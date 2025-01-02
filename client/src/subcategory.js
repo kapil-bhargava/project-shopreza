@@ -12,6 +12,7 @@ const SubCategory = () => {
     const [usermobile, setusermobile] = useState()
     const [userpassword, setuserpassword] = useState()
     const [otp, setOtp] = useState();
+    const [unitId, setunitId] = useState();
     const loginPopup = useRef()
     const signupPopup = useRef()
     const otpPopup = useRef()
@@ -40,12 +41,19 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
+        
+        if (data.length > 0 && data[0].available_units.length > 0) {
+            setunitId(data[0].available_units[0].unitid); // Set the unit ID from the first available unit of the first product
+        } else {
+            console.warn("No available units found in the first product.");
+            setunitId(null); // Set a default value or handle accordingly
+        }
         document.getElementById("loader").style.display = "none";
         setproductdata(data)
     }
 
-    //validation function for login 
-    const validationLogin = async () => {
+    //login Validation function 
+    const loginValidation = async () => {
         const re = await fetch("https://zninfotech.com/mywork/webapi/validateapi.php", {
             method: 'POST',
             headers: {
@@ -72,7 +80,17 @@ const SubCategory = () => {
             loginPopup.current.style.display = "block";
         }
         else {
-            validationLogin()
+            alert(unitId)
+            const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Authorization': `Bearer ${cookie["sp"]}`
+                },
+                body: JSON.stringify({ unitid: unitId, mobile:usermobile, storeid: "1" })
+            });
+            const data = await re.json();
+            alert(data.response)
         }
     }
 
@@ -126,7 +144,7 @@ const SubCategory = () => {
     //login
     const login = () => {
         if (cookie["sp"] == null) {
-            validationLogin()
+            loginValidation()
         }
         else {
             alert("Already logged in")

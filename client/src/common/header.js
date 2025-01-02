@@ -1,9 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link, Links } from 'react-router-dom'
 import { useCookies } from "react-cookie";
 
 const Header = ({ loginPopup }) => {
     const [cookie, createcookie, removecookie] = useCookies()
+    const [cartData, setCartData] = useState([])
 
     const cart = useRef();
     const cartbg = useRef();
@@ -32,6 +33,19 @@ const Header = ({ loginPopup }) => {
         }
 
     }
+
+    // gettting cart data 
+    // const getCartData = async () => {
+    //     const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php", {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //     });
+    //     const data = await re.json();
+    //     setCartData(data)
+    // }
+
     const logout = () => {
         removecookie("sp");
         closeUserProfile();
