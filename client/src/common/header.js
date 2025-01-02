@@ -1,20 +1,41 @@
 import React, { useRef } from 'react'
 import { Link, Links } from 'react-router-dom'
+import { useCookies } from "react-cookie";
 
-const Header = () => {
+const Header = ({ loginPopup }) => {
+    const [cookie, createcookie, removecookie] = useCookies()
 
     const cart = useRef();
     const cartbg = useRef();
+    const userProfile = useRef();
+
+    const closeUserProfile = () => {
+        userProfile.current.style.transform = 'translateX(100%)';
+    }
+    const openUserProfile = () => {
+        userProfile.current.style.transform = 'translateX(0)';
+    }
 
     const cartOpen = () => {
         cart.current.style.display = 'block';
         cartbg.current.style.display = 'block';
-        
     }
     const cartClose = () => {
         cart.current.style.display = 'none';
         cartbg.current.style.display = 'none';
-       
+
+    }
+    const openLogin = () => {
+        if (loginPopup.current) {
+            const currentDisplay = loginPopup.current.style.display;
+            loginPopup.current.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+
+    }
+    const logout = () => {
+        removecookie("sp");
+        closeUserProfile();
+        // window.location.reload();
     }
     return (
         <>
@@ -35,42 +56,28 @@ const Header = () => {
                 </div>
                 <div className="cart-btn-div">
                     <i onClick={cartOpen} className="fa fa-shopping-cart"></i>
-                    <Link to="/userlogin">
-                        <button className="btn btn-success">Login</button>
-                    </Link>
+                    {
+                        cookie["sp"] == null ? (
+                            // <Link to="/userlogin">
+                            <button onClick={openLogin} className="btn btn-success">Login</button>
+                            // </Link>
+                        ) : (
+                            <div className="mobile-user-icon">
+                                <i onClick={openUserProfile} className="fa fa-user"></i>
+                            </div>
+                        )
+                    }
+
                 </div>
-                <div className="mobile-user-icon">
+                {/* <div className="mobile-user-icon">
                     <i className="fa fa-user"></i>
-                </div>
+                </div> */}
             </header>
 
             {/* =======cart coding=========  */}
-            {/* <div className="cart-bg-div"></div>
-            <section className="cart-container">
-                <div className="upper-div">
-                    <h4>My Cart</h4>
-                    <i className="fa fa-times"></i>
-                </div>
-                <div className="cart-items">
-                    <div className="cart-items-details">
-                        <div className="cart-item-img-div">
-                            <img src="https://via.placeholder.com/100" alt="product-img" />
-                        </div>
-                        <div className="cart-item-details-div">
-                            <h5>Product Name</h5>
-                            <p>Rs. 999</p>
-                            <div className="quantity-div">
-                                <button className="btn btn-primary btn-minus">-</button>
-                                <input type="text" value="1" />
-                                <button className="btn btn-primary btn-plus">+</button>
-                            </div>
-                            <button className="btn btn-danger btn-remove">Remove</button>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
+
             <div ref={cartbg} onClick={cartClose} className="cart-bg-div"></div>
-            <div  id='cc' ref={cart} className="cart-container">
+            <div id='cc' ref={cart} className="cart-container">
                 <div className="cart-header">
                     <h2>My Cart</h2>
                     <i onClick={cartClose} className="fa fa-times"></i>
@@ -168,6 +175,18 @@ const Header = () => {
                     <button className="proceed-btn">Proceed</button>
                 </div>
             </div>
+
+            {/* user icon click section part  */}
+            <section ref={userProfile} className="user-profile">
+                <h3>User Name</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
+                <div className="user-dropdown">
+                    <ul>
+                        <li><Link className='link-m' to="/profile">Profile</Link></li>
+                        <li><Link className='link-m' to="/orders">Orders</Link></li>
+                        <li onClick={logout}>Logout</li>
+                    </ul>
+                </div>
+            </section>
         </>
     )
 }

@@ -17,8 +17,8 @@ root.render(
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/product" element={<Product />} />
-        <Route exact path="/userlogin" element={<Userlogin />} />
-        <Route exact path="/usersignup" element={<Usersignup />} />
+        {/* <Route exact path="/userlogin" element={<Userlogin />} /> */}
+        {/* <Route exact path="/usersignup" element={<Usersignup />} /> */}
         <Route exact path="/subcategory/:cid" element={<SubCategory />} />
       </Routes>
     </BrowserRouter>

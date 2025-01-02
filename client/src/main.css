@@ -2,9 +2,13 @@
     --primary-yellow: #F8CB46;
     --primary-green: #168a1f;
     --primary-white: #F5F7FD;
+    --primary-blue: #007bff;
     --soft-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
-.loading{
+
+/* ========== fixed sections css ========= */
+/* loader  */
+.loading {
     text-align: center;
     line-height: 200px;
     display: none;
@@ -15,11 +19,146 @@
     width: 400px;
     background-color: var(--primary-white);
 }
-.loading h1{
+
+.loading h1 {
     font-size: 30px;
     font-weight: 600;
     letter-spacing: 2px;
 }
+
+/* login popup  */
+
+.login-popup-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: var(--primary-white);
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-green);
+    box-shadow: var(--soft-shadow);
+}
+
+.signup-popup-container {
+    /* display: none; */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: var(--primary-white);
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-green);
+    box-shadow: var(--soft-shadow);
+
+}
+
+.login-popup-container input {
+    width: 100%;
+    outline: initial;
+    padding: 2px 5px;
+}
+
+.login-popup-container input::-webkit-inner-spin-button {
+    display: none;
+}
+
+.login-popup-container h4,
+.signup-popup-container h4 {
+    text-align: center;
+}
+
+.login-popup-container button {
+    width: 100%;
+    padding-block: 2px;
+}
+
+.login-popup-container p {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.login-popup-container h4 {
+    color: var(--primary-green);
+}
+
+.login-popup-container span {
+    color: var(--primary-yellow);
+    cursor: pointer;
+
+}
+
+.sp {
+    border: 1px solid var(--primary-yellow);
+    display: none;
+}
+
+.sp span {
+    color: var(--primary-green);
+}
+
+.sp h4 {
+    color: var(--primary-yellow);
+}
+
+.otp {
+    display: none;
+    border: 1px solid var(--primary-blue);
+}
+
+.otp h4 {
+    color: var(--primary-blue);
+}
+
+.user-profile {
+    width: 300px;
+    height: 100vh;
+    background-color: var(--primary-green);
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    right: 0;
+    transition: 0.3s ease;
+    transform: translateX(100%);
+    /* display: none; */
+}
+.cross-mobile{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 25px;
+    padding: 0px 10px;
+    cursor: pointer;
+    background-color: red;
+}
+.user-profile h3{
+    padding: 5px;
+    color: white;
+}
+
+.user-profile ul {
+    padding: 0;
+    margin-top: 20px;
+}
+.link-m{
+    color: black;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.user-profile li {
+    list-style: none;
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--primary-yellow);
+}
+
+
+/* universal setup css  */
 * {
     margin: 0;
     padding: 0;
@@ -29,6 +168,8 @@
 html {
     scroll-behavior: smooth;
 }
+
+/* universal setup css  */
 
 /* ======= Header css Started ====== */
 .link {
@@ -127,7 +268,15 @@ header {
 }
 
 .mobile-user-icon {
-    display: none;
+    display: block;
+}
+
+.mobile-user-icon i {
+    font-size: 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 1px solid black;
+    padding: 5px;
 }
 
 /* cart css  */
@@ -389,8 +538,16 @@ header {
         width: 100%;
     }
 
-    .cart-btn-div {
+    .cart-btn-div i.fa-shopping-cart {
         display: none;
+    }
+
+    .cart-btn-div {
+        order: 2;
+        width: 50%;
+        justify-content: end;
+        align-items: center;
+        /* background-color: rgb(85, 47, 255); */
     }
 
     .mobile-user-icon {
@@ -547,7 +704,7 @@ header {
     height: 90vh;
     background-color: #f4f4f4;
     overflow-y: scroll;
-    border-right:1px slid grey;
+    border-right: 1px slid grey;
     /* background-color: yellow; */
 }
 
@@ -614,8 +771,21 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
         0 1px 3px rgba(0, 0, 0, 0.06);
     width: 180px;
+    padding: 5px;
     /* flex-grow: 1; */
     background-color: white;
+}
+
+.sub-cat-main-container .items p:nth-child(1) {
+    color: red;
+}
+
+.sub-cat-main-container .items button {
+    padding: 0px 10px;
+    color: var(--primary-green);
+    background-color: rgb(231, 255, 231);
+    border: 1px solid var(--primary-green);
+    border-radius: 5px;
 }
 
 .sub-cat-main-container img {
