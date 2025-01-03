@@ -200,7 +200,7 @@ const Header = ({ loginPopup }) => {
 
             {/* user icon click section part  */}
             <section ref={userProfile} className="user-profile">
-                <h3>User Name</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
+                <h3>{cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
                 <div className="user-dropdown">
                     <ul>
                         <li><Link className='link-m' to="/profile">Profile</Link></li>
