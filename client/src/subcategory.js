@@ -22,7 +22,7 @@ const SubCategory = () => {
 
     const sub = async () => {
         loaderLoading.current.style.display = "block"
-        const re = await fetch(`https://zninfotech.com/mywork/webapi/subcategoryapi.php?cid=${cid}`, {
+        const re = await fetch(`${process.env.REACT_APP_URL}/subcategoryapi.php?cid=${cid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,9 +78,9 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async () => {
+    const addToCart = async (x) => {
         if (cookie["sp"] == null) {
-            loginPopup.current.style.display = "block";
+            loginPopup.current.classList.add("active-popup");
         }
         else {
             loaderLoading.current.style.display = "block";
@@ -90,7 +90,7 @@ const SubCategory = () => {
                     'Content-Type': 'application/json'
                     // 'Authorization': `Bearer ${cookie["sp"]}`
                 },
-                body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
+                body: JSON.stringify({ unitid: x, mobile: cookie.sp, storeid: "1" })
             });
             const data = await re.json();
             loaderLoading.current.style.display = "none";
@@ -100,12 +100,13 @@ const SubCategory = () => {
 
     // opening login and signup popups 
     const openSignup = () => {
-        signupPopup.current.style.display = "block";
-        loginPopup.current.style.display = "none";
+        loginPopup.current.classList.remove("active-popup");
+        signupPopup.current.classList.add("active-popup");
+        // loginPopup.current.style.display = "none";
     }
     const openLogin = () => {
-        loginPopup.current.style.display = "block";
-        signupPopup.current.style.display = "none";
+        loginPopup.current.classList.add("active-popup");
+        signupPopup.current.classList.remove("active-popup");
     }
 
     // fetching sign up api 
@@ -118,10 +119,15 @@ const SubCategory = () => {
             body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword })
         });
         const data = await re.json();
-        alert(data.response)
-        loginPopup.current.style.display = "none";
-        signupPopup.current.style.display = "none";
-        otpPopup.current.style.display = "block";
+        // alert(data.response)
+        if(data.response==="Saved"){
+            otpPopup.current.style.display = "block";
+            loginPopup.current.style.display = "none";
+            signupPopup.current.style.display = "none";
+        }
+        else{
+            alert("Already Registered")
+        }
 
     }
 
@@ -233,7 +239,7 @@ const SubCategory = () => {
                                     <img src={x.pic} alt={x.pic} />
                                     <h5>{x.productname}</h5>
                                     <p>₹ <del> {x.available_units[0].price}</del> <strong>{x.available_units[0].offerprice}</strong></p>
-                                    <button onClick={addToCart} className="">Add</button>
+                                    <button onClick={()=>{addToCart(x.available_units[0].unitid)}} className="">Add</button>
                                 </div>
                             )
                         })

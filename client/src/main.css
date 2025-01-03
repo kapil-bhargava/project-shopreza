@@ -9,6 +9,9 @@
 body {
     font-size: 16px;
 }
+input::-webkit-inner-spin-button{
+    display: none;
+}
 
 /* ========== fixed sections css ========= */
 /* loader  */
@@ -64,17 +67,25 @@ body {
 /* login popup  */
 
 .login-popup-container {
-    display: none;
+    /* display: none; */
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -70%);
+    visibility: hidden;
+    opacity: 0;
     width: 300px;
     background-color: var(--primary-white);
     padding: 7px;
     border-radius: 5px;
     border: 1px solid var(--primary-green);
     box-shadow: var(--soft-shadow);
+    transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.active-popup{
+    transform: translate(-50%,-50%);
+    visibility: visible;
+    opacity: 1;
 }
 
 .signup-popup-container {
@@ -129,7 +140,7 @@ body {
 
 .sp {
     border: 1px solid var(--primary-yellow);
-    display: none;
+    /* display: none; */
 }
 
 .sp span {
@@ -303,6 +314,7 @@ header {
 
 .cart-btn-div i {
     font-size: 20px;
+    cursor: pointer;
 }
 
 .mobile-user-icon {

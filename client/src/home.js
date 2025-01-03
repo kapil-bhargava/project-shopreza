@@ -1,10 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Header, { Footer } from './common/header'
 import './main.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
+    const loaderLoading = useRef()
     
     const opencart = ()=>{
         document.getElementById("cc").style.display ="block"
@@ -15,12 +16,15 @@ const Home = () => {
         getCategory();
     }, [])
     const getCategory = async () => {
-        const re = await fetch("https://zninfotech.com/mywork/webapi/categoryapi.php", {
+        
+        loaderLoading.current.style.display = "block"
+        const re = await fetch(process.env.REACT_APP_URL+"/categoryapi.php", {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-
+        
         const dt = await re.json();
+        loaderLoading.current.style.display = "none"
         setCategories(dt)
     }
 
@@ -34,6 +38,10 @@ const Home = () => {
 
     return (
         <>
+        {/* loader  */}
+        <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
             {/* importing Header from './common/header' */}
             <Header />
 
