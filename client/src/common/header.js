@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, Links } from 'react-router-dom'
 import { useCookies } from "react-cookie";
 
@@ -35,22 +35,30 @@ const Header = ({ loginPopup }) => {
     }
 
     // gettting cart data 
-    // const getCartData = async () => {
-    //     const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php", {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //     });
-    //     const data = await re.json();
-    //     setCartData(data)
-    // }
-
+    const getCartData = async () => {
+        const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
+        });
+        const data = await re.json();
+        alert(data.length);
+        setCartData(data)
+    }
+    
+    // logout function 
     const logout = () => {
         removecookie("sp");
         closeUserProfile();
         // window.location.reload();
     }
+
+    useEffect(() => {
+        // getCartData();
+    }, [])
+
     return (
         <>
             <header>

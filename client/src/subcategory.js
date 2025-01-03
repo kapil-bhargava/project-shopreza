@@ -16,10 +16,12 @@ const SubCategory = () => {
     const loginPopup = useRef()
     const signupPopup = useRef()
     const otpPopup = useRef()
+    const loaderWaiting = useRef()
+    const loaderLoading = useRef()
 
 
     const sub = async () => {
-        document.getElementById("loader").style.display = "block"
+        loaderLoading.current.style.display = "block"
         const re = await fetch(`https://zninfotech.com/mywork/webapi/subcategoryapi.php?cid=${cid}`, {
             method: 'GET',
             headers: {
@@ -27,13 +29,13 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
-        document.getElementById("loader").style.display = "none"
+        loaderLoading.current.style.display = "none"
         setsubcatdata(data)
     }
 
 
     const getProduct = async (scid) => {
-        document.getElementById("loader").style.display = "block"
+        loaderLoading.current.style.display = "block"
         const re = await fetch(`https://zninfotech.com/mywork/webapi/productapi.php?scid=${scid}`, {
             method: 'GET',
             headers: {
@@ -41,19 +43,20 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
-        
+
         if (data.length > 0 && data[0].available_units.length > 0) {
             setunitId(data[0].available_units[0].unitid); // Set the unit ID from the first available unit of the first product
         } else {
             console.warn("No available units found in the first product.");
             setunitId(null); // Set a default value or handle accordingly
         }
-        document.getElementById("loader").style.display = "none";
+        loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
 
     //login Validation function 
     const loginValidation = async () => {
+        loaderWaiting.current.style.display = "block"
         const re = await fetch("https://zninfotech.com/mywork/webapi/validateapi.php", {
             method: 'POST',
             headers: {
@@ -63,12 +66,12 @@ const SubCategory = () => {
             body: JSON.stringify({ mobile: usermobile, password: userpassword })
         });
         const data = await re.json();
+        loaderWaiting.current.style.display = "none"
         if (data.response === "Valid") {
             createcookie("sp", usermobile);
-
             loginPopup.current.style.display = "none";
-            otpPopup.current.style.display = "block";
-            // window.location.reload();
+            otpPopup.current.style.display = "none";
+            window.location.reload();
         }
         else {
             alert("Invalid Mobile or Password")
@@ -80,16 +83,17 @@ const SubCategory = () => {
             loginPopup.current.style.display = "block";
         }
         else {
-            alert(unitId)
-            const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php",{
+            loaderLoading.current.style.display = "block";
+            const re = await fetch("https://zninfotech.com/mywork/webapi/cartapi.php", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                     // 'Authorization': `Bearer ${cookie["sp"]}`
                 },
-                body: JSON.stringify({ unitid: unitId, mobile:usermobile, storeid: "1" })
+                body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
             });
             const data = await re.json();
+            loaderLoading.current.style.display = "none";
             alert(data.response)
         }
     }
@@ -155,12 +159,19 @@ const SubCategory = () => {
 
     useEffect(() => {
         sub()
+        // alert(cookie.sp);
+        //   console.log(cookie["usermobile"])
     }, [])
     return (
         <>
             {/* loader  */}
-            <div id='loader' className="loading">
-                <h1>Loading....</h1>
+            <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
             </div>
             {/* login popup */}
             <section ref={loginPopup} className="login-popup-container">

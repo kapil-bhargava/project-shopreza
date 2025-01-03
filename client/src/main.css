@@ -1,5 +1,5 @@
 :root {
-    --primary-yellow: #F8CB46;
+    --primary-yellow: #FFCA2C;
     --primary-green: #168a1f;
     --primary-white: #F5F7FD;
     --primary-blue: #007bff;
@@ -10,20 +10,48 @@
 /* loader  */
 .loading {
     text-align: center;
-    line-height: 200px;
-    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: var(--primary-white);
+    width: 300px;
+    display: none;
+}
+/* .loading::before{
+    content: "";
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 10050;
+} */
+
+@keyframes changeColor {
+    0% {
+        color: var(--primary-yellow);
+    }
+    50% {
+        color: var(--primary-green);
+    }
+    100% {
+        color: var(--primary-yellow);
+    }
 }
 
-.loading h1 {
-    font-size: 30px;
+.loading p{
+    animation: 1s infinite alternate changeColor;
+    font-size: 20px;
     font-weight: 600;
-    letter-spacing: 2px;
+    color: var(--primary-yellow);
+    letter-spacing: 1px;
+    /* position: absolute; */
+    /* left: 50%; */
+    /* top: 50%; */
+    /* transform: translate(-50%, -50%); */
+    /* z-index: 600; */
 }
 
 /* login popup  */
