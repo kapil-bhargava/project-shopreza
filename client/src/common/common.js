@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, Links } from 'react-router-dom'
 import { useCookies } from "react-cookie";
 
-const Header = ({ loginPopup }) => {
+const Header = ({ loginPopup, popupBg }) => {
     const [cookie, createcookie, removecookie] = useCookies()
     const [cartData, setCartData] = useState([])
+    const [total,settotal]=useState(0);
 
     const cart = useRef();
     const cartbg = useRef();
@@ -31,7 +32,8 @@ const Header = ({ loginPopup }) => {
         if (loginPopup.current) {
             // const currentDisplay = loginPopup.current.style.display;
             // loginPopup.current.style.display = currentDisplay === 'none' ? 'block' : 'none';
-        loginPopup.current.classList.add("active-popup")
+        loginPopup.current.classList.add("active-popup");
+        popupBg.current.classList.add("active-popupBg");
         }
 
     }
@@ -47,7 +49,11 @@ const Header = ({ loginPopup }) => {
             body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
-        console.log(data);
+        var itot=0;
+        for(var i=0;i<cartData.length;i++){
+                itot=itot+ (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
+        }
+        settotal(itot);
         setCartData(data)
     }
 
@@ -72,7 +78,8 @@ const Header = ({ loginPopup }) => {
             body: JSON.stringify({ ctype: ctype, cartid: cartid })
         });
         const data = await re.json();
-        alert(data.response);
+        // alert(data.response);
+        // if(data.response==="Saved" && ctype==="minus")
         getCartData();
     }
 
@@ -98,7 +105,13 @@ const Header = ({ loginPopup }) => {
                     </div>
                 </div>
                 <div className="cart-btn-div">
-                    <i onClick={cartOpen} className="fa fa-shopping-cart"></i>
+                    <i onClick={cartOpen} className="fa fa-shopping-cart">
+                        {/* {cartData.length > 0? cartData.reduce((acc, item) => acc + item.qty, 0) : 0} */}
+                        {/* <span className="cat-badge">{cartData.length > 0? cartData.reduce((acc, item) => acc + item.qty, 0) : 0 }</span> */}
+                        <span className="cat-badge">0</span>
+                        {/* <span className="cart-price">��560</span> */}
+
+                    </i>
                     {
                         cookie["sp"] == null ? (
                             // <Link to="/userlogin">
@@ -137,10 +150,10 @@ const Header = ({ loginPopup }) => {
 
                     <div className="cart-items">
                         {
-                            cartData.map((x) => {
+                            cartData.map((x,index) => {
                                 return (
 
-                                    <div className="item">
+                                    <div key={index} className="item">
                                         <img
                                             src={x.pic}
                                             alt={x.productname}
@@ -207,7 +220,7 @@ const Header = ({ loginPopup }) => {
                     </div>
 
                     <div className="cart-footer">
-                        <div className="total-amount">₹ TOTAL</div>
+                        <div className="total-amount">₹ {total}</div>
                         <button className="proceed-btn">Proceed</button>
                     </div>
                 </div>

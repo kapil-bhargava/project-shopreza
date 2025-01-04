@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Header from './common/header'
+import Header from './common/common'
 import Items from './common/items'
 
 const Product = () => {

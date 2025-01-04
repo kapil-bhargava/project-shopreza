@@ -9,7 +9,8 @@
 body {
     font-size: 16px;
 }
-input::-webkit-inner-spin-button{
+
+input::-webkit-inner-spin-button {
     display: none;
 }
 
@@ -65,6 +66,19 @@ input::-webkit-inner-spin-button{
 }
 
 /* login popup  */
+.popup-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 450;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s ease;
+    /* display: none; */
+}
 
 .login-popup-container {
     /* display: none; */
@@ -78,12 +92,21 @@ input::-webkit-inner-spin-button{
     background-color: var(--primary-white);
     padding: 7px;
     border-radius: 5px;
+    z-index: 451;
     border: 1px solid var(--primary-green);
     box-shadow: var(--soft-shadow);
     transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-.active-popup{
-    transform: translate(-50%,-50%);
+.login-popup-container i{
+    cursor: pointer;
+}
+.active-popupBg{
+    visibility: visible;
+    opacity: 1;
+}
+
+.active-popup {
+    transform: translate(-50%, -50%);
     visibility: visible;
     opacity: 1;
 }
@@ -107,6 +130,12 @@ input::-webkit-inner-spin-button{
     width: 100%;
     outline: initial;
     padding: 2px 5px;
+    /* border-radius: 0px; */
+    /* border: 1px solid black; */
+    /* outline: none; */
+}
+.incorrect-input{
+    border: 1px solid red;
 }
 
 .login-popup-container input::-webkit-inner-spin-button {
@@ -313,8 +342,23 @@ header {
 }
 
 .cart-btn-div i {
-    font-size: 20px;
+    font-size: 25px;
     cursor: pointer;
+    position: relative;
+}
+.cart-btn-div .fa-shopping-cart{
+    color: var(--primary-green);
+}
+.cat-badge{
+    position: absolute;
+    right: -15px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    top: -10px;
+    font-size: 17px;
+    padding: 5px 7px;
+    border-radius: 50%;
+    background-color: var(--primary-yellow);
+    color: black;
 }
 
 .mobile-user-icon {
@@ -362,6 +406,7 @@ header {
 
 .cart-container .cart-header i {
     font-size: 20px;
+    cursor: pointer;
     /* background-color: yellow; */
     padding: 3px;
 }
@@ -587,7 +632,8 @@ header {
         order: 3;
         width: 100%;
     }
-    .search{
+
+    .search {
         margin-top: 5px;
     }
 
@@ -841,26 +887,65 @@ header {
     background-color: white;
 }
 
+
 .sub-cat-main-container .items p:nth-child(1) {
     color: red;
 }
 
 .sub-cat-main-container .items button {
     padding: 0px 10px;
+    padding-bottom: 2px;
     color: var(--primary-green);
     background-color: rgb(231, 255, 231);
     border: 1px solid var(--primary-green);
     border-radius: 5px;
+    position: relative;
+}
+.sub-cat-main-container .items .add-btn-badge {
+    color: black;
+    /* background-color: var(--primary-yellow); */
+    background-color: rgb(231, 255, 231);
+    position: absolute;
+    top: 50%;
+    border-bottom:1px solid var(--primary-green) ;
+    margin: 0;
+    border-radius: 50%;
+    /* padding: -3px 3px; */
+    padding-inline: 5px;
+    /* padding-bottom: 5px; */
+    left:50%;
+    transform: translate(-50%,40%);
+    font-size: 11px;
 }
 
-.sub-cat-main-container img {
+
+.sidebar-right .product-pic-div{
     width: 100%;
-    height: 200px;
+    /* height: 200px; */
+    background-color: red;
+    position: relative;
+}
+.animated-img{
+    /* width: 100%;
+    height: 200px; */
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transition: 0.3s ease-in;
+    transform: translate(-50%, -50%);
+}
+.active-animated-img{
+    transform: translate(100%,-50%);
+    visibility: visible;
+    opacity: 1;
 }
 
 /* responsive subcategory page  */
-@media screen and  (max-width:768px) {
-/* @media screen and (min-width: 378px) and (max-width:768px) { */
+@media screen and (max-width:768px) {
+
+    /* @media screen and (min-width: 378px) and (max-width:768px) { */
     .sub-cat-main-container {
         display: flex;
         /* flex-direction: column; */
@@ -920,9 +1005,10 @@ header {
 }
 
 @media screen and (max-width: 377px) {
-    .header{
+    .header {
         width: 100%;
     }
+
     .sub-cat-main-container .items {
         width: 130px;
         flex-grow: 1;
@@ -966,10 +1052,12 @@ header {
 
 .mobile-cart-main-section {
     position: fixed;
-    bottom: 0px;
-    right: 0px;
-    width: 100vw;
+    bottom: 0%;
+    left: 50%;
+    width: 20vw;
     height: 70px;
+    transition: all 0.3s ease;
+    transform: translate(-50%,100%);
     /* background-color: var(--primary-green); */
     padding: 10px;
     display: none;

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Header, { Footer } from './common/header'
+import Header, { Footer } from './common/common'
 import './main.css'
 import { useEffect, useRef, useState } from 'react'
 
@@ -7,9 +7,7 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
     
-    const opencart = ()=>{
-        document.getElementById("cc").style.display ="block"
-    }
+   
 
     const jump = useNavigate()
     useEffect(() => {
@@ -141,18 +139,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* mobile cart view  */}
-            <section  onClick={opencart}  className="mobile-cart-main-section">
-                <div className="mobile-cart">
-                    <span>
-                        <i className="fa fa-shopping-cart"></i> <br />
-                        <span>₹ 560</span>
-                    </span>
-                    <span>
-                        <Link className='link2' to="/cart">View Cart</Link>
-                    </span>
-                </div>
-            </section>
+            
 
 
             {/* importing Footer from './common/footer' */}
