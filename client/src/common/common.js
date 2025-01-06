@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, Links } from 'react-router-dom'
 import { useCookies } from "react-cookie";
+import {useDispatch, useSelector} from 'react-redux';
 
 const Header = ({ loginPopup, popupBg }) => {
+    const mynum = useSelector((state)=>state.cartitem);
+
     const [cookie, createcookie, removecookie] = useCookies()
     const [cartData, setCartData] = useState([])
     const [total,settotal]=useState(0);
-
+const dispatch=useDispatch();
     const cart = useRef();
     const cartbg = useRef();
     const userProfile = useRef();
@@ -50,11 +53,15 @@ const Header = ({ loginPopup, popupBg }) => {
         });
         const data = await re.json();
         var itot=0;
+        var qty=0;
         for(var i=0;i<cartData.length;i++){
                 itot=itot+ (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
-        }
+               qty=qty+ parseInt(data[i].quantity);
+            }
         settotal(itot);
         setCartData(data)
+        dispatch({type:'INC',cdata:qty});
+
     }
 
     // logout function 
@@ -85,7 +92,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
     useEffect(() => {
         getCartData();
-    }, [])
+    }, [cartData])
 
     return (
         <>
@@ -108,7 +115,7 @@ const Header = ({ loginPopup, popupBg }) => {
                     <i onClick={cartOpen} className="fa fa-shopping-cart">
                         {/* {cartData.length > 0? cartData.reduce((acc, item) => acc + item.qty, 0) : 0} */}
                         {/* <span className="cat-badge">{cartData.length > 0? cartData.reduce((acc, item) => acc + item.qty, 0) : 0 }</span> */}
-                        <span className="cat-badge">0</span>
+                        <span className="cat-badge">{mynum}</span>
                         {/* <span className="cart-price">��560</span> */}
 
                     </i>

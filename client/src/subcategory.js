@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './common/common'
 import { useParams } from 'react-router-dom';
-import { useCookies } from "react-cookie"
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from 'react-redux';
 
 const SubCategory = () => {
+    const mynum = useSelector((state) => state.cartitem);
+    const dispatch = useDispatch();
+
     const { cid } = useParams()
     const [subcatdata, setsubcatdata] = useState([]);
     const [productdata, setproductdata] = useState([]);
@@ -21,15 +25,42 @@ const SubCategory = () => {
     const loaderLoading = useRef()
     const audio = useRef()
     const animatedImg = useRef();
+    const unitOptionsBgDiv = useRef();
+    const unitOptionsDiv = useRef();
+    const mobileCart = useRef();
 
     const [nameError, setNameError] = useState();
     const [mobileError, setMobileError] = useState();
     const [passwordError, setPasswordError] = useState();
 
+    const [selectedProductId, setSelectedProductId] = useState();
+
+
+
+
+    // Function to handle showing unit options
+    const showUnitOptions = (productId) => {
+        setSelectedProductId(productId); // Set the selected product ID
+        unitOptionsDiv.current.style.display = 'block'; // Show the options div
+    };
+   
+    
+    // unit options div close and open functions 
+    const closeUnitOptions = () => {
+        setSelectedProductId(null); // Clear the selected product
+        unitOptionsDiv.current.style.display = "none";
+        unitOptionsBgDiv.current.style.display = "none";
+    }
 
     const opencart = () => {
         document.getElementById("cc").style.display = "block"
     }
+
+    // const openUnitOptions = (unitid) => {
+    //     unitOptionsDiv.current.style.display = "block";
+    //     unitOptionsBgDiv.current.style.display = "block";
+    //     // setunitId(unitid); 
+    // }
 
     const sub = async () => {
         loaderLoading.current.style.display = "block"
@@ -54,13 +85,6 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
-
-        if (data.length > 0 && data[0].available_units.length > 0) {
-            setunitId(data[0].available_units[0].unitid); // Set the unit ID from the first available unit of the first product
-        } else {
-            console.warn("No available units found in the first product.");
-            setunitId(null); // Set a default value or handle accordingly
-        }
         loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
@@ -74,7 +98,7 @@ const SubCategory = () => {
         else if (!userpassword) {
             setPasswordError("Password is required");
         }
-        else if (!username) {
+        else if (!usermobile) {
             setMobileError("Mobile is required");
         }
         else {
@@ -105,29 +129,37 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async (x) => {
+    const addToCart = async (unitId, availableUnits) => {
+        alert(availableUnits.length)
         if (cookie["sp"] == null) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
+        } else {
+            if (availableUnits.length > 1) {
+                // If there are more than one units, open the options div instead of adding to cart
+                setSelectedProductId(unitId);
+                showUnitOptions();
+            } else {
+                loaderLoading.current.style.display = "block";
+                const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
+                });
+                const data = await re.json();
+                audio.current.play();
+                mobileCart.current.classList.add("active-mobile-cart");
+                animatedImg.current.classList.add("active-animated-img");
+                setTimeout(() => {
+                    animatedImg.current.classList.remove("active-animated-img");
+                }, 500);
+                loaderLoading.current.style.display = "none";
+            }
         }
-        else {
-            loaderLoading.current.style.display = "block";
-            const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ unitid: x, mobile: cookie.sp, storeid: "1" })
-            });
-            const data = await re.json();
-            audio.current.play()
-            animatedImg.current.classList.add("active-animated-img");
-            setTimeout(() => {
-                animatedImg.current.classList.remove("active-animated-img");
-            }, 500)
-            loaderLoading.current.style.display = "none";
-        }
-    }
+    };
+
 
     // opening login and signup popups 
     const openSignup = () => {
@@ -304,32 +336,62 @@ const SubCategory = () => {
                     }
                 </aside>
                 <aside className="sidebar-right">
-                    {
-                        productdata.map((x, index) => {
-                            return (
-                                <div key={index} className="items">
-                                    <div className="product-pic-div">
-                                        <img src={x.pic} alt={x.pic} />
-                                        <img ref={animatedImg} src={x.pic} className='animated-img' />
 
-                                    </div>
-                                    <h5>{x.productname}</h5>
-                                    <p>₹ <del> {x.available_units[0].price}</del> <strong>{x.available_units[0].offerprice}</strong></p>
-                                    <button onClick={() => { addToCart(x.available_units[0].unitid) }}>Add <span className="add-btn-badge">3</span> </button>
-                                </div>
-                            )
-                        })
-                    }
+                {productdata.map((x, index) => (
+                <div key={index} className="items">
+                    <div className="product-pic-div">
+                        <img src={x.pic} alt={x.productname} />
+                        <img ref={animatedImg} src={x.pic} className="animated-img" />
+                    </div>
+                    <h5>{x.productname}</h5>
+                    <p>
+                        ₹ <del>{x.available_units?.[0]?.price}</del> <strong>{x.available_units?.[0]?.offerprice}</strong>
+                    </p>
+                    <button
+                        onClick={() =>
+                            x.available_units?.length > 1
+                                ? showUnitOptions(x.spid)
+                                : addToCart(x.available_units?.[0]?.unitid)
+                        }
+                    >
+                        Add{' '}
+                        {x.available_units?.length > 1 && (
+                            <span className="add-btn-badge">{x.available_units.length}</span>
+                        )}
+                    </button>
 
+                    <div ref={unitOptionsDiv} className="unit-options-div">
+                        <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
+                            &times;
+                        </div>
+                        {selectedProductId &&
+                            productdata.filter((x) => x.spid === selectedProductId).map((x) => (
+                                    <>
+                                        <h5>{x.productname}</h5>
+                                        {x.available_units.map((unit) => (
+                                            <div key={unit.unitid} className="options-items">
+                                                <img src={unit.pic} alt={unit.unitname} />
+                                                <h5>{unit.unitname}</h5>
+                                                <button onClick={() => addToCart(unit.unitid)} >Add</button>
+                                            </div>
+                                        ))}
+                                    </>
+                                ))}
+                    </div>
+                </div>
+            ))}
                 </aside>
             </section>
 
             {/* mobile cart  */}
-            <div className="mobile-cart-main-section">
+            <div ref={mobileCart} className="mobile-cart-main-section">
                 <div className="mobile-cart">
-                    <h3>Cart</h3>
-                    {/* <p>You have no items in your cart</p> */}
-                    <button onClick={opencart} className="btn btn-success"></button>
+                    <span>
+                        <i className="fa fa-shopping-cart"></i>
+                        {mynum}
+                    </span>
+
+                    <i onClick={opencart} className="fa-solid fa-chevron-right"></i>
                 </div>
             </div>
 
@@ -399,6 +461,8 @@ const SubCategory = () => {
                 <input onChange={(e) => { setOtp(e.target.value) }} placeholder='Enter OTP' type="number" /> <br /> <br />
                 <button className="btn btn-primary" onClick={otpVerification}>Verify</button> <br />
             </section>
+            {/* <button onClick={()=>{cc("INC")}}>Inc</button>
+            <button onClick={()=>{cc("DEC")}}>Dec</button> */}
 
         </>
     )

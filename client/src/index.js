@@ -8,11 +8,14 @@ import Userlogin from './userlogin';
 import Product from './product';
 import Usersignup from './usersignup';
 import SubCategory from './subcategory';
+import { Provider } from 'react-redux';
+import store from './redstore';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <Provider store ={store} >
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -22,6 +25,7 @@ root.render(
         <Route exact path="/subcategory/:cid" element={<SubCategory />} />
       </Routes>
     </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
