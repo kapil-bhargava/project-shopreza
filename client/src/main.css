@@ -191,7 +191,7 @@ input::-webkit-inner-spin-button {
 
 .user-profile {
     width: 300px;
-    height: 100vh;
+    min-height: 100vh;
     background-color: var(--primary-green);
     position: fixed;
     z-index: 500;
@@ -915,7 +915,8 @@ header {
     cursor: pointer;
 }
 .options-items{
-    background-color: yellow;
+    margin: 1px;
+    /* background-color: yellow; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -923,6 +924,7 @@ header {
 .options-items img{
     width: 70px;
     height: 70px;
+    border-radius: 10px;
 }
 .sub-cat-main-container .items {
     border-radius: 5px;
@@ -1037,9 +1039,6 @@ header {
         height: 30px;
 
     }
-
-
-
     .sidebar-right {
         width: 80%;
         gap: 10px;
@@ -1050,6 +1049,22 @@ header {
     .sub-cat-main-container .items {
         width: 138px;
         flex-grow: 1;
+    }
+    .unit-options-div{
+        width: 100%;
+        transition: 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        top: 100%;
+        left: 50%;
+        height: initial;
+        transform: translate(-50%,100%);
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: var(--primary-green);
+    }
+    .active-unit-options-div-mobile{
+        transform: translate(-50%,100%);
     }
 }
 

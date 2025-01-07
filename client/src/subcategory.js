@@ -11,6 +11,7 @@ const SubCategory = () => {
     const { cid } = useParams()
     const [subcatdata, setsubcatdata] = useState([]);
     const [productdata, setproductdata] = useState([]);
+    const [aitem, setaitem] = useState([]);
     const [cookie, createcookie, removecookie] = useCookies();
     const [username, setusername] = useState()
     const [usermobile, setusermobile] = useState()
@@ -39,17 +40,20 @@ const SubCategory = () => {
 
 
     // Function to handle showing unit options
-    const showUnitOptions = (productId) => {
-        setSelectedProductId(productId); // Set the selected product ID
-        unitOptionsDiv.current.style.display = 'block'; // Show the options div
+    const showUnitOptions = (l) => {
+        document.getElementById('div' + l).style.display = 'block';
+
+    // unitOptionsDiv.current.style.display = 'block';
     };
-   
-    
+
+
     // unit options div close and open functions 
-    const closeUnitOptions = () => {
-        setSelectedProductId(null); // Clear the selected product
-        unitOptionsDiv.current.style.display = "none";
-        unitOptionsBgDiv.current.style.display = "none";
+    const closeUnitOptions = (l) => {
+        // setSelectedProductId(null); // Clear the selected product
+        // unitOptionsDiv.current.style.display = "none";
+        // unitOptionsBgDiv.current.style.display = "none";
+        // unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
+        document.getElementById('div' + l).style.display = "block"
     }
 
     const opencart = () => {
@@ -137,8 +141,9 @@ const SubCategory = () => {
         } else {
             if (availableUnits.length > 1) {
                 // If there are more than one units, open the options div instead of adding to cart
-                setSelectedProductId(unitId);
+                // setSelectedProductId(unitId);
                 showUnitOptions();
+
             } else {
                 loaderLoading.current.style.display = "block";
                 const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
@@ -158,6 +163,7 @@ const SubCategory = () => {
                 loaderLoading.current.style.display = "none";
             }
         }
+
     };
 
 
@@ -337,49 +343,67 @@ const SubCategory = () => {
                 </aside>
                 <aside className="sidebar-right">
 
-                {productdata.map((x, index) => (
-                <div key={index} className="items">
-                    <div className="product-pic-div">
-                        <img src={x.pic} alt={x.productname} />
-                        <img ref={animatedImg} src={x.pic} className="animated-img" />
-                    </div>
-                    <h5>{x.productname}</h5>
-                    <p>
-                        ₹ <del>{x.available_units?.[0]?.price}</del> <strong>{x.available_units?.[0]?.offerprice}</strong>
-                    </p>
-                    <button
-                        onClick={() =>
-                            x.available_units?.length > 1
-                                ? showUnitOptions(x.spid)
-                                : addToCart(x.available_units?.[0]?.unitid)
-                        }
-                    >
-                        Add{' '}
-                        {x.available_units?.length > 1 && (
-                            <span className="add-btn-badge">{x.available_units.length}</span>
-                        )}
-                    </button>
 
-                    <div ref={unitOptionsDiv} className="unit-options-div">
-                        <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
-                            &times;
-                        </div>
-                        {selectedProductId &&
-                            productdata.filter((x) => x.spid === selectedProductId).map((x) => (
+                    {productdata.map((x, index) => (
+                        <div key={index} className="items">
+                            <div className="product-pic-div">
+                                <img src={x.pic} alt={x.productname} />
+                                <img ref={animatedImg} src={x.pic} className="animated-img" />
+                            </div>
+                            <h5>{x.productname}</h5>
+                            <p>
+                                ₹ <del>{x.available_units?.[0]?.price}</del> <strong>{x.available_units?.[0]?.offerprice}</strong>
+                            </p>
+                            <button
+                                onClick={() =>
+                                    x.available_units?.length > 1
+                                        ? showUnitOptions(x.available_units)
+                                        : addToCart(x.available_units[0].unitid)
+                                }
+                            >
+                                Add{' '}
+                                {x.available_units?.length > 1 && (
+                                    <span className="add-btn-badge">{x.available_units.length}</span>
+                                )}
+                            </button>
+                            <div ref={unitOptionsDiv} id={'div'+x.available_units} className="unit-options-div ">
+                                <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
+                                    &times;
+                                </div>
+                                {x.available_units.map((unit) => (
                                     <>
-                                        <h5>{x.productname}</h5>
-                                        {x.available_units.map((unit) => (
-                                            <div key={unit.unitid} className="options-items">
-                                                <img src={unit.pic} alt={unit.unitname} />
-                                                <h5>{unit.unitname}</h5>
-                                                <button onClick={() => addToCart(unit.unitid)} >Add</button>
-                                            </div>
-                                        ))}
+                                        <h5>-</h5>
+                                        <div key={unit.unitid} className="options-items">
+                                            <img src={unit.pic} alt={unit.unitname} />
+                                            <h5>{unit.unitname}</h5>
+                                            <button onClick={() => addToCart(unit.unitid)} >Add</button>
+                                        </div>
                                     </>
                                 ))}
-                    </div>
-                </div>
-            ))}
+                            </div>
+
+
+
+                            {/* {selectedProductId &&
+                                productdata.filter((x) => x.spid === selectedProductId).map((x) => (
+                                    <>
+                                        <div ref={unitOptionsDiv} className="unit-options-div ">
+                                            <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
+                                                &times;
+                                            </div>
+                                            <h5>{x.productname}</h5>
+                                            {x.available_units.map((unit) => (
+                                                <div key={unit.unitid} className="options-items">
+                                                    <img src={unit.pic} alt={unit.unitname} />
+                                                    <h5>{unit.unitname}</h5>
+                                                    <button onClick={() => addToCart(unit.unitid)} >Add</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                ))} */}
+                        </div>
+                    ))}
                 </aside>
             </section>
 
