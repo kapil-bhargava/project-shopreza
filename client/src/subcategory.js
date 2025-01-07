@@ -42,6 +42,7 @@ const SubCategory = () => {
     // Function to handle showing unit options
     const showUnitOptions = (l) => {
         document.getElementById('div' + l).style.display = 'block';
+        document.getElementById('div' + l).classList.add("active-unit-options-div-mobile");
 
     // unitOptionsDiv.current.style.display = 'block';
     };
