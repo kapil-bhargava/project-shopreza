@@ -29,6 +29,7 @@ const SubCategory = () => {
     const unitOptionsBgDiv = useRef();
     const unitOptionsDiv = useRef();
     const mobileCart = useRef();
+    const headerRef = useRef();
 
     const [nameError, setNameError] = useState();
     const [mobileError, setMobileError] = useState();
@@ -38,23 +39,28 @@ const SubCategory = () => {
 
 
 
-
-    // Function to handle showing unit options
-    const showUnitOptions = (l) => {
-        document.getElementById('div' + l).style.display = 'block';
-        document.getElementById('div' + l).classList.add("active-unit-options-div-mobile");
-
-    // unitOptionsDiv.current.style.display = 'block';
+    const handleButtonClick = (x,unit) => {
+        alert(x)
+        // Access the cartCount function from the Header using the ref
+        if (headerRef.current) {
+            headerRef.current.cartCount(x, unit.cartid);
+        }
     };
+
+    const showUnitOptions = (l) => {
+        setaitem(l)
+        unitOptionsDiv.current.classList.add("active-unit-options-div");
+        unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
+    }
 
 
     // unit options div close and open functions 
     const closeUnitOptions = (l) => {
-        // setSelectedProductId(null); // Clear the selected product
-        // unitOptionsDiv.current.style.display = "none";
-        // unitOptionsBgDiv.current.style.display = "none";
+        // console.log(l)
         // unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
-        document.getElementById('div' + l).style.display = "block"
+        // document.getElementById('div' + l).style.display = "block"
+        unitOptionsDiv.current.classList.remove("active-unit-options-div");
+        unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
     }
 
     const opencart = () => {
@@ -83,13 +89,15 @@ const SubCategory = () => {
 
     const getProduct = async (scid) => {
         loaderLoading.current.style.display = "block"
-        const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}`, {
+        var mob = cookie["sp"];
+        const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=1`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         })
         const data = await re.json()
+        console.table(data[0].available_units[0])
         loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
@@ -134,38 +142,29 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async (unitId, availableUnits) => {
-        alert(availableUnits.length)
+    const addToCart = async (unitId) => {
         if (cookie["sp"] == null) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
         } else {
-            if (availableUnits.length > 1) {
-                // If there are more than one units, open the options div instead of adding to cart
-                // setSelectedProductId(unitId);
-                showUnitOptions();
-
-            } else {
-                loaderLoading.current.style.display = "block";
-                const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
-                });
-                const data = await re.json();
-                audio.current.play();
-                mobileCart.current.classList.add("active-mobile-cart");
-                animatedImg.current.classList.add("active-animated-img");
-                setTimeout(() => {
-                    animatedImg.current.classList.remove("active-animated-img");
-                }, 500);
-                loaderLoading.current.style.display = "none";
-            }
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
+            });
+            const data = await re.json();
+            audio.current.play();
+            mobileCart.current.classList.add("active-mobile-cart");
+            animatedImg.current.classList.add("active-animated-img");
+            setTimeout(() => {
+                animatedImg.current.classList.remove("active-animated-img");
+            }, 500);
+            loaderLoading.current.style.display = "none";
         }
-
-    };
+    }
 
 
     // opening login and signup popups 
@@ -344,7 +343,32 @@ const SubCategory = () => {
                 </aside>
                 <aside className="sidebar-right">
 
-
+                    <div ref={unitOptionsDiv} className="unit-options-div">
+                        <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
+                            &times;
+                        </div>
+                        {aitem.map((unit) => (
+                            <>
+                                <h5></h5>
+                                <div key={unit.unitid} className="options-items">
+                                    <img src={unit.pic} alt={unit.unitname} />
+                                    <h5>{unit.unitname}</h5>
+                                    {
+                                        unit.cart === "no"
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button>
+                                            :
+                                            <span className="quantity">
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid) }}>-</button>
+                                                <span>{unit.cartqty}</span>
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid) }}>+</button>
+                                            </span>
+                                    }
+                                    {/* <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button> */}
+                                    {/* <span className='items-options-btns'><button>-</button><span>{aitem.cartqty}</span><button>+</button></span> */}
+                                </div >
+                            </>
+                        ))}
+                    </div>
                     {productdata.map((x, index) => (
                         <div key={index} className="items">
                             <div className="product-pic-div">
@@ -367,49 +391,13 @@ const SubCategory = () => {
                                     <span className="add-btn-badge">{x.available_units.length}</span>
                                 )}
                             </button>
-                            <div ref={unitOptionsDiv} id={'div'+x.available_units} className="unit-options-div ">
-                                <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
-                                    &times;
-                                </div>
-                                {x.available_units.map((unit) => (
-                                    <>
-                                        <h5>-</h5>
-                                        <div key={unit.unitid} className="options-items">
-                                            <img src={unit.pic} alt={unit.unitname} />
-                                            <h5>{unit.unitname}</h5>
-                                            <button onClick={() => addToCart(unit.unitid)} >Add</button>
-                                        </div>
-                                    </>
-                                ))}
-                            </div>
-
-
-
-                            {/* {selectedProductId &&
-                                productdata.filter((x) => x.spid === selectedProductId).map((x) => (
-                                    <>
-                                        <div ref={unitOptionsDiv} className="unit-options-div ">
-                                            <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
-                                                &times;
-                                            </div>
-                                            <h5>{x.productname}</h5>
-                                            {x.available_units.map((unit) => (
-                                                <div key={unit.unitid} className="options-items">
-                                                    <img src={unit.pic} alt={unit.unitname} />
-                                                    <h5>{unit.unitname}</h5>
-                                                    <button onClick={() => addToCart(unit.unitid)} >Add</button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </>
-                                ))} */}
                         </div>
                     ))}
                 </aside>
-            </section>
+            </section >
 
             {/* mobile cart  */}
-            <div ref={mobileCart} className="mobile-cart-main-section">
+            < div ref={mobileCart} className="mobile-cart-main-section" >
                 <div className="mobile-cart">
                     <span>
                         <i className="fa fa-shopping-cart"></i>
@@ -418,7 +406,7 @@ const SubCategory = () => {
 
                     <i onClick={opencart} className="fa-solid fa-chevron-right"></i>
                 </div>
-            </div>
+            </ div>
 
 
             <section className="sub-cat-container-2">

@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, Links } from 'react-router-dom'
+import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Header = ({ loginPopup, popupBg }) => {
-    const mynum = useSelector((state)=>state.cartitem);
+const Header = forwardRef (({ loginPopup, popupBg },ref) => {
+    const mynum = useSelector((state) => state.cartitem);
 
     const [cookie, createcookie, removecookie] = useCookies()
     const [cartData, setCartData] = useState([])
-    const [total,settotal]=useState(0);
-const dispatch=useDispatch();
+    const [total, settotal] = useState(0);
+    const dispatch = useDispatch();
     const cart = useRef();
     const cartbg = useRef();
     const userProfile = useRef();
@@ -35,8 +35,8 @@ const dispatch=useDispatch();
         if (loginPopup.current) {
             // const currentDisplay = loginPopup.current.style.display;
             // loginPopup.current.style.display = currentDisplay === 'none' ? 'block' : 'none';
-        loginPopup.current.classList.add("active-popup");
-        popupBg.current.classList.add("active-popupBg");
+            loginPopup.current.classList.add("active-popup");
+            popupBg.current.classList.add("active-popupBg");
         }
 
     }
@@ -52,15 +52,16 @@ const dispatch=useDispatch();
             body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
-        var itot=0;
-        var qty=0;
-        for(var i=0;i<cartData.length;i++){
-                itot=itot+ (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
-               qty=qty+ parseInt(data[i].quantity);
-            }
+        // console.table(data)
+        var itot = 0;
+        var qty = 0;
+        for (var i = 0; i < cartData.length; i++) {
+            itot = itot + (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
+            qty = qty + parseInt(data[i].quantity);
+        }
         settotal(itot);
         setCartData(data)
-        dispatch({type:'INC',cdata:qty});
+        dispatch({ type: 'INC', cdata: qty });
 
     }
 
@@ -73,7 +74,7 @@ const dispatch=useDispatch();
         // Optional: Reload the page to clear in-memory states
         // window.location.reload();
     };
-    
+
 
     // Increment and Decrement of Product in Cart 
     const cartCount = async (ctype, cartid) => {
@@ -90,9 +91,13 @@ const dispatch=useDispatch();
         getCartData();
     }
 
+    useImperativeHandle(ref, () => ({
+        cartCount,
+      }));
+
     useEffect(() => {
         getCartData();
-    }, [cartData])
+    }, [])
 
     return (
         <>
@@ -157,7 +162,7 @@ const dispatch=useDispatch();
 
                     <div className="cart-items">
                         {
-                            cartData.map((x,index) => {
+                            cartData.map((x, index) => {
                                 return (
 
                                     <div key={index} className="item">
@@ -183,18 +188,18 @@ const dispatch=useDispatch();
 
 
                     </div>
-                    
-                            <div className="bill-details">
-                                <h3>Bill details</h3>
-                                <p>
-                                    Items total <span className="saved">Saved ₹1</span> ₹109
-                                </p>
-                                <p>
-                                    Delivery charge <span className="free">FREE</span> ₹25
-                                </p>
-                                <p>Handling charge ₹2</p>
-                                <h3>Grand total </h3>
-                            </div>
+
+                    <div className="bill-details">
+                        <h3>Bill details</h3>
+                        <p>
+                            Items total <span className="saved">Saved ₹1</span> ₹109
+                        </p>
+                        <p>
+                            Delivery charge <span className="free">FREE</span> ₹25
+                        </p>
+                        <p>Handling charge ₹2</p>
+                        <h3>Grand total </h3>
+                    </div>
 
                     {/* <div className="donation">
                     <input type="checkbox" id="donation" />
@@ -247,7 +252,7 @@ const dispatch=useDispatch();
             </section>
         </>
     )
-}
+});
 
 
 const Footer = () => {
