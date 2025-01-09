@@ -39,12 +39,16 @@ const SubCategory = () => {
 
 
 
-    const handleButtonClick = (x,unit) => {
-        alert(x)
-        // Access the cartCount function from the Header using the ref
-        if (headerRef.current) {
-            headerRef.current.cartCount(x, unit.cartid);
-        }
+    const handleButtonClick = async (ctype, cartid) => {
+        const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ctype: ctype, cartid: cartid })
+        });
+        const data = await re.json();
+        dispatch({ type: 'INC', cdata: data.cdata });
     };
 
     const showUnitOptions = (l) => {

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
 
-const Header = forwardRef (({ loginPopup, popupBg },ref) => {
+const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
 
     const [cookie, createcookie, removecookie] = useCookies()
@@ -52,15 +52,16 @@ const Header = forwardRef (({ loginPopup, popupBg },ref) => {
             body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
+        console.log(data);
         // console.table(data)
         var itot = 0;
         var qty = 0;
-        for (var i = 0; i < cartData.length; i++) {
+        for (var i = 0; i < data.length; i++) {
             itot = itot + (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
             qty = qty + parseInt(data[i].quantity);
         }
         settotal(itot);
-        setCartData(data)
+        setCartData(data);
         dispatch({ type: 'INC', cdata: qty });
 
     }
@@ -78,6 +79,7 @@ const Header = forwardRef (({ loginPopup, popupBg },ref) => {
 
     // Increment and Decrement of Product in Cart 
     const cartCount = async (ctype, cartid) => {
+        alert(ctype)
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {
@@ -86,14 +88,10 @@ const Header = forwardRef (({ loginPopup, popupBg },ref) => {
             body: JSON.stringify({ ctype: ctype, cartid: cartid })
         });
         const data = await re.json();
-        // alert(data.response);
-        // if(data.response==="Saved" && ctype==="minus")
+        dispatch({ type: 'INC', cdata: data.cdata });
         getCartData();
     }
 
-    useImperativeHandle(ref, () => ({
-        cartCount,
-      }));
 
     useEffect(() => {
         getCartData();
@@ -252,7 +250,7 @@ const Header = forwardRef (({ loginPopup, popupBg },ref) => {
             </section>
         </>
     )
-});
+};
 
 
 const Footer = () => {
