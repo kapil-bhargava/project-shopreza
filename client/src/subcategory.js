@@ -39,7 +39,7 @@ const SubCategory = () => {
 
 
 
-    const handleButtonClick = async (ctype, cartid) => {
+    const handleButtonClick = async (ctype, cartid, x) => {
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {
@@ -48,12 +48,27 @@ const SubCategory = () => {
             body: JSON.stringify({ ctype: ctype, cartid: cartid })
         });
         const data = await re.json();
+        if (ctype === "plus") {
+            aitem[x].cartqty = parseInt(aitem[x].cartqty) + 1;
+        } else {
+            aitem[x].cartqty = parseInt(aitem[x].cartqty) - 1;
+        }
+        console.log(aitem);
         dispatch({ type: 'INC', cdata: data.cdata });
+
     };
 
-    const showUnitOptions = (l) => {
-        setaitem(l)
-        unitOptionsDiv.current.classList.add("active-unit-options-div");
+    const showUnitOptions = async() => {
+        const re = await fetch(process.env.REACT_APP_URL + "/aitemapi.php?spid=1&mob=9565017342&storeid=1", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const data = await re.json();
+        console.log(data)
+       setaitem(data);
+       unitOptionsDiv.current.classList.add("active-unit-options-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
     }
 
@@ -146,7 +161,8 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async (unitId) => {
+    const addToCart = async (unitId, x) => {
+        alert(x);
         if (cookie["sp"] == null) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
@@ -160,6 +176,10 @@ const SubCategory = () => {
                 body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
             });
             const data = await re.json();
+            dispatch({ type: 'INC', cdata: data.cdata });
+            aitem[x].cartqty = parseInt(aitem[x].cartqty) + 1;
+            showUnitOptions(aitem);
+
             audio.current.play();
             mobileCart.current.classList.add("active-mobile-cart");
             animatedImg.current.classList.add("active-animated-img");
@@ -319,8 +339,18 @@ const SubCategory = () => {
 
 
     useEffect(() => {
-        sub()
+        sub();
+
     }, [])
+
+    // useEffect(() => {
+    //     alert("ss");
+    //     if (aitem.length > 0) {
+    //         console.log(aitem);
+    //         showUnitOptions(aitem);
+    //     }
+
+    // }, [aitem])
     return (
         <>
 
@@ -351,7 +381,7 @@ const SubCategory = () => {
                         <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
                             &times;
                         </div>
-                        {aitem.map((unit) => (
+                        {aitem.map((unit, index) => (
                             <>
                                 <h5></h5>
                                 <div key={unit.unitid} className="options-items">
@@ -359,12 +389,12 @@ const SubCategory = () => {
                                     <h5>{unit.unitname}</h5>
                                     {
                                         unit.cart === "no"
-                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button>
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index)} >Add</button>
                                             :
                                             <span className="quantity">
-                                                <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid) }}>-</button>
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
                                                 <span>{unit.cartqty}</span>
-                                                <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid) }}>+</button>
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid, index) }}>+</button>
                                             </span>
                                     }
                                     {/* <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button> */}
@@ -385,14 +415,14 @@ const SubCategory = () => {
                             </p>
                             <button
                                 onClick={() =>
-                                    x.available_units?.length > 1
-                                        ? showUnitOptions(x.available_units)
-                                        : addToCart(x.available_units[0].unitid)
+                                    x.available_units > 1
+                                        ? showUnitOptions()
+                                        : addToCart(x.available_units[0].unitid, index)
                                 }
                             >
                                 Add{' '}
-                                {x.available_units?.length > 1 && (
-                                    <span className="add-btn-badge">{x.available_units.length}</span>
+                                {x.available_units > 1 && (
+                                    <span className="add-btn-badge">{x.available_units}</span>
                                 )}
                             </button>
                         </div>
