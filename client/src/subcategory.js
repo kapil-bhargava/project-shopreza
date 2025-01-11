@@ -35,17 +35,17 @@ const SubCategory = () => {
     const [mobileError, setMobileError] = useState();
     const [passwordError, setPasswordError] = useState();
 
-    const [selectedProductId, setSelectedProductId] = useState();
+    const [spid,setspid]=useState();
 
 
-
+    // updating cart count 
     const handleButtonClick = async (ctype, cartid, x) => {
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile:cookie.sp, storeid:"1" })
         });
         const data = await re.json();
         if (ctype === "plus") {
@@ -54,30 +54,53 @@ const SubCategory = () => {
             aitem[x].cartqty = parseInt(aitem[x].cartqty) - 1;
         }
         console.log(aitem);
+       
         dispatch({ type: 'INC', cdata: data.cdata });
+        showUnitOptions(spid);
+
+    };
+    
+    const handleButtonClick1 = async (ctype, cartid, x) => {
+        
+        const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile:cookie.sp, storeid:"1" })
+        });
+        const data = await re.json();
+        if (ctype === "plus") {
+            productdata[x].cartqty = parseInt(productdata[x].cartqty) + 1;
+        } else {
+            productdata[x].cartqty = parseInt(productdata[x].cartqty) - 1;
+        }
+        console.log(data);
+//       alert(data.cdata);
+        dispatch({ type: 'INC', cdata: data.cdata });
+        getProduct(cid);
 
     };
 
-    const showUnitOptions = async() => {
-        const re = await fetch(process.env.REACT_APP_URL + "/aitemapi.php?spid=1&mob=9565017342&storeid=1", {
+    // unit options div close and open functions 
+    const showUnitOptions = async (spid) => {
+        
+        setspid(spid);
+        const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=1`, {
+        // const re = await fetch(process.env.REACT_APP_URL + "/aitemapi.php?spid=1&mob=9565017342&storeid=1", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         })
         const data = await re.json();
-        console.log(data)
-       setaitem(data);
-       unitOptionsDiv.current.classList.add("active-unit-options-div");
+        console.log(data);
+        setaitem(data);
+        unitOptionsDiv.current.classList.add("active-unit-options-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
     }
 
-
-    // unit options div close and open functions 
     const closeUnitOptions = (l) => {
-        // console.log(l)
-        // unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
-        // document.getElementById('div' + l).style.display = "block"
         unitOptionsDiv.current.classList.remove("active-unit-options-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
     }
@@ -86,12 +109,7 @@ const SubCategory = () => {
         document.getElementById("cc").style.display = "block"
     }
 
-    // const openUnitOptions = (unitid) => {
-    //     unitOptionsDiv.current.style.display = "block";
-    //     unitOptionsBgDiv.current.style.display = "block";
-    //     // setunitId(unitid); 
-    // }
-
+    // getting subcategory data 
     const sub = async () => {
         loaderLoading.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/subcategoryapi.php?cid=${cid}`, {
@@ -105,8 +123,9 @@ const SubCategory = () => {
         setsubcatdata(data)
     }
 
-
+    // getting all products 
     const getProduct = async (scid) => {
+        
         loaderLoading.current.style.display = "block"
         var mob = cookie["sp"];
         const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=1`, {
@@ -116,7 +135,8 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
-        console.table(data[0].available_units[0])
+        // console.log(data);
+        console.table(data);
         loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
@@ -134,15 +154,18 @@ const SubCategory = () => {
             setMobileError("Mobile is required");
         }
         else {
+            alert(usermobile)
+            alert(userpassword)
             loaderWaiting.current.style.display = "block"
             const re = await fetch(process.env.REACT_APP_URL + "/validateapi.php", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ mobile: usermobile, password: userpassword })
+                body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid:"1" })
             });
             const data = await re.json();
+            console.log(data)
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
                 createcookie("sp", usermobile, {
@@ -150,10 +173,8 @@ const SubCategory = () => {
                     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                     secure: true, // Use for HTTPS
                 });
-
-                loginPopup.current.style.display = "none";
-                otpPopup.current.style.display = "none";
-                window.location.reload();
+                loginPopup.current.classList.remove('active-popup');              
+                
             }
             else {
                 alert("Invalid Mobile or Password")
@@ -161,8 +182,8 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async (unitId, x) => {
-        alert(x);
+    const addToCart = async (unitId, x,au) => {
+      //  alert(spid);
         if (cookie["sp"] == null) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
@@ -176,10 +197,10 @@ const SubCategory = () => {
                 body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
             });
             const data = await re.json();
+           
             dispatch({ type: 'INC', cdata: data.cdata });
-            aitem[x].cartqty = parseInt(aitem[x].cartqty) + 1;
-            showUnitOptions(aitem);
-
+            alert(au);
+           if(au==="yes"){ showUnitOptions(spid)};
             audio.current.play();
             mobileCart.current.classList.add("active-mobile-cart");
             animatedImg.current.classList.add("active-animated-img");
@@ -216,6 +237,7 @@ const SubCategory = () => {
         }
         setusername(nameValue);
     }
+
     const mobileChange = (e) => {
         const mobileValue = e.target.value;
         const regex = /^[6-9]\d{9}$/;
@@ -230,9 +252,9 @@ const SubCategory = () => {
         } else {
             setMobileError(""); // Clear error if valid
         }
-
         setusermobile(mobileValue);
     }
+
     const signUpPassword = (e) => {
         setuserpassword(e.target.value)
     }
@@ -290,14 +312,14 @@ const SubCategory = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword })
+                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, lat:"101", lon:"202", storeid:"1" })
             });
             const data = await re.json();
-            // alert(data.response)
+            console.log(data);
             if (data.response === "Saved") {
-                otpPopup.current.style.display = "block";
-                loginPopup.current.style.display = "none";
-                signupPopup.current.style.display = "none";
+                otpPopup.current.classList.add('active-popup');
+                loginPopup.current.classList.remove('active-popup');
+                signupPopup.current.classList.remove('active-popup');
             }
             else {
                 alert("Already Registered")
@@ -319,10 +341,7 @@ const SubCategory = () => {
         alert(data.response);
         if (data.response === "Verified") {
             createcookie("sp", usermobile);
-            // window.location.reload();
-            // loginPopup.current.style.display = "none";
-            otpPopup.current.style.display = "none";
-
+            otpPopup.current.classList.remove('active-popup');
         }
     }
 
@@ -347,7 +366,7 @@ const SubCategory = () => {
     //     alert("ss");
     //     if (aitem.length > 0) {
     //         console.log(aitem);
-    //         showUnitOptions(aitem);
+    //        // showUnitOptions(aitem);
     //     }
 
     // }, [aitem])
@@ -387,9 +406,10 @@ const SubCategory = () => {
                                 <div key={unit.unitid} className="options-items">
                                     <img src={unit.pic} alt={unit.unitname} />
                                     <h5>{unit.unitname}</h5>
+                                    <h5>{unit.offerprice}</h5>
                                     {
                                         unit.cart === "no"
-                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index)} >Add</button>
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index,'yes')} >Add</button>
                                             :
                                             <span className="quantity">
                                                 <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
@@ -411,20 +431,25 @@ const SubCategory = () => {
                             </div>
                             <h5>{x.productname}</h5>
                             <p>
-                                ₹ <del>{x.available_units?.[0]?.price}</del> <strong>{x.available_units?.[0]?.offerprice}</strong>
+                                ₹ <del>{x.price}</del> <strong>{x.offerprice}</strong>
                             </p>
-                            <button
-                                onClick={() =>
-                                    x.available_units > 1
-                                        ? showUnitOptions()
-                                        : addToCart(x.available_units[0].unitid, index)
-                                }
-                            >
-                                Add{' '}
+                            {
+                                x.available_units>1?<button onClick={()=>showUnitOptions(x.spid)}>Add{' '}
                                 {x.available_units > 1 && (
                                     <span className="add-btn-badge">{x.available_units}</span>
-                                )}
-                            </button>
+                                )}</button>:
+                                (
+                                    x.cart === "no"
+                                    ? <button className='items-options-single-btn' onClick={() => addToCart(x.unitid, index,'yes')} >Add</button>
+                                    :
+                                    <span className="quantity">
+                                        <button className="quantity-btn" onClick={() => { handleButtonClick1("minus", x.cartid, index) }}>-</button>
+                                        <span>{x.cartqty}</span>
+                                        <button className="quantity-btn" onClick={() => { handleButtonClick1("plus", x.cartid, index) }}>+</button>
+                                    </span>
+                                )
+                            }
+                            
                         </div>
                     ))}
                 </aside>
@@ -503,9 +528,10 @@ const SubCategory = () => {
 
             {/* otp popup  */}
             <section ref={otpPopup} className="login-popup-container otp">
-                <p>Enter the OTP sent on <strong>{usermobile}</strong></p>
-                <label  >Enter OTP</label>
-                <input onChange={(e) => { setOtp(e.target.value) }} placeholder='Enter OTP' type="number" /> <br /> <br />
+                <p>Please Enter the Verification code </p>
+                {/* <strong>{usermobile}</strong> */}
+                {/* <label>Enter OTP</label> */}
+                <input onChange={(e) => { setOtp(e.target.value) }} placeholder='XXXX' type="number" /> <br /> <br />
                 <button className="btn btn-primary" onClick={otpVerification}>Verify</button> <br />
             </section>
             {/* <button onClick={()=>{cc("INC")}}>Inc</button>

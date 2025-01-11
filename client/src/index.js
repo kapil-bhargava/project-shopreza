@@ -12,6 +12,9 @@ import { Provider } from 'react-redux';
 import store from './redstore';
 import Dashboard from './admin/dashboard';
 import Customer from './admin/customer';
+import Employee from './admin/employee';
+import Newemployee from './admin/newemployee';
+import Store from './admin/stores';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,6 +26,9 @@ root.render(
         <Route exact path="/" element={<Home />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/customers" element={<Customer />} />
+        <Route exact path="/employee" element={<Employee />} />
+        <Route exact path="/stores" element={<Store />} />
+        <Route exact path="/newemployee" element={<Newemployee />} />
         <Route exact path="/product" element={<Product />} />
         <Route exact path="/userlogin" element={<Userlogin />} />
         {/* <Route exact path="/usersignup" element={<Usersignup />} /> */}

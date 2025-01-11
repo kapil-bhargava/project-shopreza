@@ -79,7 +79,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // Increment and Decrement of Product in Cart 
     const cartCount = async (ctype, cartid) => {
-        alert(ctype)
+        
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {

@@ -28,6 +28,8 @@ const SideBar = () => {
                     <nav>
                         <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
                         <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
+                        <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-users"></i>Employees</Link></div>
+                        <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-users"></i>Stores</Link></div>
                         <div className="nav-item"><Link className="linkdb" ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
                         <div className="nav-item"><Link className="linkdb" ><i className="fas fa-box"></i>Products</Link></div>
                         <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
