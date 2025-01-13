@@ -154,8 +154,6 @@ const SubCategory = () => {
             setMobileError("Mobile is required");
         }
         else {
-            alert(usermobile)
-            alert(userpassword)
             loaderWaiting.current.style.display = "block"
             const re = await fetch(process.env.REACT_APP_URL + "/validateapi.php", {
                 method: 'POST',
@@ -165,6 +163,7 @@ const SubCategory = () => {
                 body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid:"1" })
             });
             const data = await re.json();
+            alert(data.response)
             console.log(data)
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {

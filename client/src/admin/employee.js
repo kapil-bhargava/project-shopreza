@@ -6,6 +6,13 @@ const Employee = () => {
     const jump = useNavigate();
     const [signUpData, setSignUpData] = useState([]);
 
+    const [stores, setStores] = useState([]);
+    const [empData, setEmpData] = useState([]);
+
+    const [empMobile, setEmpMobile] = useState();
+    const [storeId, setStoreId] = useState();
+    const [empType, setEmpType] = useState();
+
     const employeeForm = useRef();
     const employeeFormBg = useRef();
 
@@ -13,12 +20,59 @@ const Employee = () => {
         employeeForm.current.style.display = "none";
         employeeFormBg.current.style.display = "none";
     }
-    const addEmployee = () => {
+    const openEmployeeForm = () => {
         employeeForm.current.style.display = "block";
         employeeFormBg.current.style.display = "block";
     }
-    const signupEmployee = () => {
-        jump("/newemployee")
+
+
+    // adding new employee 
+    const addEmployee = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                mobileno: empMobile,
+                storeid: storeId,
+                emptype: empType
+            })
+        })
+        const data = await re.json();
+        console.log(data);
+        closeAddEmployee();
+        // getEmployees();
+    }
+
+    // const signupEmployee = () => {
+    //     jump("/newemployee")
+    // }
+
+    // get all employee data 
+    const getEmployees = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const data = await re.json();
+        console.table(data);
+        setEmpData(data);
+    }
+
+    // getting store 
+    const getStores = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const data = await re.json();
+        console.log(data);
+        setStores(data);
     }
 
     // const getSignUpData = async () => {
@@ -32,9 +86,10 @@ const Employee = () => {
     //     setSignUpData(data)
     // }
 
-    // useEffect(() => {
-    //     getSignUpData();
-    // }, [])
+    useEffect(() => {
+        // getStores();
+        getEmployees();
+    }, [])
 
     return (
         <>
@@ -43,7 +98,7 @@ const Employee = () => {
             <div className="new-employee-main">
                 <div className="add-c-div">
                     {/* <Link to="/newemployee"> */}
-                    <button tpe="submit" onClick={addEmployee}>Add Employee</button>
+                    <button tpe="submit" onClick={openEmployeeForm}>Add Employee</button>
                     {/* </Link> */}
                 </div>
 
@@ -52,40 +107,42 @@ const Employee = () => {
                         <thead>
                             <tr>
                                 <th>S. No.</th>
-                                <th>Photo</th>
-                                <th>Employee Name</th>
-                                <th>Address</th>
+                                <th>Emp Store Id</th>
+                                {/* <th>Photo</th> */}
+                                {/* <th>Employee Name</th> */}
+                                {/* <th>Address</th> */}
                                 <th>Mobile No</th>
-                                <th>Email</th>
-                                <th>Gender</th>
-                                <th>Father Name</th>
-                                <th>Status</th>
+                                {/* <th>Email</th> */}
+                                {/* <th>Gender</th> */}
+                                {/* <th>Father Name</th> */}
+                                {/* <th>Status</th> */}
                                 <th>Employee Type</th>
-                                <th>Referral Code</th>
+                                {/* <th>Referral Code</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {
-                employeeData.map((employee, index) => {
+                            {
+                empData.map((employee, index) => {
                     return (
                         <tr key={index}>
                             <td>{index + 1}</td>
-                            <td><img src={employee.photo} alt="Employee Photo" /></td>
-                            <td>{employee.name}</td>
-                            <td>{employee.address}</td>
-                            <td>{employee.mobile}</td>
-                            <td>{employee.email}</td>
-                            <td>{employee.gender}</td>
-                            <td>{employee.fatherName}</td>
-                            <td>{employee.status}</td>
-                            <td>{employee.type}</td>
-                            <td>{employee.refCode}</td>
+                            {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
+                            {/* <td>{employee.name}</td> */}
+                            {/* <td>{employee.name}</td> */}
+                            {/* <td>{employee.address}</td> */}
+                            {/* <td>{employee.mobile}</td> */}
+                            {/* <td>{employee.email}</td> */}
+                            {/* <td>{employee.gender}</td> */}
+                            {/* <td>{employee.fatherName}</td> */}
+                            {/* <td>{employee.status}</td> */}
+                            {/* <td>{employee.type}</td> */}
+                            {/* <td>{employee.refCode}</td> */}
                         </tr>
                     );
                 })
-            } */}
+            }
 
-                            <tr>
+                            {/* <tr>
                                 <td>S. No.</td>
                                 <td>Photo</td>
                                 <td>Employee Name</td>
@@ -97,7 +154,7 @@ const Employee = () => {
                                 <td>Status</td>
                                 <td>Employee Type</td>
                                 <td>Referral Code</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                 </div>
@@ -110,24 +167,36 @@ const Employee = () => {
                 <form>
                     <div className="form-group">
                         <label>Mobile</label>
-                        <input placeholder='Enter Mobile' type="number" id="customer-name" name="customer-name" required />
+                        <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
                     </div>
                     <div className="form-group">
                         <div>
                             <label htmlFor="employee-type">Employee Type</label>
-                            <select id="employee-type" name="employee-type" className='employee-type-signup'>
-                                <option value="distributor">Distributor</option>
-                                <option value="manager">Manager</option>
-                                <option value="delivery-agent">Delivery Agent</option>
+                            <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                                <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Delivery Agent">Delivery Agent</option>
                             </select>
                         </div>
                     </div>
                     <div className="form-group">
-                        <label for="customer-phone">Store id</label>
-                        <input placeholder='Store Id' type="tel" id="customer-phone" name="customer-phone" />
+                        <div>
+                            <label htmlFor="employee-type">Assign Store</label>
+                            <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
+                                <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
+                                {
+                                    stores.map((store, index) => {
+                                        return (
+                                            <option key={index} value={store.storeid}>{store.storename}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
                     </div>
                     <div className="form-group">
-                        <button onClick={signupEmployee}>Sigup</button>
+                        <button onClick={addEmployee}>Add</button>
                     </div>
                 </form>
             </div>

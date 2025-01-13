@@ -10,6 +10,10 @@ const Store = () => {
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
 
+    const [storeId, setStoreId ] = useState();
+
+    const [isEditMode, setIsEditMode] = useState(false);
+
     const employeeForm = useRef();
     const employeeFormBg = useRef();
 
@@ -36,10 +40,12 @@ const Store = () => {
                 latitude: latitude
             })
         });
-        alert("j")
         const data = await re.json();
-        console.log(data)
-
+        getStores();
+        setStoreName('')
+        setStoreAddress('')
+        setLongitude('')
+        setLatitude('')
     }
 
     // getting store 
@@ -52,8 +58,69 @@ const Store = () => {
         })
         const data = await re.json();
         setstoreData(data);
-        getStores()
     }
+
+    // delete store 
+    const deleteStore = async (storeid) => {
+        if (window.confirm('Are you sure you want to delete this store ?')) {
+            const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    storeid: storeid
+                })
+            })
+            const data = await re.json();
+            console.log(data)
+            getStores();
+        }
+    }
+
+    // getting single store data 
+    const getSingleStore = async (storeid) => {
+        setStoreId(storeid)
+        setIsEditMode(true);
+        const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                storeid: storeid
+            })
+        })
+        const data = await re.json();
+        console.log(data)
+        setStoreName(data.storename)
+        setStoreAddress(data.address)
+        setLongitude(data.longtude)
+        setLatitude(data.latitude)
+        addEmployee()
+    }
+
+    // updating store 
+    const updateStore = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                storeid: storeData[0].storeid,
+                storename: storeName,
+                address: storeAddress,
+                longitude: longitude,
+                latitude: latitude
+            })
+        });
+        const data = await re.json();
+        console.log(data)
+        getStores();
+        setIsEditMode(false);
+    }
+
 
     useEffect(() => {
         getStores();
@@ -81,6 +148,7 @@ const Store = () => {
                                 <th>Latitude</th>
                                 <th>Longitude</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +163,10 @@ const Store = () => {
                                             <td>{x.latitude}</td>
                                             <td>{x.longtude}</td>
                                             <td>{x.status}</td>
+                                            <td>
+                                                <i onClick={() => { getSingleStore(x.storeid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { deleteStore(x.storeid) }} className="fa fa-trash text-danger"></i>
+                                            </td>
                                         </tr>
                                     );
                                 })
@@ -107,29 +179,30 @@ const Store = () => {
 
             {/* sign up form for employee */}
             <div ref={employeeForm} className="add-customer-form">
-                <h2>Add New Store</h2>
-                {/* <form> */}
+                <h2> {isEditMode ? "Update Store" : "Add Store"}</h2>
                 <div className="form-group">
                     <label>Store Name</label>
-                    <input onChange={(e) => { setStoreName(e.target.value) }} placeholder='Enter Store Name' type="text" />
+                    <input value={storeName} onChange={(e) => { setStoreName(e.target.value) }} placeholder='Enter Store Name' type="text" />
                 </div>
                 <div className="form-group">
                     <label>Store Address</label>
-                    <input onChange={(e) => { setStoreAddress(e.target.value) }} placeholder='Enter Store Address' type="text" />
+                    <input value={storeAddress} onChange={(e) => { setStoreAddress(e.target.value) }} placeholder='Enter Store Address' type="text" />
 
                 </div>
                 <div className="form-group">
                     <label>Latitute</label>
-                    <input onChange={(e) => { setLatitude(e.target.value) }} placeholder='Latitute' type="text" />
+                    <input value={latitude} onChange={(e) => { setLatitude(e.target.value) }} placeholder='Latitute' type="text" />
                 </div>
                 <div className="form-group">
                     <label>Longitude</label>
-                    <input onChange={(e) => { setLongitude(e.target.value) }} placeholder='Longitute' type="text" />
+                    <input value={longitude} onChange={(e) => { setLongitude(e.target.value) }} placeholder='Longitute' type="text" />
                 </div>
                 <div className="form-group">
-                    <button onClick={addStore}>Add Store</button>
+                    <button onClick={isEditMode ? updateStore : addStore}>
+                        {isEditMode ? "Update Store" : "Add Store"}
+                    </button>
+
                 </div>
-                {/* </form> */}
             </div>
             <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
 

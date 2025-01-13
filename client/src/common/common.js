@@ -73,13 +73,13 @@ const Header = ({ loginPopup, popupBg }) => {
         sessionStorage.clear(); // Clear session storage
         closeUserProfile();
         // Optional: Reload the page to clear in-memory states
-        // window.location.reload();
+        window.location.reload();
     };
 
 
     // Increment and Decrement of Product in Cart 
     const cartCount = async (ctype, cartid) => {
-        
+
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {

@@ -1,7 +1,54 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SideBar from './admincommon'
+import { useNavigate } from 'react-router-dom';
 
 const Newemployee = () => {
+    const jump = useNavigate()
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    const [adhar, setAdhar] = useState();
+    const [email, setEmail] = useState();
+    const [gender, setGender] = useState();
+    const [address, setAddress] = useState();
+    const [father, setFather] = useState();
+    const [password, setPassword] = useState();
+    const [confirmPassword, setConfirmPassword] = useState();
+    const [altMobile, setAltMobile] = useState();
+
+    // Employee details form function 
+    const submit = async (state) => {
+        // validation
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+        // submit data to the server
+        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                mobileno: mobile,  //mobile not updated
+                name: name,
+                adharno: adhar,
+                email: email,
+                gender: gender,
+                address,
+                fahername: father,
+                password: password,
+                othercontactno: altMobile
+            })
+        })
+        const data = await re.json();
+        // if(data.response === "Saved") {
+        //     alert("Employee saved successfully");
+        // } else {
+        //     alert("Failed to save employee");
+        // }
+        jump("/employee")
+    }
+
     return (
         <>
             <SideBar />
@@ -18,6 +65,7 @@ const Newemployee = () => {
                                         type="text"
                                         id="employee-name"
                                         name="employee-name"
+                                        onChange={(e) => { setName(e.target.value) }}
                                         required
                                     />
                                 </div>
@@ -28,6 +76,7 @@ const Newemployee = () => {
                                         type="text"
                                         id="employee-aadhar"
                                         name="employee-aadhar"
+                                        onChange={(e) => { setAdhar(e.target.value) }}
                                         required
                                     />
                                 </div>
@@ -35,7 +84,7 @@ const Newemployee = () => {
 
                             <div className="input-pair">
                                 <div>
-                                <label>Employee Type</label>
+                                    <label>Employee Type</label>
                                     <input
                                         type="text"
                                         disabled
@@ -49,6 +98,7 @@ const Newemployee = () => {
                                         type="number"
                                         id="employee-alt-phone"
                                         name="employee-alt-phone"
+                                        onChange={(e) => { setAltMobile(e.target.value) }}
                                     />
                                 </div>
                             </div>
@@ -61,11 +111,12 @@ const Newemployee = () => {
                                         type="email"
                                         id="employee-email"
                                         name="employee-email"
+                                        onChange={(e) => { setEmail(e.target.value) }}
                                     />
                                 </div>
                                 <div>
                                     <label htmlFor="employee-gender">Gender</label>
-                                    <select id="employee-gender" name="employee-gender">
+                                    <select onChange={(e) => { setGender(e.target.value) }}>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
@@ -92,6 +143,7 @@ const Newemployee = () => {
                                         name="employee-address"
                                         placeholder="Enter Address"
                                         rows="2"
+                                        onChange={(e) => { setAddress(e.target.value) }}
                                     ></textarea>
                                 </div>
 
@@ -106,6 +158,7 @@ const Newemployee = () => {
                                         type="text"
                                         id="father-name"
                                         name="father-name"
+                                        onChange={(e) => { setFather(e.target.value) }}
                                     />
                                 </div>
 
@@ -128,6 +181,7 @@ const Newemployee = () => {
                                         id="employee-password"
                                         name="employee-password"
                                         placeholder="Enter Password"
+                                        onChange={(e) => { setPassword(e.target.value) }}
                                         required
                                     />
                                 </div>
@@ -138,6 +192,7 @@ const Newemployee = () => {
                                         id="employee-password"
                                         name="employee-password"
                                         placeholder="Enter Password"
+                                        onChange={(e) => { setConfirmPassword(e.target.value) }}
                                         required
                                     />
                                 </div>

@@ -323,7 +323,12 @@ td {
     margin-left: 250px;
     padding: 20px;
 }
-
+.fa-edit{
+    color: var(--primary-green);
+}
+.table-responsive i{
+    cursor: pointer;
+}
 .employee-form-container {
     background: var(--light-gray);
     border: 2px solid var(--primary-green);
