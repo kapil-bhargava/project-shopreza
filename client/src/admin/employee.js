@@ -3,15 +3,33 @@ import SideBar from './admincommon'
 import { Link, useNavigate } from 'react-router-dom';
 
 const Employee = () => {
+    const signupref = useRef();
+    const editForm = useRef();
+    const editFormBg = useRef();
+    const [name, setName] = useState();
+    const [empType, setEmpType] = useState();
+    const [mobile, setMobile] = useState();
+    const [adhar, setAdhar] = useState();
+    const [email, setEmail] = useState();
+    const [gender, setGender] = useState();
+    const [address, setAddress] = useState();
+    const [father, setFather] = useState();
+    const [password, setPassword] = useState();
+    const [status, setStatus] = useState();
+    var st = ["active", "inactive"];
+    var type = ["Delivery Agent", "Manager", "Distributor"]
+    const [confirmPassword, setConfirmPassword] = useState();
+    const [altMobile, setAltMobile] = useState();
+
     const jump = useNavigate();
     const [signUpData, setSignUpData] = useState([]);
 
     const [stores, setStores] = useState([]);
     const [empData, setEmpData] = useState([]);
+    const [singleEmpData, setSingleEmpData] = useState([]);
 
     const [empMobile, setEmpMobile] = useState();
     const [storeId, setStoreId] = useState();
-    const [empType, setEmpType] = useState();
 
     const employeeForm = useRef();
     const employeeFormBg = useRef();
@@ -42,12 +60,7 @@ const Employee = () => {
         const data = await re.json();
         console.log(data);
         closeAddEmployee();
-        // getEmployees();
     }
-
-    // const signupEmployee = () => {
-    //     jump("/newemployee")
-    // }
 
     // get all employee data 
     const getEmployees = async () => {
@@ -58,7 +71,6 @@ const Employee = () => {
             }
         })
         const data = await re.json();
-        console.table(data);
         setEmpData(data);
     }
 
@@ -71,24 +83,117 @@ const Employee = () => {
             }
         })
         const data = await re.json();
-        console.log(data);
         setStores(data);
     }
 
-    // const getSignUpData = async () => {
-    //     const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         }
-    //     })
-    //     const data = await re.json();
-    //     setSignUpData(data)
-    // }
+    // getting single Emp Data 
+    const getSingleEmp = async (mobile) => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                mobileno: mobile
+            })
+        })
+        const data = await re.json();
+        console.log(data);
+        setName(data[0].name);
+        setEmpType(data[0].emptype);
+        setMobile(data[0].mobileno);
+        setAdhar(data[0].aadharno);
+        setEmail(data[0].email);
+        setGender(data[0].gender);
+        setAddress(data[0].address);
+        setFather(data[0].fathername);
+        setAltMobile(data[0].othercontactno);
+        setEmpMobile(mobile);
+        setStatus(data[0].status);
+        setStoreId(data[0].storeid);
+        editForm.current.style.display = "block";
+        editFormBg.current.style.display = "block";
+    }
+
+    // delete employee 
+    const deleteEmp = async (mobile) => {
+        alert(mobile)
+        if (window.confirm('Are you sure you want to delete this Employee ?')) {
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mobile: mobile
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+            // emptyFields();
+            getEmployees();
+        }
+    }
+
+
+    const emptyFields = () => {
+        setName('');
+        setEmpType('');
+        setMobile('');
+        setAdhar('');
+        setEmail('');
+        setGender('');
+        setAddress('');
+        setFather('');
+        setAltMobile('');
+        setEmpMobile('');
+        setStatus('');
+        setStoreId('');
+        editForm.current.style.display = "none";
+        editFormBg.current.style.display = "none";
+        getEmployees();
+    }
+
+
+    // update employee form 
+    const update = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                mobileno: mobile,
+                name: name,
+                aadharno: adhar,
+                email: email,
+                gender: gender,
+                address: address,
+                fathername: father,
+                othercontactno: altMobile,
+                emptype: empType,
+                status: status,
+                storeid: storeId
+            })
+        })
+        const data = await re.json();
+        if (data.response === "Saved") {
+            alert("Employee updated successfully");
+            editForm.current.style.display = "none";
+            getEmployees();
+            emptyFields();
+
+        }
+        else {
+            alert("Failed to update employee");
+        }
+    }
+
 
     useEffect(() => {
-        // getStores();
+        getStores();
         getEmployees();
+
     }, [])
 
     return (
@@ -107,84 +212,203 @@ const Employee = () => {
                         <thead>
                             <tr>
                                 <th>S. No.</th>
-                                <th>Emp Store Id</th>
-                                {/* <th>Photo</th> */}
-                                {/* <th>Employee Name</th> */}
-                                {/* <th>Address</th> */}
+                                <th>Assigned Store</th>
+                                <th>Employee Name</th>
+                                <th>Address</th>
                                 <th>Mobile No</th>
-                                {/* <th>Email</th> */}
-                                {/* <th>Gender</th> */}
-                                {/* <th>Father Name</th> */}
-                                {/* <th>Status</th> */}
+                                <th>Email</th>
+                                <th>Other Mob</th>
+                                <th>Gender</th>
+                                <th>Father Name</th>
+                                <th>Status</th>
                                 <th>Employee Type</th>
+                                <th>Action</th>
                                 {/* <th>Referral Code</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {
-                empData.map((employee, index) => {
-                    return (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
-                            {/* <td>{employee.name}</td> */}
-                            {/* <td>{employee.name}</td> */}
-                            {/* <td>{employee.address}</td> */}
-                            {/* <td>{employee.mobile}</td> */}
-                            {/* <td>{employee.email}</td> */}
-                            {/* <td>{employee.gender}</td> */}
-                            {/* <td>{employee.fatherName}</td> */}
-                            {/* <td>{employee.status}</td> */}
-                            {/* <td>{employee.type}</td> */}
-                            {/* <td>{employee.refCode}</td> */}
-                        </tr>
-                    );
-                })
-            }
-
-                            {/* <tr>
-                                <td>S. No.</td>
-                                <td>Photo</td>
-                                <td>Employee Name</td>
-                                <td>Address</td>
-                                <td>Mobile No</td>
-                                <td>Email</td>
-                                <td>Gender</td>
-                                <td>Fatder Name</td>
-                                <td>Status</td>
-                                <td>Employee Type</td>
-                                <td>Referral Code</td>
-                            </tr> */}
+                                empData.map((employee, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
+                                            <td>{employee.storeid}</td>
+                                            <td>{employee.name}</td>
+                                            <td>{employee.address}</td>
+                                            <td>{employee.mobileno}</td>
+                                            <td>{employee.email}</td>
+                                            <td>{employee.othercontactno}</td>
+                                            <td>{employee.gender}</td>
+                                            <td>{employee.fathername}</td>
+                                            <td>{employee.status}</td>
+                                            <td>{employee.emptype}</td>
+                                            <td>
+                                                <i onClick={() => { getSingleEmp(employee.mobileno) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { deleteEmp(employee.mobileno) }} className="fa fa-trash text-danger"></i>
+                                            </td>
+                                            {/* <td>{employee.refCode}</td> */}
+                                        </tr>
+                                    );
+                                })
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
 
 
-            sign up form for employee
+            {/* sign up form for employee */}
             <div ref={employeeForm} className="add-customer-form">
                 <h2>Add New Employee</h2>
-                <form>
-                    <div className="form-group">
-                        <label>Mobile</label>
-                        <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
+                <div className="form-group">
+                    <label>Mobile</label>
+                    <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
+                </div>
+                <div className="form-group">
+                    <div>
+                         <label>Employee Type</label>
+                        <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
+                            <option value="Distributor">Distributor</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Delivery Agent">Delivery Agent</option>
+                        </select>
                     </div>
-                    <div className="form-group">
+                </div>
+                <div className="form-group">
+                    <div>
+                         <label>Assign Store</label>
+                        <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
+                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
+                            {
+                                stores.map((store, index) => {
+                                    return (
+                                        <option key={index} value={store.storeid}>{store.storename}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <button onClick={addEmployee}>Add</button>
+                </div>
+            </div>
+            <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
+
+            {/* </div> */}
+
+            {/* edit employee form  */}
+            <div onClick={emptyFields} className="edit-form-bg" ref={editFormBg}></div>
+            <div ref={editForm} className="employee-form-container edit-form">
+                <h3>Edit Employee Details</h3>
+                <div className="form-group">
+                    <div className="input-pair">
                         <div>
-                            <label htmlFor="employee-type">Employee Type</label>
-                            <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
-                                <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
-                                <option value="Distributor">Distributor</option>
-                                <option value="Manager">Manager</option>
-                                <option value="Delivery Agent">Delivery Agent</option>
+                            <label htmlFor="employee-name">Name</label>
+                            <input
+                                placeholder="Employee Name"
+                                type="text"
+                                id="employee-name"
+                                name="employee-name"
+                                onChange={(e) => { setName(e.target.value) }}
+                                value={name}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="employee-aadhar">Aadhar</label>
+                            <input
+                                placeholder="Employee Aadhar"
+                                type="text"
+                                id="employee-aadhar"
+                                name="employee-aadhar"
+                                onChange={(e) => { setAdhar(e.target.value) }}
+                                value={adhar}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="input-pair">
+                        <div>
+                            <label>Employee Number</label>
+                            <input
+                                type="text"
+                                value={mobile}
+                                onChange={(e) => { setMobile(e.target.value) }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="employee-alt-phone">Alternate Mobile No</label>
+                            <input
+                                placeholder="Alternate Mobile Number"
+                                type="number"
+                                id="employee-alt-phone"
+                                value={altMobile}
+                                name="employee-alt-phone"
+                                onChange={(e) => { setAltMobile(e.target.value) }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="input-pair">
+                        <div>
+                            <label htmlFor="employee-email">Email</label>
+                            <input
+                                placeholder="Employee Email"
+                                type="email"
+                                id="employee-email"
+                                name="employee-email"
+                                value={email}
+                                onChange={(e) => { setEmail(e.target.value) }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="employee-gender">Gender</label>
+                            <select onChange={(e) => { setGender(e.target.value) }}>
+                                <option value={gender}>{gender}</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                     </div>
-                    <div className="form-group">
+
+                    <div className="input-pair">
                         <div>
-                            <label htmlFor="employee-type">Assign Store</label>
-                            <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
-                                <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
+                            <label htmlFor="employee-address">Address</label>
+                            <textarea
+                                id="employee-address"
+                                name="employee-address"
+                                placeholder="Enter Address"
+                                rows="2"
+                                value={address}
+                                onChange={(e) => { setAddress(e.target.value) }}
+                            ></textarea>
+                        </div>
+
+
+                    </div>
+
+                    <div className="input-pair">
+                        <div>
+                            <label htmlFor="father-name">Father Name</label>
+                            <input
+                                placeholder="Father's Name"
+                                type="text"
+                                id="father-name"
+                                name="father-name"
+                                value={father}
+                                onChange={(e) => { setFather(e.target.value) }}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Assign Store</label>
+                            <select onChange={(e) => { setStoreId(e.target.value) }}>
+                                {/* <option value={store}></option> */}
                                 {
                                     stores.map((store, index) => {
                                         return (
@@ -193,16 +417,39 @@ const Employee = () => {
                                     })
                                 }
                             </select>
+
                         </div>
                     </div>
-                    <div className="form-group">
-                        <button onClick={addEmployee}>Add</button>
-                    </div>
-                </form>
-            </div>
-            <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
 
-            {/* </div> */}
+                    <div className="input-pair">
+                        <div>
+                            <label>Employee Status</label>
+                            <select onChange={(e) => { setStatus(e.target.value) }}>
+                                {st.map((x, index) => {
+                                    return (
+                                        x == status ? <option selected value={x}>{x}</option> : <option value={x}>{x}</option>
+
+                                    )
+                                })}
+                            </select>
+                        </div>
+                        <div>
+                             <label>Employee Type</label>
+                            <select onChange={(e) => { setEmpType(e.target.value) }}>
+                                {type.map((x, index) => {
+                                    return (
+                                        x === empType ? <option selected value={x}>{x}</option> : <option value={x}>{x}</option>
+
+                                    )
+                                })}
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" onClick={update}>Update</button>
+            </div>
         </>
     )
 }

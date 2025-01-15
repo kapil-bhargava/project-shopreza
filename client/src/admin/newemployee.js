@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import SideBar from './admincommon'
 import { useNavigate } from 'react-router-dom';
 
 const Newemployee = () => {
-    const jump = useNavigate()
+    const jump = useNavigate();
+    const signupref = useRef();
+    const form = useRef();
     const [name, setName] = useState();
+    const [status, setStatus] = useState();
+    const [storeId, setStoreId] = useState();
+    const [empType, setEmpType] = useState();
     const [mobile, setMobile] = useState();
     const [adhar, setAdhar] = useState();
     const [email, setEmail] = useState();
@@ -14,6 +19,32 @@ const Newemployee = () => {
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [altMobile, setAltMobile] = useState();
+
+    const signup = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                mobileno: mobile
+            })
+        });
+        const data = await re.json();
+        console.log(data);
+        if (data !== null) {
+            signupref.current.style.display = 'none';
+            form.current.style.display = "block";
+            setMobile(data[0].mobileno);
+            setEmpType(data[0].emptype)
+            setStatus(data[0].status)
+            setStoreId(data[0].storeid)
+        }
+        else {
+            alert("Number not registered!");
+        }
+        console.log(data);
+    }
 
     // Employee details form function 
     const submit = async (state) => {
@@ -29,33 +60,48 @@ const Newemployee = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                mobileno: mobile,  //mobile not updated
+                mobileno: mobile,
                 name: name,
-                adharno: adhar,
+                aadharno: adhar,
                 email: email,
                 gender: gender,
-                address,
-                fahername: father,
+                address:address,
+                fathername: father,
+                emptype:empType,
                 password: password,
+                storeid: storeId,
+                status: status,
                 othercontactno: altMobile
             })
         })
         const data = await re.json();
-        // if(data.response === "Saved") {
-        //     alert("Employee saved successfully");
-        // } else {
-        //     alert("Failed to save employee");
-        // }
-        jump("/employee")
+        console.log(data);
+        if(data.response === "Saved") {
+            alert("Employee saved successfully");
+            jump("/adminlogin")
+        } else {
+            alert("Failed to save employee");
+        }
+        // jump("/employee")
     }
 
     return (
         <>
-            <SideBar />
-            <div className="new-employee-main">
+            {/* signup  */}
+            <section ref={signupref} className="signup-popup-container active-popup">
+                {/* <i onClick={goBack} className="fa-solid fa-arrow-left"></i> */}
+                <h4>Please Signup</h4> <br />
+                <label  >Enter Mobile Number</label>
+                <input onChange={(e) => { setMobile(e.target.value) }} placeholder='9158XXXX45' type="number" /> <br /> <br />
+                {/* {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>} */}
+                <button className="btn btn-success" onClick={signup} >Signup</button> <br />
+            </section>
+
+            {/* employee form  */}
+            <div ref={form} className="new-employee">
                 <div className="employee-form-container">
                     <h3>New Employee Details</h3>
-                    <form>
+                    {/* <form> */}
                         <div className="form-group">
                             <div className="input-pair">
                                 <div>
@@ -84,11 +130,11 @@ const Newemployee = () => {
 
                             <div className="input-pair">
                                 <div>
-                                    <label>Employee Type</label>
+                                    <label>Employee Number</label>
                                     <input
                                         type="text"
                                         disabled
-                                        value="9090909099"
+                                        value={mobile}
                                     />
                                 </div>
                                 <div>
@@ -122,20 +168,9 @@ const Newemployee = () => {
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
-
-
                             </div>
 
                             <div className="input-pair">
-                                {/* <div>
-                                    <label htmlFor="employee-photo">Photo</label>
-                                    <input
-                                        type="file"
-                                        id="employee-photo"
-                                        name="employee-photo"
-                                        accept="image/*"
-                                    />
-                                </div> */}
                                 <div>
                                     <label htmlFor="employee-address">Address</label>
                                     <textarea
@@ -161,16 +196,6 @@ const Newemployee = () => {
                                         onChange={(e) => { setFather(e.target.value) }}
                                     />
                                 </div>
-
-                                {/* <div>
-                                    <label htmlFor="ref-code">Referral Code</label>
-                                    <input
-                                        placeholder="Referral Code"
-                                        type="text"
-                                        id="ref-code"
-                                        name="ref-code"
-                                    />
-                                </div> */}
                             </div>
                             <div className="input-pair">
 
@@ -178,7 +203,6 @@ const Newemployee = () => {
                                     <label htmlFor="employee-password">Password</label>
                                     <input
                                         type="password"
-                                        id="employee-password"
                                         name="employee-password"
                                         placeholder="Enter Password"
                                         onChange={(e) => { setPassword(e.target.value) }}
@@ -189,7 +213,6 @@ const Newemployee = () => {
                                     <label htmlFor="employee-password">Confirm Password</label>
                                     <input
                                         type="password"
-                                        id="employee-password"
                                         name="employee-password"
                                         placeholder="Enter Password"
                                         onChange={(e) => { setConfirmPassword(e.target.value) }}
@@ -199,38 +222,26 @@ const Newemployee = () => {
                             </div>
 
                             <div className="input-pair">
-                                {/* <div>
-                                    <label htmlFor="employee-status">Status</label>
-                                    <input
-                                        type="text"
-                                        id="employee-status"
-                                        name="employee-status"
-                                        placeholder="Status"
-                                    />
-                                </div> */}
-
                                 <div>
-                                    <label>Employee Type</label>
-                                    <input
-                                        type="text"
-                                        disabled
-                                        value="Manager"
-                                    />
-
+                                    <label>Employee Status</label>
+                                    <select onChange={(e)=>{setEmpType(e.target.value)}} disabled >
+                                        <option value="active">{status}</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
                                 </div>
-                                {/* <div>
+                                <div>
                                     <label htmlFor="employee-type">Employee Type</label>
-                                    <select id="employee-type" name="employee-type">
-                                        <option value="distributor">Distributor</option>
+                                    <select onChange={(e)=>{setEmpType(e.target.value)}} disabled id="employee-type" name="employee-type">
+                                        <option value="distributor">{empType}</option>
                                         <option value="manager">Manager</option>
                                         <option value="delivery-agent">Delivery Agent</option>
                                     </select>
-                                </div> */}
+                                </div>
                             </div>
                         </div>
 
-                        <button type="submit">Submit</button>
-                    </form>
+                        <button type="submit" onClick={submit}>Submit</button>
+                    {/* </form> */}
                 </div>
             </div>
         </>

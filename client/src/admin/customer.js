@@ -3,9 +3,13 @@ import SideBar from './admincommon'
 
 const Customer = () => {
     const [signUpData, setSignUpData] = useState([]);
-
     const customerForm = useRef();
     const customerFormBg = useRef();
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    // const [address, setAddress] = useState();
+
+
     const addCustomer = () => {
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
@@ -42,17 +46,17 @@ const Customer = () => {
                 <h2>Add New Customer</h2>
                 <form>
                     <div className="form-group">
-                        <label for="customer-name">Name</label>
-                        <input placeholder='Customer Name' type="text" id="customer-name" name="customer-name" required />
+                        <label>Name</label>
+                        <input onChange={(e) => { setName(e.target.value) }} placeholder='Customer Name' type="text" id="customer-name" name="customer-name" required />
                     </div>
                     <div className="form-group">
                         <label for="customer-email">Mobile</label>
-                        <input placeholder='Customer Phone' type="email" id="customer-email" name="customer-email" required />
+                        <input onChange={(e) => { setName(e.target.value) }} placeholder='Customer Mobile' type="email" id="customer-email" name="customer-email" required />
                     </div>
-                    <div className="form-group">
-                        <label for="customer-phone">Phone</label>
-                        <input placeholder='Customer Address' type="tel" id="customer-phone" name="customer-phone" />
-                    </div>
+                    {/* <div className="form-group">
+                        <label for="customer-phone">Address</label>
+                        <input onChange={(e) => { setName(e.target.value) }} placeholder='Customer Address' type="tel" id="customer-phone" name="customer-phone" />
+                    </div> */}
                     <div className="form-group">
                         <button type="submit">Add Customer</button>
                     </div>
@@ -73,15 +77,15 @@ const Customer = () => {
                     </thead>
                     <tbody>
                         {
-                            signUpData.map((x,index) => {
+                            signUpData.map((x, index) => {
                                 return (
                                     <tr key={index}>
-                                       <td>{index+1}</td>
-                                       <td> <img src={x.pic} alt={x.pic} /></td>
-                                       <td>{x.name}</td>
-                                       <td>lat : {x.lat} <br/> lon : {x.lon}</td>
-                                       <td>{x.status}</td>
-                                       <td>{x.vcode}</td>
+                                        <td>{index + 1}</td>
+                                        <td> <img src={x.pic} alt={x.pic} /></td>
+                                        <td>{x.name}</td>
+                                        <td>lat : {x.lat} <br /> lon : {x.lon}</td>
+                                        <td>{x.status}</td>
+                                        <td>{x.vcode}</td>
 
                                     </tr>
                                 )

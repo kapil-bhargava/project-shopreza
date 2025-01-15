@@ -16,6 +16,7 @@ const SubCategory = () => {
     const [username, setusername] = useState()
     const [usermobile, setusermobile] = useState()
     const [userpassword, setuserpassword] = useState()
+    const [confirmuserpassword, setconfirmuserpassword] = useState()
     const [otp, setOtp] = useState();
     const [unitId, setunitId] = useState();
     const loginPopup = useRef()
@@ -34,6 +35,7 @@ const SubCategory = () => {
     const [nameError, setNameError] = useState();
     const [mobileError, setMobileError] = useState();
     const [passwordError, setPasswordError] = useState();
+    const [confirmPasswordError, setconfirmPasswordError] = useState();
 
     const [spid,setspid]=useState();
 
@@ -257,6 +259,9 @@ const SubCategory = () => {
     const signUpPassword = (e) => {
         setuserpassword(e.target.value)
     }
+    const signUpConfirmPassword = (e) => {
+        setconfirmuserpassword(e.target.value)
+    }
 
     // for login up back button 
     const goBack = () => {
@@ -304,6 +309,9 @@ const SubCategory = () => {
         }
         else if (!userpassword) {
             setPasswordError("Password is required");
+        }
+        else if(userpassword!==confirmuserpassword){
+            setconfirmPasswordError("Password do not match");
         }
         else {
             const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
@@ -519,6 +527,10 @@ const SubCategory = () => {
                 <label  >Enter Password</label>
                 <input onChange={signUpPassword} placeholder='Password' type="password" /> <br />
                 {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
+                <br />
+                <label  >Confirm Password</label>
+                <input onChange={signUpConfirmPassword} placeholder='Password' type="password" /> <br />
+                {confirmPasswordError && <span style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</span>}
                 <br />
 
                 <button className="btn btn-warning" onClick={signUp}>SignUp</button> <br />

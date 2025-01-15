@@ -15,6 +15,8 @@ import Customer from './admin/customer';
 import Employee from './admin/employee';
 import Newemployee from './admin/newemployee';
 import Store from './admin/stores';
+import Adminlogin from './admin/adminlogin';
+import Adminsignup from './admin/adminsignup';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -33,6 +35,8 @@ root.render(
         <Route exact path="/userlogin" element={<Userlogin />} />
         {/* <Route exact path="/usersignup" element={<Usersignup />} /> */}
         <Route exact path="/subcategory/:cid" element={<SubCategory />} />
+        <Route exact path="/adminlogin" element={<Adminlogin/>} />
+        <Route exact path="/adminsignup" element={<Adminsignup/>} />
       </Routes>
     </BrowserRouter>
     </Provider>

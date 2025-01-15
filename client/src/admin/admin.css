@@ -323,6 +323,10 @@ td {
     margin-left: 250px;
     padding: 20px;
 }
+.new-employee{
+    display: none;
+
+}
 .fa-edit{
     color: var(--primary-green);
 }
@@ -339,6 +343,27 @@ td {
     font-family: Arial, sans-serif;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+.edit-form-bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    /* z-index: 1000; */
+}
+.edit-form{
+    position: fixed;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    width: 450px;
+    background-color: var(--white);
+    display: none;
+    
+}
+
 
 .employee-form-container h3 {
     color: var(--dark-gray);
@@ -393,9 +418,9 @@ td {
 
 
 @media (max-width: 768px) {
-    .sidebar-main {
+    /* .sidebar-main {
         flex-direction: column;
-    }
+    } */
 
     .menu-toggle {
         display: block;
@@ -403,6 +428,7 @@ td {
 
     .sidebardb {
         transform: translateX(-250px);
+        /* background-color: red; */
     }
 
     .sidebardb.active {
@@ -443,4 +469,78 @@ td {
     .employee-form-container {
         width: 100%;
     }
+}
+
+
+/* admin login css  */
+/* login popup  */
+.popup-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 450;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s ease;
+    /* display: none; */
+}
+
+.login-popup-container {
+    /* display: none; */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    visibility: hidden;
+    opacity: 0;
+    width: 300px;
+    background-color: var(--primary-white);
+    padding: 7px;
+    border-radius: 5px;
+    z-index: 451;
+    border: 1px solid var(--primary-green);
+    box-shadow: var(--soft-shadow);
+    transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.login-popup-container i{
+    cursor: pointer;
+}
+.active-popupBg{
+    visibility: visible;
+    opacity: 1;
+}
+
+.active-popup {
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    opacity: 1;
+}
+.signup-popup-container {
+    /* display: none; */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: var(--primary-white);
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-green);
+    box-shadow: var(--soft-shadow);
+
+}
+.signup-popup-container input {
+    width: 100%;
+    outline: initial;
+    padding: 2px 5px;
+    /* border-radius: 0px; */
+    /* border: 1px solid black; */
+    /* outline: none; */
+}
+.signup-popup-container button{
+    width: 100%;
+    padding: 3px;
 }

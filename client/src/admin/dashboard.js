@@ -13,18 +13,10 @@ const Dashboard = () => {
     return (
         <>
             <div className="sidebar-main">
-                <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
-                <div className="sidebardb" ref={sidebar}>
-                    <div className="logo">Admin Dashboard</div>
-                    <SideBar />
-                </div>
+                <SideBar />
                 <div className="main-content">
                     <div className="header">
                         <h1>Dashboard Overview</h1>
-                        {/* <div className="search-bar">
-                        <input type="text" placeholder="Search..."/>
-                            <button>Search</button>
-                    </div> */}
                     </div>
                     <div className="dashboard-cards">
                         <div className="card">
