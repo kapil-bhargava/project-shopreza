@@ -7,6 +7,7 @@ const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
 
     const [cookie, createcookie, removecookie] = useCookies()
+    const [cookie2, createcookie2, removecookie2] = useCookies()
     const [cartData, setCartData] = useState([])
     const [total, settotal] = useState(0);
     const dispatch = useDispatch();
@@ -68,12 +69,9 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // logout function 
     const logout = () => {
+        removecookie2("sp2");
         removecookie("sp");
-        localStorage.clear(); // Clear local storage
-        sessionStorage.clear(); // Clear session storage
-        closeUserProfile();
-        // Optional: Reload the page to clear in-memory states
-        window.location.reload();
+      
     };
 
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const Adminsignup = () => {
+const Empsignup = () => {
     const [mobile, setmobile] = useState();
-    const jump = useNavigate()
+    const jump = useNavigate();
+
+    
     const signup = async () => {
         const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
             method: 'PATCH',
@@ -38,4 +40,4 @@ const Adminsignup = () => {
     )
 }
 
-export default Adminsignup
+export default Empsignup

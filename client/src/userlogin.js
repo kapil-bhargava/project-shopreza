@@ -5,6 +5,8 @@ const Userlogin = () => {
 
     const [usermobile, setusermobile] = useState("");
     const [error, setError] = useState("");
+
+    // Input validation and state management
     const handleChange = (e) => {
         const value = e.target.value;
         const regex = /^[6-9]\d{9}$/; // Indian mobile numbers start with 6-9 and have 10 digits

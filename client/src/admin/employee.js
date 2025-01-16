@@ -211,17 +211,16 @@ const Employee = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>S. No.</th>
-                                <th>Assigned Store</th>
-                                <th>Employee Name</th>
+                                <th>S.No.</th>
+                                <th>Name</th>
+                                <th>Store</th>
                                 <th>Address</th>
-                                <th>Mobile No</th>
+                                <th>Mobile</th>
+                                <th>Alt Mob</th>
                                 <th>Email</th>
-                                <th>Other Mob</th>
-                                <th>Gender</th>
-                                <th>Father Name</th>
+                                <th>Father&nbsp;Name</th>
                                 <th>Status</th>
-                                <th>Employee Type</th>
+                                <th>Type</th>
                                 <th>Action</th>
                                 {/* <th>Referral Code</th> */}
                             </tr>
@@ -233,13 +232,12 @@ const Employee = () => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
-                                            <td>{employee.storeid}</td>
-                                            <td>{employee.name}</td>
+                                            <td>{employee.name+"(" + employee.gender + ")"}</td>
+                                            <td>{employee.storename}</td>
                                             <td>{employee.address}</td>
                                             <td>{employee.mobileno}</td>
-                                            <td>{employee.email}</td>
                                             <td>{employee.othercontactno}</td>
-                                            <td>{employee.gender}</td>
+                                            <td>{employee.email}</td>
                                             <td>{employee.fathername}</td>
                                             <td>{employee.status}</td>
                                             <td>{employee.emptype}</td>

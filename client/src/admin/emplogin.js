@@ -2,55 +2,52 @@ import React, { useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
-const AdminLogin = () => {
-    const [adminName, setAdminName] = useState();
-    const [adminPassword, setAdminPassword] = useState();
-
+const Emplogin = () => {
+    const [mobile, setmobile] = useState();
+    const [password, setpassword] = useState();
     const jump = useNavigate();
     const [cookie, createcookie, removecookie] = useCookies();
 
-    // const login = () => {
-    //     if (userName === "zn" && password === "12345") {
-    //         createcookie('adminCookie', userName);
-    //         jump("/dashboard")
-    //     }
-    // }
-
     const login = async () => {
-        const re = await fetch(`${process.env.REACT_APP_URL}/validateadminapi.php`, {
+        console.log(mobile, password)
+        const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
             method: 'POST',
-            headers: {
+            headers: { 
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ uname: adminName, password: adminPassword }),
+            body: JSON.stringify({ mobile: mobile, password: password }),
         })
         const data = await re.json();
         console.log(data);
         if (data.response === "Valid") {
-            createcookie('adminCookie', adminName);
-            jump("/dashboard")
+            createcookie('empCookie', mobile);
+            jump("/customers")
         }
         else {
             alert("Invalid User")
         }
     }
 
+    const signup = () => {
+        jump("/empsignup")
+    }
 
     return (
         <>
             <section className="login-popup-container active-popup">
                 {/* <i onClick={goBack} className="fa-solid fa-arrow-left"></i> */}
-                <h4>Admin Login</h4> <br />
-                <label  >Enter User Name</label>
-                <input onChange={(e) => { setAdminName(e.target.value) }} placeholder='username' type="text" /> <br />
+                <h4>Employee Login</h4> <br />
+                <label  >Enter Mobile Number</label>
+                <input onChange={(e) => { setmobile(e.target.value) }} placeholder='9158XXXX45' type="number" /> <br />
                 {/* {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>} */}
                 <br />
                 <label  >Enter Password</label>
-                <input onChange={(e) => { setAdminPassword(e.target.value) }} placeholder='password' type="text" /> <br />
+                <input onChange={(e) => { setpassword(e.target.value) }} placeholder='Password' type="password" /> <br />
                 {/* {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>} */}
                 <br />
 
-                <button className="btn btn-success" onClick={login} >Login</button>
+                <button className="btn btn-success" onClick={login} >Login</button> <br />
+                <p>Not have an account ? <span onClick={signup}>Signup</span></p>
             </section>
 
 
@@ -58,4 +55,4 @@ const AdminLogin = () => {
     )
 }
 
-export default AdminLogin
+export default Emplogin

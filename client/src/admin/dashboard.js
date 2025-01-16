@@ -1,10 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import "./admin.css";
 import Customer from './customer';
 import SideBar from './admincommon';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const sidebar = useRef()
+    const [cookie, createcookie, removecookie] = useCookies()
+    const sidebar = useRef();
+    const jump = useNavigate();
+
+ 
+    useEffect(()=>{
+        if(cookie["adminCookie"]==null){
+            jump('/adminlogin');
+            // return null;    
+        }
+    
+    },[])
+    
 
     const openSidebar = () => {
         sidebar.current.classList.toggle('active');

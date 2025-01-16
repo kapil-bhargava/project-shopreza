@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 const SubCategory = () => {
     const mynum = useSelector((state) => state.cartitem);
     const dispatch = useDispatch();
-
     const { cid } = useParams()
     const [subcatdata, setsubcatdata] = useState([]);
     const [productdata, setproductdata] = useState([]);
     const [aitem, setaitem] = useState([]);
     const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
     const [username, setusername] = useState()
     const [usermobile, setusermobile] = useState()
     const [userpassword, setuserpassword] = useState()
@@ -31,13 +31,14 @@ const SubCategory = () => {
     const unitOptionsDiv = useRef();
     const mobileCart = useRef();
     const headerRef = useRef();
+    const [userGender, setUserGender] = useState();
 
     const [nameError, setNameError] = useState();
     const [mobileError, setMobileError] = useState();
     const [passwordError, setPasswordError] = useState();
     const [confirmPasswordError, setconfirmPasswordError] = useState();
 
-    const [spid,setspid]=useState();
+    const [spid, setspid] = useState();
 
 
     // updating cart count 
@@ -47,7 +48,7 @@ const SubCategory = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile:cookie.sp, storeid:"1" })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
         if (ctype === "plus") {
@@ -56,20 +57,20 @@ const SubCategory = () => {
             aitem[x].cartqty = parseInt(aitem[x].cartqty) - 1;
         }
         console.log(aitem);
-       
+
         dispatch({ type: 'INC', cdata: data.cdata });
         showUnitOptions(spid);
 
     };
-    
+
     const handleButtonClick1 = async (ctype, cartid, x) => {
-        
+
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile:cookie.sp, storeid:"1" })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
         if (ctype === "plus") {
@@ -78,7 +79,7 @@ const SubCategory = () => {
             productdata[x].cartqty = parseInt(productdata[x].cartqty) - 1;
         }
         console.log(data);
-//       alert(data.cdata);
+        //       alert(data.cdata);
         dispatch({ type: 'INC', cdata: data.cdata });
         getProduct(cid);
 
@@ -86,10 +87,9 @@ const SubCategory = () => {
 
     // unit options div close and open functions 
     const showUnitOptions = async (spid) => {
-        
+
         setspid(spid);
         const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=1`, {
-        // const re = await fetch(process.env.REACT_APP_URL + "/aitemapi.php?spid=1&mob=9565017342&storeid=1", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const SubCategory = () => {
 
     // getting all products 
     const getProduct = async (scid) => {
-        
+
         loaderLoading.current.style.display = "block"
         var mob = cookie["sp"];
         const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=1`, {
@@ -162,10 +162,9 @@ const SubCategory = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid:"1" })
+                body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid: "1" })
             });
             const data = await re.json();
-            alert(data.response)
             console.log(data)
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
@@ -174,8 +173,16 @@ const SubCategory = () => {
                     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                     secure: true, // Use for HTTPS
                 });
-                loginPopup.current.classList.remove('active-popup');              
-                
+                createcookie2("sp2", data.storeid, {
+                    path: "/", // Cookie is available on all routes
+                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
+                    secure: true, // Use for HTTPS
+                });
+
+                // createcookie2("sp2", storeid)
+                loginPopup.current.classList.remove('active-popup');
+                // loginPopup.current.classList.remove('active-popup');              
+
             }
             else {
                 alert("Invalid Mobile or Password")
@@ -183,8 +190,8 @@ const SubCategory = () => {
         }
     }
     // adding to the cart 
-    const addToCart = async (unitId, x,au) => {
-      //  alert(spid);
+    const addToCart = async (unitId, x, au) => {
+        //  alert(spid);
         if (cookie["sp"] == null) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
@@ -198,10 +205,10 @@ const SubCategory = () => {
                 body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
             });
             const data = await re.json();
-           
+
             dispatch({ type: 'INC', cdata: data.cdata });
             alert(au);
-           if(au==="yes"){ showUnitOptions(spid)};
+            if (au === "yes") { showUnitOptions(spid) };
             audio.current.play();
             mobileCart.current.classList.add("active-mobile-cart");
             animatedImg.current.classList.add("active-animated-img");
@@ -310,26 +317,27 @@ const SubCategory = () => {
         else if (!userpassword) {
             setPasswordError("Password is required");
         }
-        else if(userpassword!==confirmuserpassword){
+        else if (userpassword !== confirmuserpassword) {
             setconfirmPasswordError("Password do not match");
         }
         else {
+            alert(userGender)
             const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, lat:"101", lon:"202", storeid:"1" })
+                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender:userGender })
             });
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             if (data.response === "Saved") {
-                otpPopup.current.classList.add('active-popup');
-                loginPopup.current.classList.remove('active-popup');
+
+                loginPopup.current.classList.add('active-popup');
                 signupPopup.current.classList.remove('active-popup');
             }
             else {
-                alert("Already Registered")
+                alert(data.response)
             }
         }
 
@@ -345,9 +353,12 @@ const SubCategory = () => {
             body: JSON.stringify({ mobile: usermobile, otp: otp })
         });
         const data = await re.json();
-        alert(data.response);
-        if (data.response === "Verified") {
+        console.log(data)
+        if (data.response === "Valid") {
             createcookie("sp", usermobile);
+            createcookie2("sp2", data.storeid);
+            console.log(data.storeid)
+            console.log(cookie2.sp2)
             otpPopup.current.classList.remove('active-popup');
         }
     }
@@ -366,6 +377,7 @@ const SubCategory = () => {
 
     useEffect(() => {
         sub();
+        // alert(cookie2.sp2)
 
     }, [])
 
@@ -416,7 +428,7 @@ const SubCategory = () => {
                                     <h5>{unit.offerprice}</h5>
                                     {
                                         unit.cart === "no"
-                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index,'yes')} >Add</button>
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index, 'yes')} >Add</button>
                                             :
                                             <span className="quantity">
                                                 <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
@@ -441,22 +453,22 @@ const SubCategory = () => {
                                 ₹ <del>{x.price}</del> <strong>{x.offerprice}</strong>
                             </p>
                             {
-                                x.available_units>1?<button onClick={()=>showUnitOptions(x.spid)}>Add{' '}
-                                {x.available_units > 1 && (
-                                    <span className="add-btn-badge">{x.available_units}</span>
-                                )}</button>:
-                                (
-                                    x.cart === "no"
-                                    ? <button className='items-options-single-btn' onClick={() => addToCart(x.unitid, index,'yes')} >Add</button>
-                                    :
-                                    <span className="quantity">
-                                        <button className="quantity-btn" onClick={() => { handleButtonClick1("minus", x.cartid, index) }}>-</button>
-                                        <span>{x.cartqty}</span>
-                                        <button className="quantity-btn" onClick={() => { handleButtonClick1("plus", x.cartid, index) }}>+</button>
-                                    </span>
-                                )
+                                x.available_units > 1 ? <button onClick={() => showUnitOptions(x.spid)}>Add{' '}
+                                    {x.available_units > 1 && (
+                                        <span className="add-btn-badge">{x.available_units}</span>
+                                    )}</button> :
+                                    (
+                                        x.cart === "no"
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(x.unitid, index, 'yes')} >Add</button>
+                                            :
+                                            <span className="quantity">
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick1("minus", x.cartid, index) }}>-</button>
+                                                <span>{x.cartqty}</span>
+                                                <button className="quantity-btn" onClick={() => { handleButtonClick1("plus", x.cartid, index) }}>+</button>
+                                            </span>
+                                    )
                             }
-                            
+
                         </div>
                     ))}
                 </aside>
@@ -524,6 +536,13 @@ const SubCategory = () => {
                 <input value={usermobile} onChange={mobileChange} placeholder='915468XXXX' type="number" /> <br />
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
+                <label>Gender</label>
+                <select onChange={(e) => { setUserGender(e.target.value) }}  className='employee-type-signup'>
+                    <option style={{ textAlign: 'center' }} value="female">-- Select Gender --</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                    <option value="other">Other</option>
+                </select>
                 <label  >Enter Password</label>
                 <input onChange={signUpPassword} placeholder='Password' type="password" /> <br />
                 {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}

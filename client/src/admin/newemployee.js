@@ -78,7 +78,7 @@ const Newemployee = () => {
         console.log(data);
         if(data.response === "Saved") {
             alert("Employee saved successfully");
-            jump("/adminlogin")
+            jump("/emplogin")
         } else {
             alert("Failed to save employee");
         }

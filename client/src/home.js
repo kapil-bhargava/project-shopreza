@@ -2,10 +2,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import Header, { Footer } from './common/common'
 import './main.css'
 import { useEffect, useRef, useState } from 'react'
+import { useCookies } from 'react-cookie'
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
+    
+    const [cookie2, createCookie2, removeCookie2] = useCookies();
     
    
 
@@ -16,7 +19,7 @@ const Home = () => {
     const getCategory = async () => {
         
         loaderLoading.current.style.display = "block"
-        const re = await fetch(process.env.REACT_APP_URL+"/categoryapi.php", {
+        const re = await fetch(process.env.REACT_APP_URL+"/categoryapi.php?storeid="+cookie2.sp2, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });

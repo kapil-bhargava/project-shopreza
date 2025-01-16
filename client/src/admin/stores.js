@@ -58,6 +58,7 @@ const Store = () => {
         })
         const data = await re.json();
         setstoreData(data);
+        getStores();
     }
 
     // delete store 

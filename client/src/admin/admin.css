@@ -342,6 +342,8 @@ td {
     padding: 20px;
     font-family: Arial, sans-serif;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* height: 100vh;
+    overflow-y: scroll; */
 }
 .edit-form-bg{
     position: fixed;
@@ -382,11 +384,14 @@ td {
 .employee-form-container select,
 .employee-form-container textarea {
     width: 100%;
-    padding: 10px;
+    padding: 2px;
     margin-bottom: 15px;
     border: 1px solid var(--dark-gray);
     border-radius: 5px;
     font-size: 14px;
+}
+input{
+    padding: 2px;
 }
 
 .input-pair {
