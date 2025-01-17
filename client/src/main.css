@@ -58,11 +58,6 @@ input::-webkit-inner-spin-button {
     font-weight: 600;
     color: var(--primary-yellow);
     letter-spacing: 1px;
-    /* position: absolute; */
-    /* left: 50%; */
-    /* top: 50%; */
-    /* transform: translate(-50%, -50%); */
-    /* z-index: 600; */
 }
 
 /* login popup  */

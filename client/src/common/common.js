@@ -69,9 +69,11 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // logout function 
     const logout = () => {
-        removecookie2("sp2");
         removecookie("sp");
-      
+        removecookie2("sp2");
+        closeUserProfile();
+        openLogin()
+
     };
 
 
@@ -121,7 +123,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
                     </i>
                     {
-                        cookie["sp"] == null ? (
+                        cookie["sp"] == null && cookie2["sp2"] == null ? (
                             // <Link to="/userlogin">
                             <button onClick={openLogin} className="btn btn-success">Login</button>
                             // </Link>

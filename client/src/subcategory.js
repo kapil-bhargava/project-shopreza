@@ -18,13 +18,12 @@ const SubCategory = () => {
     const [userpassword, setuserpassword] = useState()
     const [confirmuserpassword, setconfirmuserpassword] = useState()
     const [otp, setOtp] = useState();
-    const [unitId, setunitId] = useState();
     const loginPopup = useRef()
     const popupBg = useRef()
     const signupPopup = useRef()
     const otpPopup = useRef()
-    const loaderWaiting = useRef()
-    const loaderLoading = useRef()
+    const loaderWaiting = useRef();
+    const loaderLoading = useRef();
     const audio = useRef()
     const animatedImg = useRef();
     const unitOptionsBgDiv = useRef();
@@ -87,7 +86,6 @@ const SubCategory = () => {
 
     // unit options div close and open functions 
     const showUnitOptions = async (spid) => {
-
         setspid(spid);
         const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=1`, {
             method: 'GET',
@@ -181,6 +179,7 @@ const SubCategory = () => {
 
                 // createcookie2("sp2", storeid)
                 loginPopup.current.classList.remove('active-popup');
+                popupBg.current.classList.remove("active-popupBg");
                 // loginPopup.current.classList.remove('active-popup');              
 
             }

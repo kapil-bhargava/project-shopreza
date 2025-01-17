@@ -6,6 +6,9 @@ const Employee = () => {
     const signupref = useRef();
     const editForm = useRef();
     const editFormBg = useRef();
+            const loaderWaiting = useRef();
+                const loaderLoading = useRef();
+
     const [name, setName] = useState();
     const [empType, setEmpType] = useState();
     const [mobile, setMobile] = useState();
@@ -64,6 +67,7 @@ const Employee = () => {
 
     // get all employee data 
     const getEmployees = async () => {
+        loaderLoading.current.style.display="block"
         const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
             method: 'GET',
             headers: {
@@ -71,6 +75,7 @@ const Employee = () => {
             }
         })
         const data = await re.json();
+        loaderLoading.current.style.display="none"
         setEmpData(data);
     }
 
@@ -157,6 +162,7 @@ const Employee = () => {
 
     // update employee form 
     const update = async () => {
+
         const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
             method: 'PUT',
             headers: {
@@ -436,7 +442,7 @@ const Employee = () => {
                             <select onChange={(e) => { setEmpType(e.target.value) }}>
                                 {type.map((x, index) => {
                                     return (
-                                        x === empType ? <option selected value={x}>{x}</option> : <option value={x}>{x}</option>
+                                        x === empType ? <option key={index} selected value={x}>{x}</option> : <option value={x}>{x}</option>
 
                                     )
                                 })}
@@ -447,6 +453,16 @@ const Employee = () => {
                 </div>
 
                 <button type="submit" onClick={update}>Update</button>
+            </div>
+
+              {/* loader  */}
+              <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
             </div>
         </>
     )

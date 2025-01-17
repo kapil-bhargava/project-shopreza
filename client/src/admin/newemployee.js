@@ -3,9 +3,13 @@ import SideBar from './admincommon'
 import { useNavigate } from 'react-router-dom';
 
 const Newemployee = () => {
-    const jump = useNavigate();
     const signupref = useRef();
     const form = useRef();
+    const loaderWaiting = useRef();
+        const loaderLoading = useRef();
+
+
+    const jump = useNavigate();
     const [name, setName] = useState();
     const [status, setStatus] = useState();
     const [storeId, setStoreId] = useState();
@@ -243,6 +247,16 @@ const Newemployee = () => {
                         <button type="submit" onClick={submit}>Submit</button>
                     {/* </form> */}
                 </div>
+            </div>
+
+              {/* loader  */}
+              <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
             </div>
         </>
     )

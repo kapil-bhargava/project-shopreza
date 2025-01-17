@@ -283,8 +283,9 @@ td {
 
 .add-customer-form .form-group input {
     width: 100%;
-    padding: 5px;
-    border: 1px solid var(--primary-yellow);
+    padding: 2px;
+    /* border: 1px solid var(--primary-yellow); */
+    border: 1px solid var(--dark-gray);
     border-radius: 5px;
     font-size: 16px;
 }
@@ -388,10 +389,24 @@ td {
     margin-bottom: 15px;
     border: 1px solid var(--dark-gray);
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
 }
-input{
+
+input,select,textarea{
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid var(--dark-gray);
+    width: 100%;
+    margin-bottom: 15px;
+    /* margin-top: 2px; */
     padding: 2px;
+}
+textarea{
+    resize: vertical;
+    max-height: 60px;
+}
+select{
+    padding: 5px 0;
 }
 
 .input-pair {
@@ -548,4 +563,38 @@ input{
 .signup-popup-container button{
     width: 100%;
     padding: 3px;
+}
+
+/* loader for admin  */
+.loading {
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    display: none;
+}
+
+
+@keyframes changeColor {
+    0% {
+        color: var(--primary-yellow);
+    }
+
+    50% {
+        color: var(--primary-green);
+    }
+
+    100% {
+        color: var(--primary-yellow);
+    }
+}
+
+.loading p {
+    animation: 1s infinite alternate changeColor;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-yellow);
+    letter-spacing: 1px;
 }

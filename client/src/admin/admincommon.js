@@ -20,8 +20,7 @@ const SideBar = () => {
         // sidebar.current.classList.toggle('active');
         sidebar.current.style.transform = "translateX(0)"
     };
-    const navItems = document.querySelectorAll('.sidebardb .linkdb');
-
+    const navItems = document.querySelectorAll('nav .linkdb');
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             // Remove 'clicked' class from all nav items
@@ -31,6 +30,8 @@ const SideBar = () => {
         });
     });
 
+
+
     return (
         <>
             {/* <div className="sidebar-main"> */}
@@ -38,12 +39,14 @@ const SideBar = () => {
             <div className="sidebardb" ref={sidebar}>
                 <div className="logo">{cookie.adminCookie} Dashboard</div>
                 <nav>
-                    <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-                    <div className="nav-item"><Link className="linkdb" to="/employee"><i class="fas fa-handshake"></i>Employees</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
                     <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
                     <div className="nav-item"><Link className="linkdb" ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
-                    <div className="nav-item"><Link className="linkdb" ><i className="fas fa-box"></i>Products</Link></div>
                     <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
                     <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
                     <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>

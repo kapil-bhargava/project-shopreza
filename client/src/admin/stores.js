@@ -3,6 +3,8 @@ import SideBar from './admincommon'
 import { useNavigate } from 'react-router-dom';
 
 const Store = () => {
+    const loaderWaiting = useRef();
+        const loaderLoading = useRef();
     const jump = useNavigate();
     const [storeData, setstoreData] = useState([]);
     const [storeName, setStoreName] = useState('');
@@ -28,6 +30,7 @@ const Store = () => {
 
     // adding new store 
     const addStore = async () => {
+        loaderLoading.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
             method: 'POST',
             headers: {
@@ -41,6 +44,7 @@ const Store = () => {
             })
         });
         const data = await re.json();
+        loaderLoading.current.style.display = "none"
         getStores();
         setStoreName('')
         setStoreAddress('')
@@ -50,6 +54,7 @@ const Store = () => {
 
     // getting store 
     const getStores = async () => {
+        loaderLoading.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
             method: 'GET',
             headers: {
@@ -57,12 +62,14 @@ const Store = () => {
             }
         })
         const data = await re.json();
+        loaderLoading.current.style.display = "none"
         setstoreData(data);
-        getStores();
+        // getStores();
     }
 
     // delete store 
     const deleteStore = async (storeid) => {
+        loaderLoading.current.style.display = "block"
         if (window.confirm('Are you sure you want to delete this store ?')) {
             const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
                 method: 'DELETE',
@@ -74,13 +81,15 @@ const Store = () => {
                 })
             })
             const data = await re.json();
-            console.log(data)
+            loaderLoading.current.style.display = "none"
+            // console.log(data)
             getStores();
         }
     }
 
     // getting single store data 
     const getSingleStore = async (storeid) => {
+        loaderLoading.current.style.display = "block"
         setStoreId(storeid)
         setIsEditMode(true);
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
@@ -93,7 +102,8 @@ const Store = () => {
             })
         })
         const data = await re.json();
-        console.log(data)
+        loaderLoading.current.style.display = "none"
+        // console.log(data)
         setStoreName(data.storename)
         setStoreAddress(data.address)
         setLongitude(data.longtude)
@@ -103,6 +113,7 @@ const Store = () => {
 
     // updating store 
     const updateStore = async () => {
+        loaderLoading.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
             method: 'PUT',
             headers: {
@@ -117,7 +128,8 @@ const Store = () => {
             })
         });
         const data = await re.json();
-        console.log(data)
+        // console.log(data)
+        loaderLoading.current.style.display = "none"
         getStores();
         setIsEditMode(false);
     }
@@ -207,6 +219,16 @@ const Store = () => {
             </div>
             <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
 
+
+  {/* loader  */}
+  <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
+            </div>
         </>
     )
 }

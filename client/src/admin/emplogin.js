@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const Emplogin = () => {
+    const loaderWaiting = useRef();
+    const loaderLoading = useRef();
     const [mobile, setmobile] = useState();
     const [password, setpassword] = useState();
     const jump = useNavigate();
@@ -12,7 +14,7 @@ const Emplogin = () => {
         console.log(mobile, password)
         const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ mobile: mobile, password: password }),
@@ -50,6 +52,16 @@ const Emplogin = () => {
                 <p>Not have an account ? <span onClick={signup}>Signup</span></p>
             </section>
 
+
+  {/* loader  */}
+  <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
+            </div>
 
         </>
     )

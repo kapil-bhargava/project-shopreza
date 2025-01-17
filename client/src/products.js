@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Header from './common/common'
 import Items from './common/items'
 
-const Product = () => {
+const Products = () => {
   useEffect(() => {
     getCategory();
   }, [])
@@ -109,4 +109,4 @@ const Product = () => {
   )
 }
 
-export default Product
+export default Products

@@ -6,8 +6,12 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const [cookie, createcookie, removecookie] = useCookies()
     const sidebar = useRef();
+    const loaderWaiting = useRef();
+            const loaderLoading = useRef();
+
+
+    const [cookie, createcookie, removecookie] = useCookies()
     const jump = useNavigate();
 
  
@@ -105,6 +109,17 @@ const Dashboard = () => {
                         </table>
                     </div>
                 </div>
+            </div>
+
+
+              {/* loader  */}
+              <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
             </div>
         </>
     )

@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const Empsignup = () => {
+const loaderWaiting = useRef();
+    const loaderLoading = useRef();
+
     const [mobile, setmobile] = useState();
     const jump = useNavigate();
 
-    
     const signup = async () => {
         const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
             method: 'PATCH',
@@ -36,6 +38,16 @@ const Empsignup = () => {
                 {/* {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>} */}
                 <button className="btn btn-success" onClick={signup} >Signup</button> <br />
             </section>
+
+              {/* loader  */}
+              <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
+            </div>
         </>
     )
 }
