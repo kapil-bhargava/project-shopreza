@@ -7,30 +7,31 @@ import { useCookies } from 'react-cookie'
 const Home = () => {
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
-    
+
     const [cookie2, createCookie2, removeCookie2] = useCookies();
-    
-   
+
+
 
     const jump = useNavigate()
     useEffect(() => {
         getCategory();
     }, [])
     const getCategory = async () => {
-        
+
         loaderLoading.current.style.display = "block"
-        const re = await fetch(process.env.REACT_APP_URL+"/categoryapi.php?storeid="+cookie2.sp2, {
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.sp2, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-        
+
         const dt = await re.json();
+        console.log(dt)
         loaderLoading.current.style.display = "none"
         setCategories(dt)
     }
 
     const catClicked = (cid) => {
-        jump(`/subcategory/${cid}`)  
+        jump(`/subcategory/${cid}`)
     }
 
 
@@ -39,8 +40,8 @@ const Home = () => {
 
     return (
         <>
-        {/* loader  */}
-        <div ref={loaderLoading} className="loading">
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
             </div>
             {/* importing Header from './common/header' */}
@@ -61,9 +62,9 @@ const Home = () => {
                 <h2>Categories</h2>
                 <div className="container">
                     {
-                        categories.map((x,index) => {
+                        categories.map((x, index) => {
                             return (
-                                <div key={index} onClick={()=>{catClicked(x.catid)}} className="category">
+                                <div key={index} onClick={() => { catClicked(x.catid) }} className="category">
                                     <img src={x.pic} alt="" />
                                     <h6>{x.catname}</h6>
                                 </div>
@@ -142,7 +143,7 @@ const Home = () => {
                 </div>
             </section>
 
-            
+
 
 
             {/* importing Footer from './common/footer' */}
