@@ -27,14 +27,8 @@ const AdminLogin = () => {
         })
         const data = await re.json();
         setStores(data);
-        // if (data.response !==null) {
-        //     setStores(data.response);
-        //     createcookie2('adminCookie2', stores);
-
-        //     jump("/dashboard")
-        // }
         loaderWaiting.current.style.display = "none"
-        console.log(data);
+        // console.log(data);
     }
 
     const login = async () => {

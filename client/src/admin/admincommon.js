@@ -1,12 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import "./admin.css";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 const SideBar = () => {
+    const loaderWaiting = useRef();
+    const loaderLoading = useRef();
+
+    const [stores, setStores] = useState([]);
+    const [activeStore, setActiveStore] = useState();
+    const [storeId, setStoreId] = useState();
     const jump = useNavigate();
     const sidebar = useRef();
+    const sidebarBg = useRef();
     const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
 
     // logout admin 
     const logoutAdmin = () => {
@@ -15,11 +23,42 @@ const SideBar = () => {
             jump("/adminlogin")
         }
     }
+    // getting store 
+    const getStores = async () => {
+        loaderWaiting.current.style.display = "block"
+        const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const data = await re.json();
+        console.table(data)
+        // setStoreId(cookie2.adminCookie2);
+        setStores(data);
+        const selectedStore = data.find((store) => store.storeid == cookie2.adminCookie2);
+        if (selectedStore) {
+            setActiveStore(selectedStore.storename);
+            console.log(activeStore)
+        } else {
+            setActiveStore(''); // Reset if no store matches the id
+            // console.log("else")
+        }
+        // console.log(activeStore);
+        loaderWaiting.current.style.display = "none"
+        // console.log(data);
+    }
 
     const openSidebar = () => {
-        // sidebar.current.classList.toggle('active');
-        sidebar.current.style.transform = "translateX(0)"
+        sidebar.current.classList.add('activesb');
+        sidebarBg.current.classList.add('activesb-bg');
     };
+
+    const closeSidebar = () => {
+        sidebar.current.classList.remove('activesb');
+        sidebarBg.current.classList.remove('activesb-bg');
+    };
+
     const navItems = document.querySelectorAll('nav .linkdb');
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -30,6 +69,10 @@ const SideBar = () => {
         });
     });
 
+    useEffect(() => {
+        getStores();
+        // console.log(stores);
+    }, [])
 
 
     return (
@@ -37,7 +80,19 @@ const SideBar = () => {
             {/* <div className="sidebar-main"> */}
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
-                <div className="logo">{cookie.adminCookie} Dashboard</div>
+                <div className="form-group">
+                        <h5>{cookie2.adminCookie2}{activeStore}</h5>
+                    <label>Store</label>
+                    <select value={activeStore} onChange={(e) => { setStoreId(e.target.value) }}>
+                        {/* <option>Select Store</option> */}
+                        {stores.map((store, index) => {
+                            return (
+                                <option key={index} value={store.storeid}>{store.storename}</option>
+                            )
+                        })}
+                    </select>
+                </div>
+                <div className="logo">{cookie.adminCookie} Dashboard </div>
                 <nav>
                     <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
@@ -52,7 +107,18 @@ const SideBar = () => {
                     <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
                 </nav>
             </div>
+
+            <div ref={sidebarBg} onClick={closeSidebar} className="sidebar-bg"></div>
             {/* </div> */}
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
+            </div>
 
         </>
     )
@@ -62,6 +128,7 @@ const SideBar = () => {
 const SideBarEmp = () => {
     const [cookie, createcookie, removecookie] = useCookies()
     const sidebar = useRef();
+    const sidebarBg = useRef();
     const jump = useNavigate()
 
     // logout employee 
@@ -72,11 +139,15 @@ const SideBarEmp = () => {
 
     }
 
-
     const openSidebar = () => {
-        // sidebar.current.classList.toggle('active');
-        sidebar.current.style.transform = "translateX(0)"
+        sidebar.current.classList.add('activesb');
+        sidebarBg.current.classList.add('activesb-bg');
     };
+    const closeSidebar = () => {
+        sidebar.current.classList.remove('activesb');
+        sidebarBg.current.classList.remove('activesb-bg');
+    };
+
     const navItems = document.querySelectorAll('.sidebardb .linkdb');
 
     navItems.forEach(item => {
@@ -93,6 +164,7 @@ const SideBarEmp = () => {
             {/* <div className="sidebar-main"> */}
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
+
                 <div className="logo">Customer Dashboard</div>
                 <nav>
                     {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
@@ -106,7 +178,12 @@ const SideBarEmp = () => {
                     <div onClick={logoutEmployee} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
                 </nav>
             </div>
+
+            <div ref={sidebarBg} onClick={closeSidebar} className="sidebar-bg"></div>
             {/* </div> */}
+
+
+
 
         </>
     )
