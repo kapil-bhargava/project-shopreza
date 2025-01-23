@@ -598,10 +598,7 @@ select {
     .product-unit .input-pair{
         width: 100%;
     }
-    .input-pair-container {
-        /* flex-wrap: nowrap; */
-        /* background-color: yellowgreen; */
-    }
+    
     .product-unit .input-pair {
         display: block;
     }

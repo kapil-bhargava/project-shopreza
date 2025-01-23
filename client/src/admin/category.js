@@ -7,6 +7,7 @@ const Category = () => {
     const customerFormBg = useRef();
     const loaderLoading = useRef();
     const loaderWaiting = useRef();
+    const [catId, setCatId] = useState();
 
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -66,6 +67,8 @@ const Category = () => {
 
     }
 
+
+
     // getCategory
     const getCategory = async () => {
         // console.log(cookie2.adminCookie2)
@@ -107,47 +110,46 @@ const Category = () => {
         }
     }
 
-    const openEditCategory = async () => {
+    const openEditCategory = async (catid) => {
+        setCatId(catid)
         setIsEditMode(true);
-        //  const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?", {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         id: 1,
-        //         productname: productName,
-        //         price: productPrice,
-        //         offerprice: productOfferPrice,
-        //         description: productDes,
-        //         // subcategoryname: subcategory,
-        //         // categoryname: category
-        //     })
-        // })
-        // const data = await re.json();
-        // if (data.response === "Updated") {
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                catid: catid,
+
+            })
+        })
+        const data = await re.json();
+        setCategory(data[0].catname);
         openAddCategory();
-        // closeAddCategory();
-        // }
+        if (data.response === "Updated") {
+            closeAddCategory();
+        }
     }
 
     // update category 
-    const updateCategory = () => {
-        // loaderLoading.current.style.display = "block";
-        // const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         // catid: catid,
-        //         catname: category,
-        //         storeid: cookie2.adminCookie2,
-        //     })
-        // })
-        // const data = await re.json();
-        // console.log(data);
-        // loaderLoading.current.style.display = "none";
+    const updateCategory = async() => {
+        loaderLoading.current.style.display = "block";
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                catid: catId,
+                catname: category,
+                storeid: cookie2.adminCookie2,
+            })
+        })
+        const data = await re.json();
+        alert(data.Response)
+        loaderLoading.current.style.display = "none";
+        closeAddCategory();
+        getCategory()
     }
 
 
@@ -189,7 +191,7 @@ const Category = () => {
                                             <td>{cat.offerprice}</td>
                                             <td>{cat.description}</td> */}
                                             <td>
-                                                <i onClick={() => { openEditCategory() }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { openEditCategory(cat.catid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
                                                 <i onClick={() => { deleteCategory(catData[index].catid) }} className="fa fa-trash text-danger"></i>
                                             </td>
                                         </tr>
@@ -204,7 +206,7 @@ const Category = () => {
                 <div ref={customerFormBg} onClick={closeAddCategory} className="c-bg"></div>
                 <div ref={customerForm} className="add-customer-form">
                     <h2>{isEditMode ? "Edit Category" : "Add New category"}</h2>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <label>Store</label>
                         <select onChange={(e) => { setStoreid(e.target.value) }}>
                             <option value="">Select Store</option>
@@ -214,10 +216,10 @@ const Category = () => {
                                 )
                             })}
                         </select>
-                    </div>
+                    </div> */}
                     <div className="form-group">
                         <label>Category Name</label>
-                        <input onChange={(e) => { setCategory(e.target.value) }} placeholder='Enter category name' type="text" id="customer-name" name="customer-name" required />
+                        <input value={category} onChange={(e) => { setCategory(e.target.value) }} placeholder='Enter category name' type="text" id="customer-name" name="customer-name" required />
                     </div>
                     <div className="form-group">
                         <button onClick={isEditMode ? updateCategory : addCategory}>

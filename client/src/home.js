@@ -3,19 +3,21 @@ import Header, { Footer } from './common/common'
 import './main.css'
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import Userlogin from './userlogin'
 
-const Home = () => {
+const Home = (props) => {
+    const loginPopup = useRef();
+    const popupBg = useRef();
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
 
     const [cookie2, createCookie2, removeCookie2] = useCookies();
+    const [cookie, createCookie, removeCookie] = useCookies();
 
 
 
     const jump = useNavigate()
-    useEffect(() => {
-        getCategory();
-    }, [])
+   
     const getCategory = async () => {
 
         loaderLoading.current.style.display = "block"
@@ -35,7 +37,17 @@ const Home = () => {
     }
 
 
-
+    useEffect(() => {
+        // if ((cookie2.sp2 !== null || cookie2.sp2 ==undefined) && ((cookie.sp !== null || cookie.sp == undefined) )){
+        //     // alert(cookie.sp)
+        //     getCategory();
+        //     // jump('/userlogin');
+        // }
+        // else {
+        //     alert("Please Login First")
+        // }
+        // getCategory();
+    }, [])
 
 
     return (
@@ -45,7 +57,7 @@ const Home = () => {
                 <p>Loading....</p>
             </div>
             {/* importing Header from './common/header' */}
-            <Header />
+            <Header loginPopup={loginPopup} popupBg={popupBg} />
 
             {/* hero section */}
             <section className="hero">
@@ -142,6 +154,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+            <Userlogin ref={loginPopup}/>
 
 
 

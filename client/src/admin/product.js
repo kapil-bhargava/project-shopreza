@@ -16,8 +16,13 @@ const Product = () => {
     const [catdata, setCatData] = useState([]);
     const [subcategory, setSubcategory] = useState([]);
     const [product, setproduct] = useState([]);
+    const [productUnits, setProductUnits] = useState([]);
+    // const [productUnitData, setProductUnitData] = useState([]);
     const [subCatId, setsubCatId] = useState();
+    const [unitId, setUnitId] = useState();
     const [productName, setProductName] = useState();
+    const [unitStatus, setUnitStatus] = useState();
+    const [stock, setStock] = useState();
 
 
     const [spid, setSPId] = useState();
@@ -25,7 +30,6 @@ const Product = () => {
     const [unitPrice, setUnitPrice] = useState();
     const [unitOfferPrice, setUnitOfferPrice] = useState();
     const [unitDes, setUnitDes] = useState();
-    const [unitStock, setUnitStock] = useState();
 
 
     useEffect(() => {
@@ -79,8 +83,17 @@ const Product = () => {
         setproduct(data);
     }
 
-    const openAddProduct = (spid) => {
+    const openAddProduct = async (spid) => {
         setSPId(spid);
+        const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?spid=" + spid, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const data = await re.json();
+        setProductUnits(data)
+        // alert(data.Response);
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
     }
@@ -123,7 +136,7 @@ const Product = () => {
                 unitname: unitName,
                 price: unitPrice,
                 offerprice: unitOfferPrice,
-                stock: unitStock
+                stock: stock
 
             })
         })
@@ -183,7 +196,68 @@ const Product = () => {
         //     }
     }
 
+    // get single Product Unit data 
+    const openEditProductUnit = async (unitid) => {
+        setIsEditMode(true)
+        setUnitId(unitid)
+        const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?unitid=" + unitid, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const data = await re.json();
+        setUnitName(data.unitname);
+        setUnitPrice(data.price);
+        setUnitOfferPrice(data.offerprice);
+        setStock(data.stock);
+        setUnitStatus(data.status);
+        openAddProduct();
 
+    }
+
+    // update product unit data 
+    const updateProductUnit = async () => {
+
+        const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                unitid: unitId,
+                unitname: unitName,
+                price: unitPrice,
+                offerprice: unitOfferPrice,
+                stock:stock,
+                status: unitStatus
+            })
+        })
+        const data = await re.json();
+        console.log(data);
+    }
+
+
+    // delete product unit 
+    const deleteProductUnit = async (unitid) => {
+        if (window.confirm('Are you sure you want to delete')) {
+            const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    unitid: unitid
+
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+        }
+    }
+
+
+    // delete Product 
     const deleteProduct = async (spid) => {
         if (window.confirm('Are you sure you want to delete')) {
             const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
@@ -299,20 +373,20 @@ const Product = () => {
                         <input onChange={(e) => { setUnitName(e.target.value) }} placeholder='Product Unit' required />
                     </div>
                     <div className="input-pair">
-                    <label>Product Price</label>
-                    <input onChange={(e) => { setUnitPrice(e.target.value) }} placeholder='Price' required />
+                        <label>Product Price</label>
+                        <input onChange={(e) => { setUnitPrice(e.target.value) }} placeholder='Price' required />
                     </div>
                     <div className="input-pair">
-                    <label>Product Offer Price</label>
-                    <input onChange={(e) => { setUnitOfferPrice(e.target.value) }} placeholder='Offer Price' required />
+                        <label>Product Offer Price</label>
+                        <input onChange={(e) => { setUnitOfferPrice(e.target.value) }} placeholder='Offer Price' required />
                     </div>
                     <div className="input-pair">
-                    <label>Stock</label>
-                    <input onChange={(e) => { setUnitStock(e.target.value) }} placeholder='Offer Price' required />
+                        <label>Stock</label>
+                        <input onChange={(e) => { setStock(e.target.value) }} placeholder='Offer Price' required />
                     </div>
                     <div className="input-pair">
-                    <label>Product Description</label>
-                    <textarea onChange={(e) => { setUnitDes(e.target.value) }} placeholder='Product Description' required />
+                        <label>Product Description</label>
+                        <textarea onChange={(e) => { setUnitDes(e.target.value) }} placeholder='Product Description' required />
                     </div>
 
                 </div>
@@ -321,42 +395,39 @@ const Product = () => {
                         {isEditMode ? "Update" : "Add Product"}
                     </button>
                 </div>
+
+                {/* table for product units  */}
                 <div className="mt-4 table-responsive table-employee">
                     <table>
                         <thead>
                             <tr>
                                 <th>S.No.</th>
-                                <th>Product Name</th>
-                                <th>Available Units</th>
+                                <th>Unit Name</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                <th>Status</th>
                                 <th>Action</th>
-                                {/* <th>Referral Code</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Product 1</td>
-                                <td>10</td>
-                                <td>
-                                    <i onClick={openEditProduct} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                    <i onClick={() => { deleteProduct(1) }} className="fa fa-trash text-danger"></i>
-                                </td>
-                            </tr>
-                            {/* {
-                                product.map((x, index) => {
+
+                            {
+                                productUnits.map((x, index) => {
                                     return (
                                         <tr>
                                             <td>{index + 1}</td>
-                                            <td>{x.productname}</td>
-                                            <td><button className="btn btn-warning" onClick={() => { openAddProduct(x.spid) }}>{x.available_units} Options</button></td>
+                                            <td>{x.unitname}</td>
+                                            <td>{x.stock}</td>
+                                            <td><del>₹ {x.price}</del> ₹{x.offerprice}</td>
+                                            <td>{x.status}</td>
                                             <td>
-                                                <i onClick={openEditProduct} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
+                                                <i onClick={() => { openEditProductUnit(x.unitid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { deleteProductUnit(x.unitid) }} className="fa fa-trash text-danger"></i>
                                             </td>
                                         </tr>
                                     )
                                 })
-                            } */}
+                            }
                         </tbody>
                     </table>
                 </div>

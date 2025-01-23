@@ -3,6 +3,7 @@ import Header from './common/common'
 import { useParams } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
+import Userlogin from './userlogin';
 
 const SubCategory = () => {
     const mynum = useSelector((state) => state.cartitem);
@@ -326,7 +327,7 @@ const SubCategory = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender:userGender })
+                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender: userGender })
             });
             const data = await re.json();
             // console.log(data);
@@ -373,21 +374,11 @@ const SubCategory = () => {
 
     }
 
-
     useEffect(() => {
         sub();
-        // alert(cookie2.sp2)
-
     }, [])
 
-    // useEffect(() => {
-    //     alert("ss");
-    //     if (aitem.length > 0) {
-    //         console.log(aitem);
-    //        // showUnitOptions(aitem);
-    //     }
 
-    // }, [aitem])
     return (
         <>
 
@@ -486,15 +477,11 @@ const SubCategory = () => {
             </ div>
 
 
-            <section className="sub-cat-container-2">
-
-            </section>
-
 
             {/* i have to setup these codes somewhere */}
 
             {/* popup background */}
-            <div ref={popupBg} className="popup-bg"></div>
+            {/* <div ref={popupBg} className="popup-bg"></div> */}
             {/* audio  */}
             <audio ref={audio} src={require("./sounds/cash-sound.mp3")}></audio>
             {/* loader  */}
@@ -507,21 +494,20 @@ const SubCategory = () => {
                 <p>Please wait....</p>
             </div>
             {/* login popup */}
-            <section ref={loginPopup} className="login-popup-container">
+            {/* <section ref={loginPopup} className="login-popup-container">
                 <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
                 <h4>Login</h4>
                 <label  >Enter Mobile Number</label>
                 <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" /> <br />
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
-                <br />
                 <label  >Enter Password</label>
                 <input onChange={(e) => { setuserpassword(e.target.value) }} placeholder='Password' type="password" /> <br />
                 {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
-                <br />
-
                 <button className="btn btn-success" onClick={login}>Login</button> <br />
                 <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
-            </section>
+            </section> */}
+
+            <Userlogin ref={loginPopup}/>
 
             {/* signup popup */}
             <section ref={signupPopup} className="login-popup-container sp">
@@ -536,7 +522,7 @@ const SubCategory = () => {
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
                 <label>Gender</label>
-                <select onChange={(e) => { setUserGender(e.target.value) }}  className='employee-type-signup'>
+                <select onChange={(e) => { setUserGender(e.target.value) }} className='employee-type-signup'>
                     <option style={{ textAlign: 'center' }} value="female">-- Select Gender --</option>
                     <option value="female">Female</option>
                     <option value="male">Male</option>
