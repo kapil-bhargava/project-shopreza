@@ -481,7 +481,7 @@ const SubCategory = () => {
             {/* i have to setup these codes somewhere */}
 
             {/* popup background */}
-            {/* <div ref={popupBg} className="popup-bg"></div> */}
+            <div ref={popupBg} className="popup-bg"></div>
             {/* audio  */}
             <audio ref={audio} src={require("./sounds/cash-sound.mp3")}></audio>
             {/* loader  */}
@@ -494,7 +494,7 @@ const SubCategory = () => {
                 <p>Please wait....</p>
             </div>
             {/* login popup */}
-            {/* <section ref={loginPopup} className="login-popup-container">
+            <section ref={loginPopup} className="login-popup-container">
                 <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
                 <h4>Login</h4>
                 <label  >Enter Mobile Number</label>
@@ -505,9 +505,9 @@ const SubCategory = () => {
                 {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
                 <button className="btn btn-success" onClick={login}>Login</button> <br />
                 <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
-            </section> */}
+            </section>
 
-            <Userlogin ref={loginPopup}/>
+            {/* <Userlogin ref={loginPopup} ref1={popupBg}/> */}
 
             {/* signup popup */}
             <section ref={signupPopup} className="login-popup-container sp">

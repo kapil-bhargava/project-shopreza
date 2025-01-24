@@ -493,8 +493,8 @@ select {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
+    transform: translate(-30%, -50%);
+    width: 60%;
 }
 
 .input-pair-container {
@@ -593,6 +593,7 @@ select {
     /* .product unit container css  */
     .product-unit{
         width: 90%;
+        transform: translate(-50%, -50%);
         /* display: block; */
     }
     .product-unit .input-pair{

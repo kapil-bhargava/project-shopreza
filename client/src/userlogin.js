@@ -87,6 +87,12 @@ const Userlogin = (props) => {
 
 
     const login = () => {
+        if (cookie["sp"] == null) {
+            loginValidation()
+        }
+        else {
+            alert("Already logged in")
+        }
 
     }
     const goBack = () => {
@@ -134,7 +140,7 @@ const Userlogin = (props) => {
                 <button className="btn btn-success" onClick={login}>Login</button> <br />
                 <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
             </section>
-            <div ref={props.ref} className="popup-bg"></div>
+            <div ref={props.ref1} className="popup-bg"></div>
 
         </>
     )

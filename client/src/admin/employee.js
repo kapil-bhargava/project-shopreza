@@ -61,7 +61,7 @@ const Employee = () => {
             })
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         closeAddEmployee();
     }
 
@@ -103,7 +103,7 @@ const Employee = () => {
             })
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         setName(data[0].name);
         setEmpType(data[0].emptype);
         setMobile(data[0].mobileno);
@@ -134,7 +134,7 @@ const Employee = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             // emptyFields();
             getEmployees();
         }
@@ -431,7 +431,7 @@ const Employee = () => {
                             <select onChange={(e) => { setStatus(e.target.value) }}>
                                 {st.map((x, index) => {
                                     return (
-                                        x == status ? <option selected value={x}>{x}</option> : <option value={x}>{x}</option>
+                                        x == status ? <option key={index} selected value={x}>{x}</option> : <option key={index} value={x}>{x}</option>
 
                                     )
                                 })}
@@ -442,7 +442,7 @@ const Employee = () => {
                             <select onChange={(e) => { setEmpType(e.target.value) }}>
                                 {type.map((x, index) => {
                                     return (
-                                        x === empType ? <option key={index} selected value={x}>{x}</option> : <option value={x}>{x}</option>
+                                        x === empType ? <option key={index} selected value={x}>{x}</option> : <option key={index} value={x}>{x}</option>
 
                                     )
                                 })}

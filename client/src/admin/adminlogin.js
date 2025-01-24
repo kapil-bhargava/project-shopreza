@@ -40,7 +40,7 @@ const AdminLogin = () => {
             body: JSON.stringify({ uname: adminName, password: adminPassword }),
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         if (data.response === "Valid") {
             createcookie('adminCookie', adminName);
             createcookie2('adminCookie2', storeId);

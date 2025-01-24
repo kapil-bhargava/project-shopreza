@@ -23,6 +23,8 @@ const SideBar = () => {
             jump("/adminlogin")
         }
     }
+
+    const [activeStoreId, setActiveStoreId] = useState();
     // getting store 
     const getStores = async () => {
         loaderWaiting.current.style.display = "block"
@@ -33,13 +35,13 @@ const SideBar = () => {
             }
         })
         const data = await re.json();
-        console.table(data)
         // setStoreId(cookie2.adminCookie2);
         setStores(data);
         const selectedStore = data.find((store) => store.storeid == cookie2.adminCookie2);
         if (selectedStore) {
             setActiveStore(selectedStore.storename);
-            console.log(activeStore)
+            setActiveStoreId(selectedStore.storeid);
+            // console.log(activeStore)
         } else {
             setActiveStore(''); // Reset if no store matches the id
             // console.log("else")
@@ -69,21 +71,37 @@ const SideBar = () => {
         });
     });
 
+    // changing the store 
+    const changeStore = (storeId) => {
+        setStoreId(storeId);
+        createcookie2('adminCookie2', storeId);
+        getStores()
+        jump("/category");
+        // setActiveStore(storeId);
+        window.location.reload();
+        // console.log(storeId);
+    }
+
+
+
+
     useEffect(() => {
         getStores();
+        // alert(activeStore)
         // console.log(stores);
     }, [])
 
 
     return (
         <>
-            {/* <div className="sidebar-main"> */}
+
+            {/* Sidebar of Admin  */}
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
                 <div className="form-group">
-                        <h5>{cookie2.adminCookie2}{activeStore}</h5>
+                    <h5>{cookie2.adminCookie2}{activeStore}</h5>
                     <label>Store</label>
-                    <select value={activeStore} onChange={(e) => { setStoreId(e.target.value) }}>
+                    <select value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
                         {/* <option>Select Store</option> */}
                         {stores.map((store, index) => {
                             return (

@@ -46,7 +46,7 @@ const Home = (props) => {
         // else {
         //     alert("Please Login First")
         // }
-        // getCategory();
+        getCategory();
     }, [])
 
 
@@ -154,7 +154,7 @@ const Home = (props) => {
                     </div>
                 </div>
             </section>
-            <Userlogin ref={loginPopup}/>
+            <Userlogin ref={loginPopup} ref1={popupBg}/>
 
 
 

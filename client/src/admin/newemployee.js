@@ -35,7 +35,7 @@ const Newemployee = () => {
             })
         });
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         if (data !== null) {
             signupref.current.style.display = 'none';
             form.current.style.display = "block";
@@ -47,7 +47,7 @@ const Newemployee = () => {
         else {
             alert("Number not registered!");
         }
-        console.log(data);
+        // console.log(data);
     }
 
     // Employee details form function 
@@ -79,7 +79,7 @@ const Newemployee = () => {
             })
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         if(data.response === "Saved") {
             alert("Employee saved successfully");
             jump("/emplogin")

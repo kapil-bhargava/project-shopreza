@@ -25,7 +25,7 @@ const loaderWaiting = useRef();
         else{
             alert("Number not registered!");
         }
-        console.log(data);
+        // console.log(data);
     }
 
     return (

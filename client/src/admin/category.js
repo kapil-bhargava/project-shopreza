@@ -26,6 +26,7 @@ const Category = () => {
     const closeAddCategory = () => {
         customerForm.current.style.display = "none";
         customerFormBg.current.style.display = "none";
+        setCategory('')
         setIsEditMode(false)
     }
 
@@ -55,11 +56,12 @@ const Category = () => {
             },
             body: JSON.stringify({
                 catname: category,
-                storeid: storeid
+                // storeid: storeid
+                storeid: cookie2.adminCookie2
             })
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         loaderLoading.current.style.display = "none";
         getCategory();
         closeAddCategory();
@@ -102,9 +104,9 @@ const Category = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             loaderLoading.current.style.display = "none";
-
+            getCategory()
             closeAddCategory();
             // }
         }
@@ -113,6 +115,7 @@ const Category = () => {
     const openEditCategory = async (catid) => {
         setCatId(catid)
         setIsEditMode(true);
+        loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?", {
             method: 'PATCH',
             headers: {
@@ -124,15 +127,17 @@ const Category = () => {
             })
         })
         const data = await re.json();
+        loaderLoading.current.style.display = "none";
         setCategory(data[0].catname);
         openAddCategory();
         if (data.response === "Updated") {
             closeAddCategory();
+            getCategory()
         }
     }
 
     // update category 
-    const updateCategory = async() => {
+    const updateCategory = async () => {
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
             method: 'PUT',

@@ -11,7 +11,7 @@ const Emplogin = () => {
     const [cookie, createcookie, removecookie] = useCookies();
 
     const login = async () => {
-        console.log(mobile, password)
+        // console.log(mobile, password)
         const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
             method: 'POST',
             headers: {
@@ -20,7 +20,7 @@ const Emplogin = () => {
             body: JSON.stringify({ mobile: mobile, password: password }),
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         if (data.response === "Valid") {
             createcookie('empCookie', mobile);
             jump("/customers")

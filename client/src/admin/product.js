@@ -32,14 +32,12 @@ const Product = () => {
     const [unitDes, setUnitDes] = useState();
 
 
-    useEffect(() => {
-        getCategory();
-    }, []);
+    const [catId, setCatId] = useState();
 
-
+    // getting category 
     const getCategory = async () => {
         // console.log(cookie2.adminCookie2)
-        // loaderLoading.current.style.display = "block";
+        loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.adminCookie2, {
             method: 'GET',
             headers: {
@@ -47,14 +45,16 @@ const Product = () => {
             }
         })
         const data = await re.json();
-        // console.log(data);
+        // setCatId(data[0].catid)
+        getSubCategory(data[0].catid)
         // console.log(data[0])
         setCatData(data);
-        //  loaderLoading.current.style.display = "none";
+         loaderLoading.current.style.display = "none";
     }
 
     const getSubCategory = async (catid) => {
-        // loaderLoading.current.style.display = "block";
+        setCatId(catid);
+        loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/subcategoryapi.php?cid=" + catid, {
             method: 'GET',
             headers: {
@@ -62,9 +62,11 @@ const Product = () => {
             }
         })
         const data = await re.json();
-        //loaderLoading.current.style.display = "none";
-        // console.log(data);
+        // console.log("subct data",data);
+        // setsubCatId(data[0].subcatid)
+        getProducts(data[0].subcatid)
         setSubcategory(data);
+        loaderLoading.current.style.display = "none";
     }
 
     const getProducts = async (subcatid) => {
@@ -100,6 +102,12 @@ const Product = () => {
     const closeAddProduct = () => {
         customerForm.current.style.display = "none";
         customerFormBg.current.style.display = "none";
+        setProductName('')
+        setUnitName('');
+        setUnitPrice('');
+        setUnitOfferPrice('');
+        setStock('');
+        setUnitStatus('');
         setIsEditMode(false);
     }
 
@@ -142,58 +150,55 @@ const Product = () => {
         })
         const data = await re.json();
         if (data.Response === "Saved") {
-            alert("Product saved successfully");
+            alert(data.Response);
             getProducts(subCatId);
+            openAddProduct(spid)
+            
         } else {
             alert("Product not saved");
         }
-        //closeAddProduct();
+        closeAddProduct();
 
     }
 
-    const openEditProduct = async () => {
+    const openEditProduct = async (spid) => {
+        setSPId(spid);
+        alert(spid)
         setIsEditMode(true);
-        //     const re = await fetch(process.env.REACT_APP_URL + "/editproductapi.php", {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             id: 1
-        //         })
-        //     })
-        //     const data = await re.json();
-        //     console.log(data);
-        //     setProductName(data.productname);
-        //     setProductPrice(data.price);
-        //     setProductOfferPrice(data.offerprice);
-        //     setProductDes(data.description);
-        //     // setSubcategory(data.subcategoryname);
-        //     // setCategory(data.categoryname);
-        openAddProduct();
-
+            const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    spid: spid
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+            setProductName(data[0].productname);
     }
+
+    // updating product 
     const updateProduct = async () => {
         setIsEditMode(false);
-        //     const re = await fetch(process.env.REACT_APP_URL + "/editproductapi.php", {
-        //         method: 'PUT',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             id: 1,
-        //             productname: productName,
-        //             price: productPrice,
-        //             offerprice: productOfferPrice,
-        //             description: productDes,
-        //             // subcategoryname: subcategory,
-        //             // categoryname: category
-        //         })
-        //     })
-        //     const data = await re.json();
-        //     if (data.response === "Updated") {
-        //         closeAddProduct();
-        //     }
+            const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    spid: spid,
+                    productname: productName,
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+            alert(data.Response)
+            getProducts(subCatId);
+            // if (data.Response === "Updated") {
+                closeAddProduct();
+            // }
     }
 
     // get single Product Unit data 
@@ -207,12 +212,14 @@ const Product = () => {
             }
         })
         const data = await re.json();
-        setUnitName(data.unitname);
-        setUnitPrice(data.price);
-        setUnitOfferPrice(data.offerprice);
-        setStock(data.stock);
-        setUnitStatus(data.status);
-        openAddProduct();
+        setUnitName(data[0].unitname);
+        setUnitPrice(data[0].price);
+        setUnitOfferPrice(data[0].offerprice);
+        setStock(data[0].stock);
+        setUnitStatus(data[0].status);
+        openAddProduct(spid)
+        // openAddProduct();
+
 
     }
 
@@ -229,12 +236,19 @@ const Product = () => {
                 unitname: unitName,
                 price: unitPrice,
                 offerprice: unitOfferPrice,
-                stock:stock,
+                stock: stock,
                 status: unitStatus
             })
         })
         const data = await re.json();
-        console.log(data);
+        if(data.Response==="Updated"){
+            alert("Product Unit updated successfully");
+            getProducts(subCatId);
+            openAddProduct(spid);
+        }
+        else{
+            alert("Product Unit not updated");
+        }
     }
 
 
@@ -252,7 +266,15 @@ const Product = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+
+            if (data.Response === "Deleted") {
+                alert(data.Response);
+                getProducts(subCatId);
+                openAddProduct(spid);
+            }
+            else{
+                alert("Product Unit not deleted");
+            }
         }
     }
 
@@ -278,21 +300,30 @@ const Product = () => {
         }
     }
 
+    
+    useEffect(() => {
+        getCategory();
+        // alert(catId)
+        // getSubCategory(catId)
+    }, []);
+
+
+
 
     return (
         <>
             {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
             <div className="new-employee-main">
-                <div class="row">
-                    <div class="col-md-2">
+                <div className="row">
+                    <div className="col-md-2">
                         <div className="form-group">
                             <label>Select Category</label>
-                            <select onChange={(e) => { getSubCategory(e.target.value) }}>
+                            <select value={catId} onChange={(e) => { getSubCategory(e.target.value) }}>
                                 <option value="select">Select Category</option>
                                 {
-                                    catdata.map((x) => {
+                                    catdata.map((x, index) => {
                                         return (
-                                            <option value={x.catid}>{x.catname}</option>
+                                            <option key={index} value={x.catid}>{x.catname}</option>
                                         )
                                     })
                                 }
@@ -301,30 +332,30 @@ const Product = () => {
                         </div>
 
                     </div>
-                    <div class="col-md-2">
+                    <div className="col-md-2">
                         <div className="form-group">
                             <label>Sub Category</label>
-                            <select onChange={(e) => { getProducts(e.target.value) }}>
+                            <select value={subCatId} onChange={(e) => { getProducts(e.target.value) }}>
                                 <option value="select">Select Sub Category</option>
                                 {
-                                    subcategory.map((x) => {
+                                    subcategory.map((x, index) => {
                                         return (
-                                            <option value={x.subcatid}>{x.subcatname}</option>
+                                            <option key={index} value={x.subcatid}>{x.subcatname}</option>
                                         )
                                     })
                                 }
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div className="col-md-2">
                         <div className="form-group">
                             <label>Product Name</label>
-                            <input type="text" className="form-control" onChange={(e) => { setProductName(e.target.value) }} />
+                            <input value={productName} type="text" className="form-control" onChange={(e) => { setProductName(e.target.value) }} />
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div className="col-md-2">
                         <br />
-                        <button className="btn btn-success" onClick={SaveProduct}>Save</button>
+                        <button className="btn btn-success" onClick={ isEditMode ? updateProduct : SaveProduct}>{isEditMode ? "Update":"Save"}</button>
 
                     </div>
 
@@ -346,12 +377,12 @@ const Product = () => {
                             {
                                 product.map((x, index) => {
                                     return (
-                                        <tr>
+                                        <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{x.productname}</td>
                                             <td><button className="btn btn-warning" onClick={() => { openAddProduct(x.spid) }}>{x.available_units} Options</button></td>
                                             <td>
-                                                <i onClick={openEditProduct} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { openEditProduct(x.spid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
                                                 <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
                                             </td>
                                         </tr>
@@ -363,36 +394,44 @@ const Product = () => {
                 </div>
             </div>
 
-            {/* Modal  */}
+            {/* Modal of Product Units */}
             <div ref={customerFormBg} onClick={closeAddProduct} className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form product-unit">
                 <h2>{isEditMode ? "Edit Product  Unit" : "Add New Product Unit"}</h2>
                 <div className="input-pair-container">
                     <div className="input-pair">
                         <label>Product Unit</label>
-                        <input onChange={(e) => { setUnitName(e.target.value) }} placeholder='Product Unit' required />
+                        <input value={unitName} onChange={(e) => { setUnitName(e.target.value) }} placeholder='Product Unit' required />
                     </div>
                     <div className="input-pair">
-                        <label>Product Price</label>
-                        <input onChange={(e) => { setUnitPrice(e.target.value) }} placeholder='Price' required />
+                        <label>Unit Price</label>
+                        <input value={unitPrice} onChange={(e) => { setUnitPrice(e.target.value) }} placeholder='Unit Price' required />
                     </div>
                     <div className="input-pair">
-                        <label>Product Offer Price</label>
-                        <input onChange={(e) => { setUnitOfferPrice(e.target.value) }} placeholder='Offer Price' required />
+                        <label>Unit Offer Price</label>
+                        <input value={unitOfferPrice} onChange={(e) => { setUnitOfferPrice(e.target.value) }} placeholder='Unit Offer Price' required />
                     </div>
                     <div className="input-pair">
                         <label>Stock</label>
-                        <input onChange={(e) => { setStock(e.target.value) }} placeholder='Offer Price' required />
+                        <input value={stock} onChange={(e) => { setStock(e.target.value) }} placeholder='Unit Stock' required />
                     </div>
-                    <div className="input-pair">
+                    {/* <div className="input-pair">
+                        <label>Unit Status</label>
+                        <select value={unitStatus}>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <input value={unitStatus} onChange={(e) => { setUnitStatus(e.target.value) }} placeholder='Unit Status' required />
+                    </div> */}
+                    {/* <div className="input-pair">
                         <label>Product Description</label>
                         <textarea onChange={(e) => { setUnitDes(e.target.value) }} placeholder='Product Description' required />
-                    </div>
+                    </div> */}
 
                 </div>
                 <div className="">
-                    <button className='btn btn-success' onClick={isEditMode ? updateProduct : addUnit}>
-                        {isEditMode ? "Update" : "Add Product"}
+                    <button className='btn btn-success' onClick={isEditMode ? updateProductUnit : addUnit}>
+                        {isEditMode ? "Update Unit" : "Add Unit"}
                     </button>
                 </div>
 
@@ -414,7 +453,7 @@ const Product = () => {
                             {
                                 productUnits.map((x, index) => {
                                     return (
-                                        <tr>
+                                        <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{x.unitname}</td>
                                             <td>{x.stock}</td>
