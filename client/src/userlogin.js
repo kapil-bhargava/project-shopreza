@@ -11,6 +11,7 @@ const Userlogin = (props) => {
     const popupBg = useRef()
     const signupPopup = useRef()
     const loaderWaiting = useRef();
+    const loaderLoading = useRef();
     const [confirmuserpassword, setconfirmuserpassword] = useState();
     const [userpassword, setuserpassword] = useState();
 
@@ -41,10 +42,9 @@ const Userlogin = (props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid: "1" })
+                body: JSON.stringify({ mobile: usermobile, password: userpassword })
             });
             const data = await re.json();
-            console.log(data)
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
                 createcookie("sp", usermobile, {
@@ -57,11 +57,9 @@ const Userlogin = (props) => {
                     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                     secure: true, // Use for HTTPS
                 });
+                window.location.reload();
 
-                // createcookie2("sp2", storeid)
-                loginPopup.current.classList.remove('active-popup');
-                popupBg.current.classList.remove("active-popupBg");
-                // loginPopup.current.classList.remove('active-popup');              
+                closePopup();
 
             }
             else {
@@ -123,6 +121,11 @@ const Userlogin = (props) => {
         setconfirmuserpassword(e.target.value)
     }
 
+    const closePopup = () => {
+        props.ref.current.classList.remove("active-popup");
+        props.ref1.current.classList.remove("active-popupBg");
+    }
+
     return (
         <>
             <section ref={props.ref} className="login-popup-container ">
@@ -140,8 +143,18 @@ const Userlogin = (props) => {
                 <button className="btn btn-success" onClick={login}>Login</button> <br />
                 <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
             </section>
-            <div ref={props.ref1} className="popup-bg"></div>
+            <div onClick={closePopup} ref={props.ref1} className="popup-bg"></div>
 
+
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
+            </div>
         </>
     )
 }

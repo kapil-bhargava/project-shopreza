@@ -717,3 +717,10 @@ select {
     color: var(--primary-yellow);
     letter-spacing: 1px;
 }
+.skeleton-loader{
+    display: flex;
+    background-color: green;
+    justify-content: center;
+    align-items: start;
+    font-size: 40px;
+}

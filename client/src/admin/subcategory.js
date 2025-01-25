@@ -9,6 +9,7 @@ const Subcategory = () => {
     const loaderLoading = useRef();
 
     const [isEditMode, setIsEditMode] = useState(false);
+    const [skeletonLoading, setSkeletonLoading] = useState(false);
 
 
     const [subcategory, setSubcategory] = useState([]);
@@ -71,17 +72,23 @@ const Subcategory = () => {
 
     // getCategory
     const getCategory = async () => {
-        loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        getSubCategory(data[1].catid)
-        loaderLoading.current.style.display = "none";
-        setCatData(data);
+        try {
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            getSubCategory(data[1].catid)
+            loaderLoading.current.style.display = "none";
+            setCatData(data);
+        }
+        catch (error) {
+            setSkeletonLoading(true);
+            loaderLoading.current.style.display = "none";
+        }
     }
 
     // delete subcategory
@@ -179,36 +186,40 @@ const Subcategory = () => {
                 </div>
 
                 <div className="table-responsive table-employee">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Subcategory Name</th>
-                                {/* <th>Price</th>
+                    {skeletonLoading ? (
+                        <span className="skeleton-loader">
+                            <h1>No Data</h1>
+                        </span>) : (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Subcategory Name</th>
+                                    {/* <th>Price</th>
                                 <th>Offer Price</th>
                                 <th>Des</th> */}
-                                <th>Action</th>
-                                {/* <th>Referral Code</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                subcategory.map((sub, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td><img src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
+                                    <th>Action</th>
+                                    {/* <th>Referral Code</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    subcategory.map((sub, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td><img src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
 
-                                            <td>
-                                                <i onClick={() => { openEditSubcategory(sub.subcatid) }} className="fa fa-edit text-success"></i> &nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteSubcategory(sub.subcatid) }} className="fa fa-trash text-danger"></i>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                                                <td>
+                                                    <i onClick={() => { openEditSubcategory(sub.subcatid) }} className="fa fa-edit text-success"></i> &nbsp;&nbsp;&nbsp;
+                                                    <i onClick={() => { deleteSubcategory(sub.subcatid) }} className="fa fa-trash text-danger"></i>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>)}
                 </div>
             </div>
 

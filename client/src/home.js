@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import Userlogin from './userlogin'
 
-const Home = (props) => {
+const Home = () => {
     const loginPopup = useRef();
     const popupBg = useRef();
     const [categories, setCategories] = useState([]);
@@ -17,7 +17,7 @@ const Home = (props) => {
 
 
     const jump = useNavigate()
-   
+
     const getCategory = async () => {
 
         loaderLoading.current.style.display = "block"
@@ -27,7 +27,6 @@ const Home = (props) => {
         });
 
         const dt = await re.json();
-        console.log(dt)
         loaderLoading.current.style.display = "none"
         setCategories(dt)
     }
@@ -46,7 +45,9 @@ const Home = (props) => {
         // else {
         //     alert("Please Login First")
         // }
-        getCategory();
+        if (cookie2.sp2 !== null && cookie2.sp2 !== undefined) {
+            getCategory();
+        }
     }, [])
 
 
@@ -154,7 +155,7 @@ const Home = (props) => {
                     </div>
                 </div>
             </section>
-            <Userlogin ref={loginPopup} ref1={popupBg}/>
+            <Userlogin ref={loginPopup} ref1={popupBg} />
 
 
 

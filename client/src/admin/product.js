@@ -8,6 +8,8 @@ const Product = () => {
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
 
+    const [skeletonLoading, setSkeletonLoading] = useState(false);
+
     const [isEditMode, setIsEditMode] = useState(false);
     const [category, setCategory] = useState();
 
@@ -36,53 +38,82 @@ const Product = () => {
 
     // getting category 
     const getCategory = async () => {
-        // console.log(cookie2.adminCookie2)
-        loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.adminCookie2, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        // setCatId(data[0].catid)
-        getSubCategory(data[0].catid)
-        // console.log(data[0])
-        setCatData(data);
-         loaderLoading.current.style.display = "none";
+        try {
+            // console.log(cookie2.adminCookie2)
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.adminCookie2, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            // setCatId(data[0].catid)
+            getSubCategory(data[0].catid)
+            // console.log(data[0])
+            setCatData(data);
+            loaderLoading.current.style.display = "none";
+            // console.log("TRY");
+        }
+
+        catch (error) {
+            setSkeletonLoading(true);
+            // console.log("CATHCH");
+            // alert(error.message);
+            loaderLoading.current.style.display = "none";
+            // console.error(error)
+        }
     }
 
     const getSubCategory = async (catid) => {
-        setCatId(catid);
-        loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/subcategoryapi.php?cid=" + catid, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        // console.log("subct data",data);
-        // setsubCatId(data[0].subcatid)
-        getProducts(data[0].subcatid)
-        setSubcategory(data);
-        loaderLoading.current.style.display = "none";
+        try {
+            setCatId(catid);
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/subcategoryapi.php?cid=" + catid, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            // console.log("subct data",data);
+            // setsubCatId(data[0].subcatid)
+            getProducts(data[0].subcatid)
+            setSubcategory(data);
+            loaderLoading.current.style.display = "none";
+        }
+        catch (error) {
+            setSkeletonLoading(true);
+            // console.error(error)
+            // alert(error.message);
+            loaderLoading.current.style.display = "none";
+        }
     }
 
     const getProducts = async (subcatid) => {
-        setsubCatId(subcatid);
-        // loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php?scid=" + subcatid, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        //  console.log(data);
-        //loaderLoading.current.style.display = "none";
-        // console.log(data);
-        setproduct(data);
+        try {
+            setsubCatId(subcatid);
+            // loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php?scid=" + subcatid, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            //  console.log(data);
+            //loaderLoading.current.style.display = "none";
+            // console.log(data);
+            console.log("try pr");
+            setproduct(data);
+        }
+        catch (error) {
+            setSkeletonLoading(true);
+            console.log("CATHCH pr");
+            alert(error.message);
+            // loaderLoading.current.style.display = "none";
+            // console.error(error)
+        }
     }
 
     const openAddProduct = async (spid) => {
@@ -134,71 +165,76 @@ const Product = () => {
 
     // adding new Product function 
     const addUnit = async () => {
-        const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                spid: spid,
-                unitname: unitName,
-                price: unitPrice,
-                offerprice: unitOfferPrice,
-                stock: stock
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    spid: spid,
+                    unitname: unitName,
+                    price: unitPrice,
+                    offerprice: unitOfferPrice,
+                    stock: stock
 
+                })
             })
-        })
-        const data = await re.json();
-        if (data.Response === "Saved") {
-            alert(data.Response);
-            getProducts(subCatId);
-            openAddProduct(spid)
-            
-        } else {
-            alert("Product not saved");
-        }
-        closeAddProduct();
+            const data = await re.json();
+            if (data.Response === "Saved") {
+                alert(data.Response);
+                getProducts(subCatId);
+                openAddProduct(spid)
 
+            } else {
+                alert("Product not saved");
+            }
+            closeAddProduct();
+
+        }
+        catch (error) {
+            console.log("add unit error: "+error.message)
+        }
     }
 
     const openEditProduct = async (spid) => {
         setSPId(spid);
         alert(spid)
         setIsEditMode(true);
-            const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    spid: spid
-                })
+        const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                spid: spid
             })
-            const data = await re.json();
-            console.log(data);
-            setProductName(data[0].productname);
+        })
+        const data = await re.json();
+        console.log(data);
+        setProductName(data[0].productname);
     }
 
     // updating product 
     const updateProduct = async () => {
         setIsEditMode(false);
-            const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    spid: spid,
-                    productname: productName,
-                })
+        const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                spid: spid,
+                productname: productName,
             })
-            const data = await re.json();
-            console.log(data);
-            alert(data.Response)
-            getProducts(subCatId);
-            // if (data.Response === "Updated") {
-                closeAddProduct();
-            // }
+        })
+        const data = await re.json();
+        console.log(data);
+        alert(data.Response)
+        getProducts(subCatId);
+        // if (data.Response === "Updated") {
+        closeAddProduct();
+        // }
     }
 
     // get single Product Unit data 
@@ -241,12 +277,12 @@ const Product = () => {
             })
         })
         const data = await re.json();
-        if(data.Response==="Updated"){
+        if (data.Response === "Updated") {
             alert("Product Unit updated successfully");
             getProducts(subCatId);
             openAddProduct(spid);
         }
-        else{
+        else {
             alert("Product Unit not updated");
         }
     }
@@ -272,7 +308,7 @@ const Product = () => {
                 getProducts(subCatId);
                 openAddProduct(spid);
             }
-            else{
+            else {
                 alert("Product Unit not deleted");
             }
         }
@@ -300,7 +336,7 @@ const Product = () => {
         }
     }
 
-    
+
     useEffect(() => {
         getCategory();
         // alert(catId)
@@ -355,7 +391,7 @@ const Product = () => {
                     </div>
                     <div className="col-md-2">
                         <br />
-                        <button className="btn btn-success" onClick={ isEditMode ? updateProduct : SaveProduct}>{isEditMode ? "Update":"Save"}</button>
+                        <button className="btn btn-success" onClick={isEditMode ? updateProduct : SaveProduct}>{isEditMode ? "Update" : "Save"}</button>
 
                     </div>
 
@@ -363,34 +399,40 @@ const Product = () => {
 
 
                 <div className="table-responsive table-employee">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Product Name</th>
-                                <th>Available Units</th>
-                                <th>Action</th>
-                                {/* <th>Referral Code</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                product.map((x, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{x.productname}</td>
-                                            <td><button className="btn btn-warning" onClick={() => { openAddProduct(x.spid) }}>{x.available_units} Options</button></td>
-                                            <td>
-                                                <i onClick={() => { openEditProduct(x.spid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                    {
+                        skeletonLoading ? (
+                            <div className="skeleton-loader">
+                                <h1>No Data</h1>
+                            </div>
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Product Name</th>
+                                        <th>Available Units</th>
+                                        <th>Action</th>
+                                        {/* <th>Referral Code</th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        product.map((x, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{x.productname}</td>
+                                                    <td><button className="btn btn-warning" onClick={() => { openAddProduct(x.spid) }}>{x.available_units} Options</button></td>
+                                                    <td>
+                                                        <i onClick={() => { openEditProduct(x.spid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                        <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>)}
                 </div>
             </div>
 
@@ -437,50 +479,69 @@ const Product = () => {
 
                 {/* table for product units  */}
                 <div className="mt-4 table-responsive table-employee">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Unit Name</th>
-                                <th>Stock</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    {
+                        skeletonLoading ? (
+                            <div className="skeleton-loader">
+                                <h1>No Data</h1>
+                            </div>
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Unit Name</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                            {
-                                productUnits.map((x, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{x.unitname}</td>
-                                            <td>{x.stock}</td>
-                                            <td><del>₹ {x.price}</del> ₹{x.offerprice}</td>
-                                            <td>{x.status}</td>
-                                            <td>
-                                                <i onClick={() => { openEditProductUnit(x.unitid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteProductUnit(x.unitid) }} className="fa fa-trash text-danger"></i>
-                                            </td>
-                                        </tr>
+                                    {productUnits.map((x, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{x.unitname}</td>
+                                                <td>{x.stock}</td>
+                                                <td>
+                                                    <del>₹ {x.price}</del> ₹ {x.offerprice}
+                                                </td>
+                                                <td>{x.status}</td>
+                                                <td>
+                                                    <i
+                                                        onClick={() => openEditProductUnit(x.unitid)}
+                                                        className="fa fa-edit"
+                                                    ></i>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <i
+                                                        onClick={() => deleteProductUnit(x.unitid)}
+                                                        className="fa fa-trash text-danger"
+                                                    ></i>
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
                                     )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                                    }
+
+                                </tbody>
+                            </table>)
+                    }
                 </div>
-            </div>
+            </div >
 
             {/* loader  */}
-            <div ref={loaderLoading} className="loading">
+            <div div ref={loaderLoading} className="loading" >
                 <p>Loading....</p>
-            </div>
+            </div >
 
             {/* wait  */}
-            <div ref={loaderWaiting} className="loading">
+            <div div ref={loaderWaiting} className="loading" >
                 <p>Please wait....</p>
-            </div>
+            </div >
+
+
         </>
     )
 }

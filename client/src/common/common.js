@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
 import Userlogin from '../userlogin';
 
 const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
+    const jump = useNavigate();
 
     const [cookie, createcookie, removecookie] = useCookies()
     const [cookie2, createcookie2, removecookie2] = useCookies()
@@ -34,12 +35,10 @@ const Header = ({ loginPopup, popupBg }) => {
 
     }
     const openLogin = () => {
-        if (loginPopup.current) {
-            // const currentDisplay = loginPopup.current.style.display;
-            // loginPopup.current.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        // if (loginPopup.current) {
             loginPopup.current.classList.add("active-popup");
             popupBg.current.classList.add("active-popupBg");
-        }
+        // }
 
     }
 
@@ -54,8 +53,6 @@ const Header = ({ loginPopup, popupBg }) => {
             body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
         });
         const data = await re.json();
-        console.log(data);
-        // console.table(data)
         var itot = 0;
         var qty = 0;
         for (var i = 0; i < data.length; i++) {
@@ -73,6 +70,10 @@ const Header = ({ loginPopup, popupBg }) => {
         removecookie("sp");
         removecookie2("sp2");
         closeUserProfile();
+        jump('/')
+        // setTimeout(() => {
+        // }, 500)
+        window.location.reload();
         openLogin()
 
     };
@@ -250,7 +251,7 @@ const Header = ({ loginPopup, popupBg }) => {
                 </div>
             </section>
 
-          
+
         </>
     )
 };

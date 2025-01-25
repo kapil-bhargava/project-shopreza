@@ -8,6 +8,7 @@ const Category = () => {
     const loaderLoading = useRef();
     const loaderWaiting = useRef();
     const [catId, setCatId] = useState();
+    const [skeletonLoading, setSkeletonLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -18,7 +19,6 @@ const Category = () => {
     const [category, setCategory] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
     const [cookie2, createcookie2, removecookie2] = useCookies();
-    // const [categoryData, setCategoryData] = useState([]);
     const openAddCategory = () => {
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
@@ -41,10 +41,9 @@ const Category = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none"
-        // console.log(data);
         setstoreData(data);
-        // getStores();
     }
+
     // adding new category function 
     const addCategory = async () => {
 
@@ -61,7 +60,7 @@ const Category = () => {
             })
         })
         const data = await re.json();
-        // console.log(data);
+        //  //data);
         loaderLoading.current.style.display = "none";
         getCategory();
         closeAddCategory();
@@ -73,25 +72,32 @@ const Category = () => {
 
     // getCategory
     const getCategory = async () => {
-        // console.log(cookie2.adminCookie2)
-        loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+        //  //cookie2.adminCookie2)
+        try {
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            if (data.length <= 0) {
+                setSkeletonLoading(true);
             }
-        })
-        const data = await re.json();
-        // console.log(data);
-        // console.log(data[0])
-        setCatData(data);
-        loaderLoading.current.style.display = "none";
+            else {
+                setSkeletonLoading(false);
+            }
+            setCatData(data);
+            loaderLoading.current.style.display = "none";
+        }
+        catch (e) {
+            console.log("running getCategory catch")
+        }
     }
 
     // delete category 
-
     const deleteCategory = async (catid) => {
-        alert(catid)
         if (window.confirm('Are you sure')) {
             loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
@@ -104,11 +110,10 @@ const Category = () => {
                 })
             })
             const data = await re.json();
-            // console.log(data);
+            alert(data.Response);
             loaderLoading.current.style.display = "none";
             getCategory()
             closeAddCategory();
-            // }
         }
     }
 
@@ -173,39 +178,44 @@ const Category = () => {
                 </div>
 
                 <div className="table-responsive table-employee">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Category</th>
-                                {/* <th>Price</th>
+                    {skeletonLoading ? (
+                        <span className="skeleton-loader">
+                            <h1>No Data</h1>
+                        </span>) : (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Category</th>
+                                    {/* <th>Price</th>
                                 <th>Offer Price</th>
                                 <th>Des</th> */}
-                                <th>Action</th>
-                                {/* <th>Referral Code</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                catData.map((cat, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{cat.catname}</td>
-                                            {/* <td>{cat.price}</td>
+                                    <th>Action</th>
+                                    {/* <th>Referral Code</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    catData.map((cat, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{cat.catname}</td>
+                                                {/* <td>{cat.price}</td>
                                             <td>{cat.offerprice}</td>
                                             <td>{cat.description}</td> */}
-                                            <td>
-                                                <i onClick={() => { openEditCategory(cat.catid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteCategory(catData[index].catid) }} className="fa fa-trash text-danger"></i>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                                                <td>
+                                                    <i onClick={() => { openEditCategory(cat.catid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
+                                                    <i onClick={() => { deleteCategory(catData[index].catid) }} className="fa fa-trash text-danger"></i>
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                    )}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>)
+                    }
                 </div>
 
                 <div ref={customerFormBg} onClick={closeAddCategory} className="c-bg"></div>
