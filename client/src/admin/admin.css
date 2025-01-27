@@ -505,23 +505,77 @@ select {
 }
 
 .product-unit input {
-    width: 200px;
+    width: 60%;
     /* display: inline-block; */
     /* background-color: yellow; */
 }
 
 .product-unit textarea {
-    width: 200px;
+    width: 60%;
+    /* width: 200px; */
     /* background-color: yellow; */
 }
 
 .product-unit .input-pair {
     /* background-color: green; */
     width: 350px;
+    flex-grow: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+/* .product-unit img{
+    width: 50px;
+    height: 50px;
+} */
+ .pic-popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    padding: 10px;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    /* height: 300px; */
+    background-color: #f4f4f4;
+    display: none;
+    z-index: 1000;
+    box-shadow: 20px 20px 30px black;;
+ }
+ .main-pic-container{
+    width: 100%;
+    /* background-color: red; */
+    /* height: 200px; */
+    display: flex;
+    justify-content: space-between;
+    /* align-items: space-between; */
+    gap: 20px;
+    flex-wrap: wrap;
+ }
+ .pic-popup .pic-card{
+    /* background-color:green; */
+    width: 150px;
+    /* height: 150px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+ }
+ .pic-card img{
+    width: 100%;
+    
+    /* height: 100%; */
+ }
+
+ .pic-popup-close{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    /* background-color: yellow; */
+    font-size: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+ }
 
 
 
@@ -602,6 +656,12 @@ select {
     
     .product-unit .input-pair {
         display: block;
+    }
+    .product-unit label, .product-unit input{
+        width: 100%;
+    }
+    .product-unit button{
+        width: 100%;
     }
 }
 
@@ -693,6 +753,7 @@ select {
     transform: translate(-50%, -50%);
     width: 300px;
     display: none;
+    z-index: 5000;
 }
 
 

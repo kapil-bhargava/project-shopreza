@@ -95,7 +95,7 @@ const SubCategory = () => {
             },
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         setaitem(data);
         unitOptionsDiv.current.classList.add("active-unit-options-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
@@ -137,7 +137,7 @@ const SubCategory = () => {
         })
         const data = await re.json()
         // console.log(data);
-        console.table(data);
+        // console.table(data);
         loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
