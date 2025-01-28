@@ -13,6 +13,7 @@ const Subcategory = () => {
 
 
     const [subcategory, setSubcategory] = useState([]);
+    const [subcategoryPic, setSubcategoryPic] = useState();
     const [subcategoryName, setSubcategoryName] = useState();
     const [catId, setCatId] = useState();
     const [catData, setCatData] = useState([]);
@@ -51,6 +52,37 @@ const Subcategory = () => {
             closeAddSubcategory();
             getSubCategory(catId)
         }
+        loaderLoading.current.style.display = 'none';
+    }
+
+    const picPopup = useRef();
+
+    // pic popup 
+    const openPicForm = (x) => {
+        picPopup.current.style.display = "block";
+        setSubcatId(x)
+        
+    }
+    const closePicPopup = () => {
+        picPopup.current.style.display = "none";
+    }
+    // uploading subcategory pic 
+    const uploadPic = async () => {
+        loaderLoading.current.style.display = "block";
+        const formData = new FormData();
+        formData.append('pic', subcategoryPic);
+        formData.append('subcatid', subcatId);
+
+        const re = await fetch(process.env.REACT_APP_URL + "/uploadsubcatpic.php", {
+            method: 'POST',
+            body: formData
+        })
+        const data = await re.json();
+        alert(data.Response);
+        getSubCategory(catId);
+        closePicPopup();
+
+      
         loaderLoading.current.style.display = 'none';
     }
 
@@ -208,7 +240,7 @@ const Subcategory = () => {
                                         return (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
-                                                <td><img src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
+                                                <td><img onClick={()=>{openPicForm(sub.subcatid)}} src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
 
                                                 <td>
                                                     <i onClick={() => { openEditSubcategory(sub.subcatid) }} className="fa fa-edit text-success"></i> &nbsp;&nbsp;&nbsp;
@@ -240,8 +272,13 @@ const Subcategory = () => {
                     </select>
                 </div>
 
-                <label>Subcategory Name</label>
-                <input value={subcategoryName} onChange={(e) => { setSubcategoryName(e.target.value) }} placeholder='Enter subcategory name' type="text" required />
+                <div className="form-group">
+                    <label>Subcategory Name</label>
+                    <input value={subcategoryName} onChange={(e) => { setSubcategoryName(e.target.value) }} placeholder='Enter subcategory name' type="text" required />
+                </div>
+                <div className="form-group">
+                    <input type="file" onChange={(e) => { setSubcategoryPic(e.target.files[0]) }} />
+                </div>
 
                 <div className="form-group">
                     <button onClick={isEditMode ? updateSubcategory : addSubcategory}>{isEditMode ? "Update Subcategory" : "Add Subcategory"}</button>
@@ -256,6 +293,31 @@ const Subcategory = () => {
             {/* wait  */}
             <div ref={loaderWaiting} className="loading">
                 <p>Please wait....</p>
+            </div>
+
+             {/* picPopup */}
+             <div ref={picPopup} className="pic-popup">
+                <h5>Select Pic</h5>
+                <div className="input-pair">
+                    <input onChange={(e) => { setSubcategoryPic(e.target.files[0]) }} type="file" />
+                    <button className='btn btn-primary' onClick={uploadPic}>Upload</button>
+                    <div onClick={closePicPopup} className="pic-popup-close">
+                        &times;
+                    </div>
+                </div>
+                {/* <br />
+                <div className="main-pic-container">
+                    {
+                        picData.map((x, i) => {
+                            return (
+                                <div key={i} className="pic-card">
+                                    <img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { picOption(x.picname, x.unitid, x.picid) }} />
+                                </div>
+                            )
+                        })
+                    }
+                </div> */}
+
             </div>
         </>
     )

@@ -7,6 +7,8 @@ const Product = () => {
     const customerFormBg = useRef();
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
+    const confirmPopup = useRef();
+    const confirmPopupBg = useRef();
 
     const [skeletonLoading, setSkeletonLoading] = useState(false);
 
@@ -39,8 +41,8 @@ const Product = () => {
     // getting category 
     const getCategory = async () => {
         try {
-            // console.log(cookie2.adminCookie2)
             loaderLoading.current.style.display = "block";
+            // console.log(cookie2.adminCookie2)
             const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.adminCookie2, {
                 method: 'GET',
                 headers: {
@@ -58,9 +60,9 @@ const Product = () => {
 
         catch (error) {
             setSkeletonLoading(true);
-            // console.log("CATHCH");
+            // console.log(error);
             // alert(error.message);
-            loaderLoading.current.style.display = "none";
+            // loaderLoading.current.style.display = "none";
             // console.error(error)
         }
     }
@@ -86,7 +88,7 @@ const Product = () => {
             setSkeletonLoading(true);
             // console.error(error)
             // alert(error.message);
-            loaderLoading.current.style.display = "none";
+            // loaderLoading.current.style.display = "none";
         }
     }
 
@@ -108,9 +110,9 @@ const Product = () => {
         }
         catch (error) {
             setSkeletonLoading(true);
-            console.log("CATHCH pr");
+            // console.log("CATHCH pr");
             alert(error.message);
-            loaderLoading.current.style.display = "none";
+            // loaderLoading.current.style.display = "none";
         }
     }
 
@@ -137,6 +139,8 @@ const Product = () => {
     const closeAddProductUnit = () => {
         customerForm.current.style.display = "none";
         customerFormBg.current.style.display = "none";
+        closePicPopup();
+        closeConfirmPopup();
         setProductName('')
         setUnitName('');
         setUnitPrice('');
@@ -189,7 +193,7 @@ const Product = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             if (data.Response === "Saved") {
                 alert(data.Response);
                 getProducts(subCatId);
@@ -202,7 +206,7 @@ const Product = () => {
             }
         }
         catch (error) {
-            loaderLoading.current.style.display = "none";
+            // loaderLoading.current.style.display = "none";
             alert("add unit error: " + error.message)
         }
     }
@@ -224,7 +228,7 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        console.log(data);
+        // console.log(data);
         setProductName(data[0].productname);
     }
 
@@ -244,7 +248,7 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        console.log(data);
+        // console.log(data);
         alert(data.Response)
         getProducts(subCatId);
         closeAddProductUnit();
@@ -276,8 +280,8 @@ const Product = () => {
 
     // update product unit data 
     const updateProductUnit = async () => {
-        loaderLoading.current.style.display = "block";
         try {
+            loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
                 method: 'PUT',
                 headers: {
@@ -304,7 +308,7 @@ const Product = () => {
             }
         }
         catch (error) {
-            loaderLoading.current.style.display = "none";
+            // loaderLoading.current.style.display = "none";
             alert("update unit error: " + error.message)
         }
     }
@@ -333,7 +337,7 @@ const Product = () => {
                 openAddProductUnit(spid);
             }
             else {
-                alert("Product Unit not deleted");
+                alert(data.Response);
             }
         }
     }
@@ -385,12 +389,63 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        console.log(data);
         setPicData(data);
+        
     }
 
-    // changing pic api 
-    const changePic = async(picname,ui) => {
+    // useStates for pic 
+    const [picName, setPicName] = useState();
+    const [picId, setPicId] = useState();
+
+    // pic options function
+    const picOption = async (picname, unitid, picid) => {
+        setPicName(picname);
+        setUnitId(unitid);
+        setPicId(picid);
+        confirmPopup.current.style.display = "flex";
+        confirmPopupBg.current.style.display = "flex";
+    }
+    const closeConfirmPopup = () => {
+        confirmPopup.current.style.display = "none";
+        confirmPopupBg.current.style.display = "none";
+    }
+
+    // delete pic api 
+    const deletePic = async () => {
+        try {
+            if (window.confirm('Are you sure you want to delete ?')) {
+                loaderLoading.current.style.display = "block";
+                const re = await fetch(process.env.REACT_APP_URL + "/uploadpic.php", {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        picid: picId
+                    })
+                })
+                const data = await re.json();
+                // console.log(data);
+                loaderLoading.current.style.display = "none";
+                if (data.Response === "Deleted") {
+                    alert(data.Response);
+                    getUploadPic(unitId);
+                    closeConfirmPopup();
+                }
+                else {
+                    alert(data.Response);
+                }
+            }
+        }
+        catch (error) {
+            loaderLoading.current.style.display = "none";
+            alert("delete pic error: " + error.message)
+        }
+    }
+
+    // using the pic 
+
+    const usePic = async () => {
         if (window.confirm('Are you sure you want to change ?')) {
             loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/uploadpic.php", {
@@ -399,26 +454,20 @@ const Product = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    unitid:ui,
-                    pic: picname
+                    unitid: unitId,
+                    pic: picName,   
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             openAddProductUnit(spid);
             loaderLoading.current.style.display = "none";
-            closePicPopup()
-            // if (data.Response === "Deleted") {
-            //     alert(data.Response);
-            //     getUploadPic(unitId);
-            // }
-            // else {
-            //     alert("Product Pic not deleted");
-            // }
+            closePicPopup();
+            closeConfirmPopup();
         }
     }
 
-// saving pic 
+    // saving pic 
     const uploadPic = async () => {
         const formData = new FormData();
         formData.append('pic', pic);
@@ -431,7 +480,7 @@ const Product = () => {
             body: formData
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         loaderLoading.current.style.display = "none";
         getUploadPic(unitId)
         // if (data.Response === "Uploaded") {
@@ -582,10 +631,7 @@ const Product = () => {
                         <label>Stock</label>
                         <input value={stock} onChange={(e) => { setStock(e.target.value) }} placeholder='Unit Stock' required />
                     </div>
-                    <div className="input-pair">
-                        <label>Choose Pic</label>
 
-                    </div>
                 </div>
                 <div>
                     <button className='btn btn-success' onClick={isEditMode ? updateProductUnit : addUnit}>
@@ -626,7 +672,7 @@ const Product = () => {
                                         return (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
-                                                <td>< img src={x.pic} alt={x.pic} for="pp" onClick={() => { openPicForm(x.unitid) }} /> {x.unitname}</td>
+                                                <td>< img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { openPicForm(x.unitid) }} /> {x.unitname}</td>
                                                 <td>{x.stock}</td>
                                                 <td>
                                                     <del>₹ {x.price}</del> ₹ {x.offerprice}
@@ -675,30 +721,29 @@ const Product = () => {
                         &times;
                     </div>
                 </div>
-                    <br />
-                    <div className="main-pic-container">
-                        {
-                           picData.map((x, i) =>{
+                <br />
+                <div className="main-pic-container">
+                    {
+                        picData.map((x, i) => {
                             return (
                                 <div key={i} className="pic-card">
-                                    <img src={x.pic} alt={x.pic} onClick={() => { changePic(x.picname, x.unitid) }} />
+                                    <img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { picOption(x.picname, x.unitid, x.picid) }} />
                                 </div>
                             )
-                           })
-                        }
-                        {/* <div className="pic-card">
-                            <img src={pic} alt={pic} />
-                        </div>
-                        <div className="pic-card">
-                            <img src={pic} alt={pic} />
-                        </div>
-                        <div className="pic-card">
-                            <img src={pic} alt={pic} />
-                        </div>
-                        <div className="pic-card">
-                            <img src={pic} alt={pic} />
-                        </div> */}
-                    </div>
+                        })
+                    }
+                </div>
+
+            </div>
+
+            {/* confirm popup */}
+            <div ref={confirmPopupBg} onClick={closeConfirmPopup} className="confirm-popup-bg"></div>
+            <div ref={confirmPopup} className="confirm-popup">
+                <div onClick={closeConfirmPopup} className="pic-popup-close">
+                    &times;
+                </div>
+                <button onClick={usePic} className="btn btn-primary" >Use Pic</button>
+                <button onClick={deletePic} className="btn btn-danger">Delete</button>
 
             </div>
 

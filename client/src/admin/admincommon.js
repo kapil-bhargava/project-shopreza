@@ -27,7 +27,7 @@ const SideBar = () => {
     const [activeStoreId, setActiveStoreId] = useState();
     // getting store 
     const getStores = async () => {
-        loaderWaiting.current.style.display = "block"
+        // loaderWaiting.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
             method: 'GET',
             headers: {
@@ -47,7 +47,7 @@ const SideBar = () => {
             // console.log("else")
         }
         // console.log(activeStore);
-        loaderWaiting.current.style.display = "none"
+        // loaderWaiting.current.style.display = "none"
         // console.log(data);
     }
 
