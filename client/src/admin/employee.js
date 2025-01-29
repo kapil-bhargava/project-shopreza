@@ -9,20 +9,20 @@ const Employee = () => {
             const loaderWaiting = useRef();
                 const loaderLoading = useRef();
 
-    const [name, setName] = useState();
-    const [empType, setEmpType] = useState();
-    const [mobile, setMobile] = useState();
-    const [adhar, setAdhar] = useState();
-    const [email, setEmail] = useState();
-    const [gender, setGender] = useState();
-    const [address, setAddress] = useState();
-    const [father, setFather] = useState();
-    const [password, setPassword] = useState();
-    const [status, setStatus] = useState();
+    const [name, setName] = useState("");
+    const [empType, setEmpType] = useState("");
+    const [mobile, setMobile] = useState("");
+    const [adhar, setAdhar] = useState("");
+    const [email, setEmail] = useState("");
+    const [gender, setGender] = useState("");
+    const [address, setAddress] = useState("");
+    const [father, setFather] = useState("");
+    const [password, setPassword] = useState("");
+    const [status, setStatus] = useState("");
     var st = ["active", "inactive"];
     var type = ["Delivery Agent", "Manager", "Distributor"]
-    const [confirmPassword, setConfirmPassword] = useState();
-    const [altMobile, setAltMobile] = useState();
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [altMobile, setAltMobile] = useState("");
 
     const jump = useNavigate();
     const [signUpData, setSignUpData] = useState([]);
@@ -31,8 +31,8 @@ const Employee = () => {
     const [empData, setEmpData] = useState([]);
     const [singleEmpData, setSingleEmpData] = useState([]);
 
-    const [empMobile, setEmpMobile] = useState();
-    const [storeId, setStoreId] = useState();
+    const [empMobile, setEmpMobile] = useState("");
+    const [storeId, setStoreId] = useState("");
 
     const employeeForm = useRef();
     const employeeFormBg = useRef();

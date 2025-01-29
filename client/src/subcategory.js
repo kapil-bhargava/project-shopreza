@@ -17,6 +17,7 @@ const SubCategory = () => {
     const [username, setusername] = useState()
     const [usermobile, setusermobile] = useState()
     const [userpassword, setuserpassword] = useState()
+    const [userGender, setUserGender] = useState();
     const [confirmuserpassword, setconfirmuserpassword] = useState()
     const [otp, setOtp] = useState();
     const loginPopup = useRef()
@@ -31,7 +32,6 @@ const SubCategory = () => {
     const unitOptionsDiv = useRef();
     const mobileCart = useRef();
     const headerRef = useRef();
-    const [userGender, setUserGender] = useState();
 
     const [nameError, setNameError] = useState();
     const [mobileError, setMobileError] = useState();

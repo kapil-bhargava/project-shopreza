@@ -105,7 +105,6 @@ const Newemployee = () => {
             <div ref={form} className="new-employee">
                 <div className="employee-form-container">
                     <h3>New Employee Details</h3>
-                    {/* <form> */}
                         <div className="form-group">
                             <div className="input-pair">
                                 <div>
@@ -245,7 +244,6 @@ const Newemployee = () => {
                         </div>
 
                         <button type="submit" onClick={submit}>Submit</button>
-                    {/* </form> */}
                 </div>
             </div>
 

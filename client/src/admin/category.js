@@ -269,10 +269,10 @@ const Category = () => {
                         <label>Category Name</label>
                         <input value={category} onChange={(e) => { setCategory(e.target.value) }} placeholder='Enter category name' type="text" id="customer-name" name="customer-name" required />
                     </div>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <label>Category Pic</label>
                         <input onChange={(e) => { setCategoryPic(e.target.files[0]) }} type='file' required />
-                    </div>
+                    </div> */}
                     <div className="form-group">
                         <button onClick={isEditMode ? updateCategory : addCategory}>
                             {isEditMode ? "Update" : "Add"} Category

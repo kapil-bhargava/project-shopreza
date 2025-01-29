@@ -21,6 +21,7 @@ import AdminLogin from './admin/adminlogin';
 import Category from './admin/category';
 import Subcategory from './admin/subcategory';
 import Product from './admin/product';
+import Checkout from './checkout';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -44,6 +45,7 @@ root.render(
         <Route exact path="/category" element={<Category/>} />
         <Route exact path="/subcategory" element={<Subcategory/>} />
         <Route exact path="/product" element={<Product/>} />
+        <Route exact path="/checkout" element={<Checkout/>} />
       </Routes>
     </BrowserRouter>
     </Provider>

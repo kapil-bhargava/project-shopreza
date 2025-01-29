@@ -13,7 +13,7 @@ const Product = () => {
     const [skeletonLoading, setSkeletonLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState("");
 
     const [cookie, createcookie, removecookie] = useCookies();
 
@@ -22,21 +22,21 @@ const Product = () => {
     const [product, setproduct] = useState([]);
     const [productUnits, setProductUnits] = useState([]);
     // const [productUnitData, setProductUnitData] = useState([]);
-    const [subCatId, setsubCatId] = useState();
-    const [unitId, setUnitId] = useState();
-    const [productName, setProductName] = useState();
-    const [unitStatus, setUnitStatus] = useState();
-    const [stock, setStock] = useState();
+    const [subCatId, setsubCatId] = useState("");
+    const [unitId, setUnitId] = useState("");
+    const [productName, setProductName] = useState("");
+    const [unitStatus, setUnitStatus] = useState("");
+    const [stock, setStock] = useState("");
 
 
-    const [spid, setSPId] = useState();
-    const [unitName, setUnitName] = useState();
-    const [unitPrice, setUnitPrice] = useState();
-    const [unitOfferPrice, setUnitOfferPrice] = useState();
-    const [unitDes, setUnitDes] = useState();
+    const [spid, setSPId] = useState("");
+    const [unitName, setUnitName] = useState("");
+    const [unitPrice, setUnitPrice] = useState("");
+    const [unitOfferPrice, setUnitOfferPrice] = useState("");
+    const [unitDes, setUnitDes] = useState("");
 
 
-    const [catId, setCatId] = useState();
+    const [catId, setCatId] = useState("");
 
     // getting category 
     const getCategory = async () => {
@@ -366,7 +366,7 @@ const Product = () => {
         }
     }
 
-    const [pic, setPic] = useState();
+    const [pic, setPic] = useState("");
     const picPopup = useRef();
 
     const openPicForm = (x) => {
@@ -394,8 +394,8 @@ const Product = () => {
     }
 
     // useStates for pic 
-    const [picName, setPicName] = useState();
-    const [picId, setPicId] = useState();
+    const [picName, setPicName] = useState("");
+    const [picId, setPicId] = useState("");
 
     // pic options function
     const picOption = async (picname, unitid, picid) => {

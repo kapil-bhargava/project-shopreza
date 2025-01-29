@@ -6,7 +6,7 @@ const Items = () => {
                 <h2>Our Items</h2>
                 <div className="container">
                     {/* items */}
-                    <Link className='link' to="/product">
+                    <Link className='link' to="/products">
                         <div className="items">
                             <img src={require("./images/amul_butter.png")} alt="" />
                             <h5>Item 1</h5>

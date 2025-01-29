@@ -8,8 +8,9 @@ const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
     const jump = useNavigate();
 
-    const [cookie, createcookie, removecookie] = useCookies()
-    const [cookie2, createcookie2, removecookie2] = useCookies()
+    const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
+    const [cookieAdd, createcookieAdd, removecookieAdd] = useCookies();
     const [cartData, setCartData] = useState([])
     const [total, settotal] = useState(0);
     const dispatch = useDispatch();
@@ -149,7 +150,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
                 <div>
                     <div className="cart-header">
-                        <h2>My Cart</h2>
+                        <h2>{cookieAdd.address} Cart</h2>
                         <i onClick={cartClose} className="fa fa-times"></i>
                     </div>
 
