@@ -6,8 +6,8 @@ const Employee = () => {
     const signupref = useRef();
     const editForm = useRef();
     const editFormBg = useRef();
-            const loaderWaiting = useRef();
-                const loaderLoading = useRef();
+    const loaderWaiting = useRef();
+    const loaderLoading = useRef();
 
     const [name, setName] = useState("");
     const [empType, setEmpType] = useState("");
@@ -49,34 +49,50 @@ const Employee = () => {
 
     // adding new employee 
     const addEmployee = async () => {
-        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                mobileno: empMobile,
-                storeid: storeId,
-                emptype: empType
+        try {
+            loaderLoading.current.style.display = "block"
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mobileno: empMobile,
+                    storeid: storeId,
+                    emptype: empType
+                })
             })
-        })
-        const data = await re.json();
-        // console.log(data);
-        closeAddEmployee();
+            const data = await re.json();
+            alert(data.Response);
+            getEmployees();
+            loaderLoading.current.style.display = "none"
+            closeAddEmployee();
+        }
+        catch (error) {
+            console.error(error);
+            alert("Failed to add employee");
+            // loaderLoading.current.style.display = "none"
+        }
     }
 
     // get all employee data 
     const getEmployees = async () => {
-        loaderLoading.current.style.display="block"
-        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        loaderLoading.current.style.display="none"
-        setEmpData(data);
+        try {
+            loaderLoading.current.style.display = "block"
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            loaderLoading.current.style.display = "none"
+            setEmpData(data);
+        }
+        catch (error) {
+            console.error(error);
+            // loaderLoading.current.style.display = "none"
+        }
     }
 
     // getting store 
@@ -238,7 +254,7 @@ const Employee = () => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
-                                            <td>{employee.name+"(" + employee.gender + ")"}</td>
+                                            <td>{employee.name + "(" + employee.gender + ")"}</td>
                                             <td>{employee.storename}</td>
                                             <td>{employee.address}</td>
                                             <td>{employee.mobileno}</td>
@@ -271,7 +287,7 @@ const Employee = () => {
                 </div>
                 <div className="form-group">
                     <div>
-                         <label>Employee Type</label>
+                        <label>Employee Type</label>
                         <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
                             <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
                             <option value="Distributor">Distributor</option>
@@ -282,7 +298,7 @@ const Employee = () => {
                 </div>
                 <div className="form-group">
                     <div>
-                         <label>Assign Store</label>
+                        <label>Assign Store</label>
                         <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
                             <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
                             {
@@ -438,7 +454,7 @@ const Employee = () => {
                             </select>
                         </div>
                         <div>
-                             <label>Employee Type</label>
+                            <label>Employee Type</label>
                             <select onChange={(e) => { setEmpType(e.target.value) }}>
                                 {type.map((x, index) => {
                                     return (
@@ -455,8 +471,8 @@ const Employee = () => {
                 <button type="submit" onClick={update}>Update</button>
             </div>
 
-              {/* loader  */}
-              <div ref={loaderLoading} className="loading">
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
             </div>
 

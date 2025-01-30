@@ -27,7 +27,7 @@ const SideBar = () => {
     const [activeStoreId, setActiveStoreId] = useState();
     // getting store 
     const getStores = async () => {
-        // loaderWaiting.current.style.display = "block"
+        loaderWaiting.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/storeapi.php`, {
             method: 'GET',
             headers: {
@@ -37,6 +37,7 @@ const SideBar = () => {
         const data = await re.json();
         // setStoreId(cookie2.adminCookie2);
         setStores(data);
+        loaderWaiting.current.style.display = "none"
         const selectedStore = data.find((store) => store.storeid == cookie2.adminCookie2);
         if (selectedStore) {
             setActiveStore(selectedStore.storename);
@@ -76,7 +77,7 @@ const SideBar = () => {
         setStoreId(storeId);
         createcookie2('adminCookie2', storeId);
         getStores()
-        jump("/category");
+        window.location.reload();
         // setActiveStore(storeId);
         window.location.reload();
         // console.log(storeId);
@@ -119,7 +120,7 @@ const SideBar = () => {
                     <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
                     <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
                     <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
-                    <div className="nav-item"><Link className="linkdb" ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
+                    <div className="nav-item"><Link className="linkdb" to="/adminorders"  ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
                     <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
                     <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
                     <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
@@ -183,7 +184,7 @@ const SideBarEmp = () => {
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
 
-                <div className="logo">Customer Dashboard</div>
+                <div className="logo">Distributor Dashboard</div>
                 <nav>
                     {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>

@@ -8,9 +8,12 @@ const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
     const jump = useNavigate();
 
+    const [saved, setSaved] = useState();
+
     const [cookie, createcookie, removecookie] = useCookies();
     const [cookie2, createcookie2, removecookie2] = useCookies();
-    const [cookieAdd, createcookieAdd, removecookieAdd] = useCookies();
+    const [cookie_userAddress, createcookie_userAddress, removecookie_userAddress] = useCookies();
+    const [cookie_username, createcookie_username, removecookie_username] = useCookies();
     const [cartData, setCartData] = useState([])
     const [total, settotal] = useState(0);
     const dispatch = useDispatch();
@@ -37,11 +40,12 @@ const Header = ({ loginPopup, popupBg }) => {
     }
     const openLogin = () => {
         // if (loginPopup.current) {
-            loginPopup.current.classList.add("active-popup");
-            popupBg.current.classList.add("active-popupBg");
+        loginPopup.current.classList.add("active-popup");
+        popupBg.current.classList.add("active-popupBg");
         // }
 
     }
+
 
     // gettting cart data 
     const getCartData = async () => {
@@ -56,10 +60,13 @@ const Header = ({ loginPopup, popupBg }) => {
         const data = await re.json();
         var itot = 0;
         var qty = 0;
+        var saved = 0;
         for (var i = 0; i < data.length; i++) {
+            saved = saved + (parseFloat(data[i].price - parseFloat(data[i].offerprice)) * parseFloat(data[i].quantity))
             itot = itot + (parseFloat(data[i].offerprice) * parseFloat(data[i].quantity));
             qty = qty + parseInt(data[i].quantity);
         }
+        setSaved(saved)
         settotal(itot);
         setCartData(data);
         dispatch({ type: 'INC', cdata: qty });
@@ -70,12 +77,14 @@ const Header = ({ loginPopup, popupBg }) => {
     const logout = () => {
         removecookie("sp");
         removecookie2("sp2");
+        // removecookie_username("username");
+        removecookie_userAddress("address");
         closeUserProfile();
         jump('/')
-        // setTimeout(() => {
-        // }, 500)
         window.location.reload();
-        openLogin()
+        setTimeout(() => {
+            openLogin()
+        }, 5000)
 
     };
 
@@ -109,8 +118,12 @@ const Header = ({ loginPopup, popupBg }) => {
                     </Link>
                 </div>
                 <div className="add-div">
-                    <h5>Delivery in <span>15</span> minutes</h5>
-                    <p>Lucknow, Uttar Pradesh, India</p>
+                    {cookie_userAddress.address == null ?
+                        (<h6><i className="fas fa-map-marker-alt"></i> &nbsp;Enter Location</h6>)
+                        : (<span><h5>Delivery in <span>15</span> minutes</h5>
+                            <p>{cookie_userAddress.address}</p></span>)}
+
+
                 </div>
                 <div className="inpt-div">
                     <div className="search">
@@ -150,59 +163,60 @@ const Header = ({ loginPopup, popupBg }) => {
 
                 <div>
                     <div className="cart-header">
-                        <h2>{cookieAdd.address} Cart</h2>
+                        <h2> Cart</h2>
                         <i onClick={cartClose} className="fa fa-times"></i>
                     </div>
+                    <div className="scroll-cart">
 
-                    <div className="delivery-info">
-                        <p>
-                            <strong>Free delivery in 9 minutes</strong>
-                        </p>
-                        <p>Shipment of 2 items</p>
-                    </div>
+                        <div className="delivery-info">
+                            <p>
+                                <strong>Free delivery in 9 minutes</strong>
+                            </p>
+                            <p>Shipment of 2 items</p>
+                        </div>
 
-                    <div className="cart-items">
-                        {
-                            cartData.map((x, index) => {
-                                return (
+                        <div className="cart-items">
+                            {
+                                cartData.map((x, index) => {
+                                    return (
 
-                                    <div key={index} className="item">
-                                        <img
-                                            src={x.pic}
-                                            alt={x.productname}
-                                            className="item-image"
-                                        />
-                                        <div className="item-details">
-                                            <p>{x.productname}</p>
-                                            <p>{x.unitname}</p>
-                                            <strong><p>{x.offerprice}</p></strong>
+                                        <div key={index} className="item">
+                                            <img
+                                                src={x.pic}
+                                                alt={x.productname}
+                                                className="item-image"
+                                            />
+                                            <div className="item-details">
+                                                <p>{x.productname}</p>
+                                                <p>{x.unitname}</p>
+                                                <strong><p>{x.offerprice}</p></strong>
+                                            </div>
+                                            <div className="quantity">
+                                                <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
+                                                <span>{x.quantity}</span>
+                                                <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
+                                            </div>
                                         </div>
-                                        <div className="quantity">
-                                            <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
-                                            <span>{x.quantity}</span>
-                                            <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
+                                    )
+                                })
+                            }
 
 
-                    </div>
+                        </div>
 
-                    <div className="bill-details">
-                        <h3>Bill details</h3>
-                        <p>
-                            Items total <span className="saved">Saved ₹1</span> ₹109
-                        </p>
-                        <p>
-                            Delivery charge <span className="free">FREE</span> ₹25
-                        </p>
-                        <p>Handling charge ₹2</p>
-                        <h3>Grand total </h3>
-                    </div>
+                        <div className="bill-details">
+                            <h3> <strong>Bill details</strong></h3>
+                            <p>
+                                Items total <span className="saved">Saved ₹{saved}</span> ₹{total}
+                            </p>
+                            <p>
+                                Delivery charge <span className="free">FREE</span>
+                            </p>
+                            <p>Handling charge <span className="free">FREE</span></p>
+                            <p>Grand total <span><strong>₹ {total}</strong></span></p>
+                        </div>
 
-                    {/* <div className="donation">
+                        {/* <div className="donation">
                     <input type="checkbox" id="donation" />
                     <label htmlFor="donation">
                         Feeding India donation ₹1
@@ -210,7 +224,7 @@ const Header = ({ loginPopup, popupBg }) => {
                     </label>
                 </div> */}
 
-                    {/* <div className="tip-delivery">
+                        {/* <div className="tip-delivery">
                     <h3>Tip your delivery partner</h3>
                     <p>
                         Your kindness means a lot! 100% of your tip will go directly to your
@@ -224,17 +238,19 @@ const Header = ({ loginPopup, popupBg }) => {
                     </div>
                 </div> */}
 
-                    <div className="cancellation-policy">
-                        <h3>Cancellation Policy</h3>
-                        <p>
-                            Orders cannot be canceled once packed for delivery. In case of
-                            unexpected delays, a refund will be provided, if applicable.
-                        </p>
-                    </div>
+                        <div className="bill-details">
+                            <h4> <strong>Address</strong></h4>
+                            <p>
+                                {cookie_userAddress.address}
+                            </p>
+                        </div>
 
-                    <div className="cart-footer">
-                        <div className="total-amount">₹ {total}</div>
-                        <button className="proceed-btn">Proceed</button>
+                        <div className="cart-footer">
+                            <div className="total-amount">₹ {total}</div>
+                            <Link to="/checkout">
+                                <button className="proceed-btn">Proceed</button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
@@ -246,7 +262,7 @@ const Header = ({ loginPopup, popupBg }) => {
                 <div className="user-dropdown">
                     <ul>
                         <li><Link className='link-m' to="/profile">Profile</Link></li>
-                        <li><Link className='link-m' to="/orders">Orders</Link></li>
+                        <li><Link className='link-m' to="/userorders">Orders</Link></li>
                         <li onClick={logout}>Logout</li>
                     </ul>
                 </div>

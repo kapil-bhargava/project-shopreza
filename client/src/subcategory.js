@@ -207,7 +207,6 @@ const SubCategory = () => {
             const data = await re.json();
 
             dispatch({ type: 'INC', cdata: data.cdata });
-            alert(au);
             if (au === "yes") { showUnitOptions(spid) };
             audio.current.play();
             mobileCart.current.classList.add("active-mobile-cart");

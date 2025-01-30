@@ -6,18 +6,14 @@ const Userlogin = (props) => {
 
     const [cookie, createcookie, removecookie] = useCookies();
     const [cookie2, createcookie2, removecookie2] = useCookies();
-    const [cookieAdd, createcookieAdd, removecookieAdd] = useCookies();
+    const [cookie_userAddress, createcookie_userAddress, removecookie_userAddress] = useCookies();
+    const [cookie_username, createcookie_username, removecookie_username] = useCookies();
     const [usermobile, setusermobile] = useState("")
-    const loginPopup = useRef()
-    const popupBg = useRef()
     const signupPopup = useRef()
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
     const [confirmuserpassword, setconfirmuserpassword] = useState("");
     const [userpassword, setuserpassword] = useState("");
-
-    const [spid, setspid] = useState("");
-    const [error, setError] = useState("");
 
     // useStates for signUp data 
 
@@ -52,8 +48,8 @@ const Userlogin = (props) => {
                 body: JSON.stringify({ mobile: usermobile, password: userpassword })
             });
             const data = await re.json();
-            
-            setAddress(data.address);
+            console.log(data);
+            // setAddress(data.address);
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
                 createcookie("sp", usermobile, {
@@ -66,10 +62,20 @@ const Userlogin = (props) => {
                     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                     secure: true, // Use for HTTPS
                 });
-                createcookie("address", data.address)
+                createcookie_userAddress("address", data.address,{
+                    path: "/", // Cookie is available on all routes
+                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
+                    secure: true, // Use for HTTPS
+                });
+                // createcookie_username("username", data.name,{
+                //     path: "/", // Cookie is available on all routes
+                //     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
+                //     secure: true, // Use for HTTPS
+                // });
                 // window.location.reload();
-                
+
                 closePopup();
+                // window.location.reload();
 
             }
             else {
@@ -159,7 +165,7 @@ const Userlogin = (props) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender: userGender, address: address})
+                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender: userGender, address: address })
             });
             const data = await re.json();
             console.log(data);
@@ -222,7 +228,7 @@ const Userlogin = (props) => {
     }
 
 
-    
+
 
     return (
         <>
@@ -230,7 +236,7 @@ const Userlogin = (props) => {
                 <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
                 <h4>Login</h4>
                 <label  >Enter Mobile Number</label>
-                <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" /> 
+                <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" />
                 {/* {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>} */}
                 {/* <br /> */}
                 <label  >Enter Password</label>
@@ -248,15 +254,15 @@ const Userlogin = (props) => {
                 <i onClick={goBackToLogin} className="fa-solid fa-arrow-left"></i>
                 <h4>SignUp</h4>
                 <label  >Enter Name</label>
-                <input value={username} onChange={nameChange} placeholder='Your Name' type="name" /> 
+                <input value={username} onChange={nameChange} placeholder='Your Name' type="name" />
                 {nameError && <span style={{ color: "red", fontSize: "12px" }}>{nameError}</span>}
                 <br />
                 <label  >Enter Mobile Number</label>
-                <input value={usermobile} onChange={mobileChange} placeholder='915468XXXX' type="number" /> 
+                <input value={usermobile} onChange={mobileChange} placeholder='915468XXXX' type="number" />
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 {/* <br /> */}
                 <label  >Enter Address</label>
-                <textarea value={address} onChange={(e)=>{setAddress(e.target.value)}} placeholder='Address here'></textarea> 
+                <textarea value={address} onChange={(e) => { setAddress(e.target.value) }} placeholder='Address here'></textarea>
                 {/* <label>Gender</label> */}
                 <select onChange={(e) => { setUserGender(e.target.value) }} className='employee-type-signup'>
                     <option value="female">Select Gender</option>
@@ -269,7 +275,7 @@ const Userlogin = (props) => {
                 {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
                 <br />
                 <label  >Confirm Password</label>
-                <input onChange={signUpConfirmPassword} placeholder='Password' type="password" /> 
+                <input onChange={signUpConfirmPassword} placeholder='Password' type="password" />
                 {confirmPasswordError && <span style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</span>}
                 <br />
 

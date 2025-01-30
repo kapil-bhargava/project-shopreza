@@ -22,32 +22,38 @@ import Category from './admin/category';
 import Subcategory from './admin/subcategory';
 import Product from './admin/product';
 import Checkout from './checkout';
+import Userorders from './userorders';
+import Adminorder from './admin/adminorders';
+import TrackingOrder from './trackingorder';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store ={store} >
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
-        <Route exact path="/customers" element={<Customer />} />
-        <Route exact path="/employee" element={<Employee />} />
-        <Route exact path="/stores" element={<Store />} />
-        <Route exact path="/newemployee" element={<Newemployee />} />
-        <Route exact path="/products" element={<Products />} />
-        <Route exact path="/userlogin" element={<Userlogin />} />
-        <Route exact path="/subcategory/:cid" element={<SubCategory />} />
-        <Route exact path="/emplogin" element={<Emplogin/>} />
-        <Route exact path="/adminlogin" element={<AdminLogin/>} />
-        <Route exact path="/empsignup" element={<Empsignup/>} />
-        <Route exact path="/category" element={<Category/>} />
-        <Route exact path="/subcategory" element={<Subcategory/>} />
-        <Route exact path="/product" element={<Product/>} />
-        <Route exact path="/checkout" element={<Checkout/>} />
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store} >
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/customers" element={<Customer />} />
+          <Route exact path="/employee" element={<Employee />} />
+          <Route exact path="/stores" element={<Store />} />
+          <Route exact path="/newemployee/:mob" element={<Newemployee />} />
+          <Route exact path="/products" element={<Products />} />
+          <Route exact path="/userlogin" element={<Userlogin />} />
+          <Route exact path="/subcategory/:cid" element={<SubCategory />} />
+          <Route exact path="/emplogin" element={<Emplogin />} />
+          <Route exact path="/adminlogin" element={<AdminLogin />} />
+          <Route exact path="/empsignup" element={<Empsignup />} />
+          <Route exact path="/category" element={<Category />} />
+          <Route exact path="/subcategory" element={<Subcategory />} />
+          <Route exact path="/product" element={<Product />} />
+          <Route exact path="/checkout" element={<Checkout />} />
+          <Route exact path="/trackingorder" element={<TrackingOrder />} />
+          <Route exact path="/userorders" element={<Userorders />} />
+          <Route exact path="/adminorders" element={<Adminorder />} />
+        </Routes>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

@@ -72,7 +72,9 @@ const Home = () => {
 
             {/* category section  */}
             <section className="cat">
-                <h2>Categories</h2>
+                {/* checking login then showing category */}
+                {cookie2.sp2 !== null && cookie2.sp2 !== undefined ? (<h2>Categories</h2>) : null}
+
                 <div className="container">
                     {
                         categories.map((x, index) => {
