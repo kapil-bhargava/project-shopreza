@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SideBar from './admincommon'
 import { useNavigate } from 'react-router-dom';
+import Sidebar from './sidebars/Sidebar';
 
 const Store = () => {
     const loaderWaiting = useRef();
-        const loaderLoading = useRef();
+    const loaderLoading = useRef();
     const jump = useNavigate();
     const [storeData, setstoreData] = useState([]);
     const [storeName, setStoreName] = useState('');
@@ -12,7 +13,7 @@ const Store = () => {
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
 
-    const [storeId, setStoreId ] = useState();
+    const [storeId, setStoreId] = useState();
 
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -142,7 +143,7 @@ const Store = () => {
 
     return (
         <>
-            <SideBar />
+            <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div">
                     {/* <Link to="/newemployee"> */}
@@ -220,8 +221,8 @@ const Store = () => {
             <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
 
 
-  {/* loader  */}
-  <div ref={loaderLoading} className="loading">
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
             </div>
 

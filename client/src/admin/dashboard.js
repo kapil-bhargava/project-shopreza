@@ -4,25 +4,26 @@ import Customer from './customer';
 import SideBar from './admincommon';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from './sidebars/Sidebar';
 
 const Dashboard = () => {
     const sidebar = useRef();
     const loaderWaiting = useRef();
-            const loaderLoading = useRef();
+    const loaderLoading = useRef();
 
 
     const [cookie, createcookie, removecookie] = useCookies()
     const jump = useNavigate();
 
- 
-    useEffect(()=>{
-        if(cookie["adminCookie"]==null){
+
+    useEffect(() => {
+        if (cookie["adminCookie"] == null) {
             jump('/adminlogin');
             // return null;    
         }
-    
-    },[])
-    
+
+    }, [])
+
 
     const openSidebar = () => {
         sidebar.current.classList.toggle('active');
@@ -31,7 +32,7 @@ const Dashboard = () => {
     return (
         <>
             <div className="sidebar-main">
-                <SideBar />
+                <Sidebar />
                 <div className="main-content">
                     <div className="header">
                         <h1>Dashboard Overview</h1>
@@ -112,8 +113,8 @@ const Dashboard = () => {
             </div>
 
 
-              {/* loader  */}
-              <div ref={loaderLoading} className="loading">
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
             </div>
 

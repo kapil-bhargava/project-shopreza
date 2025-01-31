@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SideBar, { SideBarEmp } from './admincommon'
 import { useCookies } from 'react-cookie'
+import Sidebar from './sidebars/Sidebar';
 
 const Adminorder = () => {
     const [cookie, createcookie, removecookie] = useCookies();
@@ -48,8 +48,7 @@ const Adminorder = () => {
     return (
         <>
 
-            {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
-
+            <Sidebar />
             <div className="new-employee-main">
                 <div className="table-responsive">
                     {
@@ -69,7 +68,8 @@ const Adminorder = () => {
                                             <th>Payment Status</th>
                                             <th>Order Status</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th>#</th>
+                                            <th>#</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -83,15 +83,17 @@ const Adminorder = () => {
                                                         <td>{x.name} ({x.gender})</td>
 
                                                         <td><strong> {x.orderdate}</strong> <br /> {x.ordertime}</td>
-                                                        <td style={{ wordBreak:"break-word", whiteSpace:"wrap", overflow: "hidden", textOverflow: "ellipsis" }}>{x.address}</td>
+                                                        <td style={{ wordBreak: "break-word", whiteSpace: "wrap", overflow: "hidden", textOverflow: "ellipsis" }}>{x.address}</td>
                                                         <td>{x.paymentmode}</td>
                                                         <td>{x.paymentstatus}</td>
                                                         <td>{x.orderstatus}</td>
                                                         <td>
                                                             <span className={`status ${x.status.toLowerCase()}`}>{x.status}</span>
                                                         </td>
-                                                        <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                            <button onClick={viewOrder} className="btn btn-primary btn-sm">View</button> &nbsp;&nbsp;
+                                                        <td>
+                                                            <button onClick={viewOrder} className="btn btn-primary btn-sm">View</button>
+                                                        </td>
+                                                        <td>
                                                             <button onClick={editOrder} className="btn btn-success btn-sm">Edit</button>
                                                         </td>
                                                     </tr>

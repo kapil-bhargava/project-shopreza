@@ -1,18 +1,21 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Distributorsidebar = () => {
     const [cookie, createcookie, removecookie] = useCookies()
     const sidebar = useRef();
     const sidebarBg = useRef();
     const jump = useNavigate()
+
     // logout employee 
     const logoutEmployee = () => {
-        removecookie('empCookie');
-        jump("/emplogin")
-        // window.location.href = '/';
+        if (window.confirm("Sure want to logout ?")) {
+            removecookie('empCookie');
+            jump("/emplogin")
+            // window.location.href = '/';
 
+        }
     }
 
     const openSidebar = () => {
@@ -38,18 +41,30 @@ const Distributorsidebar = () => {
     return (
         <>
             {/* <div className="sidebar-main"> */}
+            <div className="dashboard-header">
+        {/* <div className="loader-waiting" ref={loaderWaiting}>
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div> */}
+        {/* <div className="loader-loading" ref={loaderLoading}>
+          <div className="spinner-grow text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div> */}
+
+        <div className="name-div">
+          <h6>{cookie.distributorCookie}</h6>
+        </div>
+      </div>
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
 
-                <div className="logo">Customer Dashboard</div>
+                <div className="logo">Distributor Emp Dashboard</div>
                 <nav>
                     {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-                    {/* <div className="nav-item"><Link className="linkdb" to="/employee"><i class="fas fa-handshake"></i>Employees</Link></div> */}
-                    {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
-                    {/* <div className="nav-item"><Link className="linkdb" ><i className="fas fa-shopping-cart"></i>Orders</Link></div> */}
-                    {/* <div className="nav-item"><Link className="linkdb" ><i className="fas fa-box"></i>Products</Link></div> */}
-                    {/* <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div> */}
+
                     {/* <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div> */}
                     <div onClick={logoutEmployee} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
                 </nav>

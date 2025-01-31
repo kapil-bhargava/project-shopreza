@@ -25,6 +25,11 @@ import Checkout from './checkout';
 import Userorders from './userorders';
 import Adminorder from './admin/adminorders';
 import TrackingOrder from './trackingorder';
+import Managerlogin from './admin/managerlogin';
+import Deliveryboylogin from './admin/deliveryboylogin';
+import Sidebar from './admin/sidebars/Sidebar';
+import ManagerDashboard from './admin/dasboardmanager';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -42,8 +47,15 @@ root.render(
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/userlogin" element={<Userlogin />} />
           <Route exact path="/subcategory/:cid" element={<SubCategory />} />
+          {/* login panels  */}
           <Route exact path="/emplogin" element={<Emplogin />} />
           <Route exact path="/adminlogin" element={<AdminLogin />} />
+          <Route exact path="/managerlogin" element={<Managerlogin />} />
+          <Route exact path="/deliveryboylogin" element={<Deliveryboylogin />} />
+
+          {/* dashboards  */}
+          <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
+
           <Route exact path="/empsignup" element={<Empsignup />} />
           <Route exact path="/category" element={<Category />} />
           <Route exact path="/subcategory" element={<Subcategory />} />

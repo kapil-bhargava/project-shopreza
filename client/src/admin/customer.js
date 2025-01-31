@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SideBar, { SideBarEmp } from './admincommon'
+import SideBar, { SideBarDeliveryboy, SideBarEmp, SideBarManager } from './admincommon'
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import Adminsidebar from './sidebars/Adminsidebar';
+import Deliveryboysidebar from './sidebars/Deliveryboysidebar';
+import Managersidebar from './sidebars/Managersidebar';
+import Distributorsidebar from './sidebars/Distributorsidebar';
+import Sidebar from './sidebars/Sidebar';
 
 const Customer = () => {
     const customerForm = useRef();
@@ -50,7 +55,7 @@ const Customer = () => {
 
     const getSignUpData = async () => {
         var et = "";
-        if (cookie.adminCookie != null) {
+        if (cookie.adminCookie != null || cookie?.managerCookie != null) {
             et = "admin";
         }
         else {
@@ -71,19 +76,19 @@ const Customer = () => {
         setSignUpData(data)
     }
 
-    
+
     useEffect(() => {
         getSignUpData();
-        if (cookie["empCookie"] == null && cookie["adminCookie"] == null) {
+        if (cookie["empCookie"] == null && cookie["adminCookie"] == null && cookie["managerCookie"] == null && cookie["deliveryboycookie"] == null) {
             jump("/emplogin")
         }
     }, [])
 
     return (
         <>
-            {/* <div className="sidebar-main"> */}
+           
+            <Sidebar />
 
-            {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
             <div className="new-employee-main">
                 <div className="add-c-div">
                     <button onClick={openAddCustomer}>Add Customer</button>

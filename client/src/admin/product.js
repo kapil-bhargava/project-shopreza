@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SideBar, { SideBarEmp } from './admincommon'
 import { useCookies } from 'react-cookie';
+import Sidebar from './sidebars/Sidebar';
 
 const Product = () => {
     const customerForm = useRef();
@@ -522,7 +523,7 @@ const Product = () => {
 
     return (
         <>
-            {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
+            <Sidebar/>
             <div className="new-employee-main">
                 <div className="row">
                     <div className="col-md-2">
@@ -702,12 +703,12 @@ const Product = () => {
             </div >
 
             {/* loader  */}
-            <div div ref={loaderLoading} className="loading" >
+            <div ref={loaderLoading} className="loading" >
                 <p>Loading....</p>
             </div >
 
             {/* wait  */}
-            <div div ref={loaderWaiting} className="loading" >
+            <div ref={loaderWaiting} className="loading" >
                 <p>Please wait....</p>
             </div >
 

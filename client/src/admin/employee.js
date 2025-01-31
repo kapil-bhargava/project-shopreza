@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SideBar from './admincommon'
 import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from './sidebars/Sidebar';
 
 const Employee = () => {
     const signupref = useRef();
@@ -221,7 +222,7 @@ const Employee = () => {
     return (
         <>
             {/* <div className="sidebar-main"> */}
-            <SideBar />
+            <Sidebar/>
             <div className="new-employee-main">
                 <div className="add-c-div">
                     {/* <Link to="/newemployee"> */}

@@ -74,6 +74,36 @@
     color: var(--white);
 }
 
+.dashboard-header {
+    background-color: var(--primary-green);
+    color: var(--white);
+    padding: 10px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 18px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    z-index: 399;
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none;
+    background-color: var(--primary-green);
+    border: none;
+    color: var(--light-gray);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 7px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 500
+}
+
 
 
 .sidebardb .nav-item i {
@@ -86,6 +116,7 @@
     padding: 20px;
     overflow-y: auto;
     margin-left: 250px;
+    margin-top: 30px;
 }
 
 .main-content .header {
@@ -151,14 +182,18 @@
 }
 
 .add-c-div {
-    width: calc(100% - 270px);
-    margin-left: 270px;
+    /* width: calc(100% - 270px); */
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    /* margin-left: 270px; */
+    /* background-color: green; */
     padding: 20px;
     text-align: right;
 }
 
 .add-c-div button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color: var(--primary-green);
     border: 1px solid var(--primary-green);
     border-radius: 5px;
@@ -251,19 +286,6 @@ td {
     color: var(--dark-gray);
 }
 
-.menu-toggle {
-    display: none;
-    background-color: var(--primary-yellow);
-    border: none;
-    color: var(--dark-gray);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    /* z-index: 1000; */
-}
 
 .add-customer-form {
     background-color: var(--white);
@@ -326,14 +348,6 @@ td {
     cursor: pointer;
 }
 
-/* .new-employee-main{
-    margin-left: 250px;
-}
-.employee-form-container{
-    width: 40%;
-    background-color: var(--primary-green);
-    margin: 50px auto;
-} */
 
 .employee-type-signup {
     width: 100%;
@@ -348,6 +362,8 @@ td {
 .new-employee-main {
     margin-left: 250px;
     padding: 20px;
+    margin-top: 30px;
+    /* background-color: crimson; */
 }
 
 .new-employee {
@@ -490,7 +506,7 @@ select {
     background-color: rgba(0, 0, 0, 0.5);
     visibility: hidden;
     opacity: 0;
-    /* z-index: 1000; */
+    z-index: 400;
     transition: 0.3s ease;
 }
 
@@ -684,6 +700,10 @@ select {
 
     .new-employee-main {
         margin: 0;
+        margin-top: 20px;
+        /* background-color: red; */
+        margin-top: 20px;
+        /* width: 100%; */
     }
 
     .input-pair {

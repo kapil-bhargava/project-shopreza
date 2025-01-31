@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SideBar, { SideBarEmp } from './admincommon'
 import { useCookies } from 'react-cookie';
+import Sidebar from './sidebars/Sidebar';
 
 const Subcategory = () => {
     const customerForm = useRef();
@@ -202,10 +203,11 @@ const Subcategory = () => {
 
     return (
         <>
-            {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
+            <Sidebar/>
             <div className="new-employee-main">
                 <div className="add-c-div selection">
                     <div style={{ width: "200px" }} className="form-group">
+                        <label htmlFor="subcatrgory">Select Category</label>    
                         <select value={catId} onChange={(e) => { getSubCategory(e.target.value) }}>
                             {catData.map((cat, index) => {
                                 return (

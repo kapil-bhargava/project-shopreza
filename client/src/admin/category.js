@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SideBar, { SideBarEmp } from './admincommon'
 import { useCookies } from 'react-cookie';
+import Sidebar from './sidebars/Sidebar';
 
 const Category = () => {
     const customerForm = useRef();
@@ -204,7 +205,7 @@ const Category = () => {
 
     return (
         <>
-            {cookie.adminCookie != null ? <SideBar /> : <SideBarEmp />}
+            <Sidebar/>
             <div className="new-employee-main">
                 <div className="add-c-div">
                     <button onClick={openAddCategory}>Add Category</button>
