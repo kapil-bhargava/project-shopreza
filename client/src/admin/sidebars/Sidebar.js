@@ -10,15 +10,22 @@ const Sidebar = () => {
 
   if (cookie?.adminCookie) {
     return <Adminsidebar />;
-  } else if (cookie?.deliveryboyCookie) {
-    return <Deliveryboysidebar />;
-  } else if (cookie?.managerCookie) {
-    return <Managersidebar />;
-  } else if (cookie?.distributorCookie) {
-    return <Distributorsidebar />;
-  } else {
-    return <Distributorsidebar />; // Default sidebar
   }
+  else {
+    if (cookie["emptype"] == "manager") {
+      return <Managersidebar />;
+    }
+    else if (cookie["emptype"] == "distributor") {
+      return <Distributorsidebar />;
+    }
+    else if (cookie["emptype"] == "deliveryboy") {
+      return <Deliveryboysidebar />;
+    }
+    else {
+      return <Distributorsidebar />; // Default sidebar
+    }
+  }
+
 
 }
 

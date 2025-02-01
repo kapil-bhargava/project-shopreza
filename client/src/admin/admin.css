@@ -497,6 +497,14 @@ select {
     padding: 5px 10px;
 }
 
+/* dashboard manager css  */
+.order-active-status .btn{
+    margin-bottom: 5px;
+    border: 1px solid black;
+}
+.no-border{
+    border: 1px solid rgb(0, 255, 64);
+}
 .sidebar-bg {
     position: fixed;
     top: 0;
@@ -648,6 +656,12 @@ select {
     background-color: rgba(0, 0, 0, 0.2);
     z-index: 1004;
 }
+.orderdetails-popup{
+    width: 60%;
+    height: 70%;
+    overflow-y: scroll
+    /* background-color: red; */
+}
 
 
 
@@ -655,7 +669,11 @@ select {
     /* .sidebar-main {
         flex-direction: column;
     } */
-
+.orderdetails-popup{
+    width: 90%;
+    margin-inline: auto;
+    
+}
     .menu-toggle {
         display: block;
     }

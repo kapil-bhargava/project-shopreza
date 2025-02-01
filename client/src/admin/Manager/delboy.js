@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import Sidebar from './sidebars/Sidebar';
+import Sidebar from '../sidebars/Sidebar';
 
-const Employee = () => {
-    
-    const editForm = useRef();
-    const editFormBg = useRef();
+const Delboy = () => {
+
+    const form = useRef();
+    const formBg = useRef();
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
 
@@ -14,15 +14,15 @@ const Employee = () => {
     const [mobile, setMobile] = useState("");
     const [adhar, setAdhar] = useState("");
     const [email, setEmail] = useState("");
-    const [gender, setGender] = useState("");
+    const [gender, setGender] = useState("Male");
     const [address, setAddress] = useState("");
-    const [father, setFather] = useState("");
-    const [password, setPassword] = useState("");
+    const [joinDate, setJoindate] = useState("");
     const [status, setStatus] = useState("");
+    const [dob, setDOB] = useState("");
     var st = ["active", "inactive"];
     var type = ["Delivery Agent", "Manager", "Distributor"]
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [altMobile, setAltMobile] = useState("");
+    const [pan, setPan] = useState("");
 
     const jump = useNavigate();
     const [signUpData, setSignUpData] = useState([]);
@@ -38,12 +38,12 @@ const Employee = () => {
     const employeeFormBg = useRef();
 
     const closeAddEmployee = () => {
-        employeeForm.current.style.display = "none";
-        employeeFormBg.current.style.display = "none";
+        form.current.style.display = "none";
+        formBg.current.style.display = "none";
     }
     const openEmployeeForm = () => {
-        employeeForm.current.style.display = "block";
-        employeeFormBg.current.style.display = "block";
+        form.current.style.display = "block";
+        formBg.current.style.display = "block";
     }
 
 
@@ -51,7 +51,7 @@ const Employee = () => {
     const addEmployee = async () => {
         try {
             loaderLoading.current.style.display = "block"
-            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ const Employee = () => {
         catch (error) {
             console.error(error);
             alert("Failed to add employee");
-            // loaderLoading.current.style.display = "none"
+            loaderLoading.current.style.display = "none"
         }
     }
 
@@ -109,7 +109,7 @@ const Employee = () => {
 
     // getting single Emp Data 
     const getSingleEmp = async (mobile) => {
-        loaderLoading.current.style.display="block";
+        loaderLoading.current.style.display = "block";
         const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
             method: 'PATCH',
             headers: {
@@ -121,7 +121,7 @@ const Employee = () => {
         })
         const data = await re.json();
         // console.log(data);
-        loaderLoading.current.style.display="none";
+        loaderLoading.current.style.display = "none";
         setName(data[0].name);
         setEmpType(data[0].emptype);
         setMobile(data[0].mobileno);
@@ -129,13 +129,13 @@ const Employee = () => {
         setEmail(data[0].email);
         setGender(data[0].gender);
         setAddress(data[0].address);
-        setFather(data[0].fathername);
-        setAltMobile(data[0].othercontactno);
+        setJoindate(data[0].fathername);
+        setPan(data[0].othercontactno);
         setEmpMobile(mobile);
         setStatus(data[0].status);
         setStoreId(data[0].storeid);
-        editForm.current.style.display = "block";
-        editFormBg.current.style.display = "block";
+        form.current.style.display = "block";
+        formBg.current.style.display = "block";
     }
 
     // delete employee 
@@ -167,13 +167,13 @@ const Employee = () => {
         setEmail('');
         setGender('');
         setAddress('');
-        setFather('');
-        setAltMobile('');
+        setJoindate('');
+        setPan('');
         setEmpMobile('');
         setStatus('');
         setStoreId('');
-        editForm.current.style.display = "none";
-        editFormBg.current.style.display = "none";
+        form.current.style.display = "none";
+        formBg.current.style.display = "none";
         getEmployees();
     }
 
@@ -193,8 +193,8 @@ const Employee = () => {
                 email: email,
                 gender: gender,
                 address: address,
-                fathername: father,
-                othercontactno: altMobile,
+                joindate: joinDate,
+                panno: setPan,
                 emptype: empType,
                 status: status,
                 storeid: storeId
@@ -203,7 +203,7 @@ const Employee = () => {
         const data = await re.json();
         if (data.response === "Saved") {
             alert("Employee updated successfully");
-            editForm.current.style.display = "none";
+            form.current.style.display = "none";
             getEmployees();
             emptyFields();
 
@@ -222,12 +222,14 @@ const Employee = () => {
 
     return (
         <>
+
+            <Sidebar />
             {/* <div className="sidebar-main"> */}
-            <Sidebar/>
+
             <div className="new-employee-main">
                 <div className="add-c-div">
                     {/* <Link to="/newemployee"> */}
-                    <button tpe="submit" onClick={openEmployeeForm}>Add Employee</button>
+                    <button tpe="submit" onClick={openEmployeeForm}>Add New</button>
                     {/* </Link> */}
                 </div>
 
@@ -281,40 +283,142 @@ const Employee = () => {
 
 
             {/* sign up form for employee */}
-            <div ref={employeeForm} className="add-customer-form">
-                <h2>Add New Employee</h2>
-                <div className="form-group">
-                    <label>Mobile</label>
-                    <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
-                </div>
-                <div className="form-group">
-                    <div>
-                        <label>Employee Type</label>
-                        <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
-                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
-                            <option value="Distributor">Distributor</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Delivery Agent">Delivery Agent</option>
-                        </select>
+            <div ref={form} className="new-employee">
+                <div className="employee-form-container">
+                    <h3>Employee Details</h3>
+                    <div className="form-group">
+                        <div className="input-pair">
+                            <div>
+                                <label htmlFor="employee-name">Name</label>
+                                <input
+                                    placeholder="Employee Name"
+                                    type="text"
+                                    onChange={(e) => { setName(e.target.value) }}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="employee-aadhar">Aadhar</label>
+                                <input
+                                    placeholder="Employee Aadhar"
+                                    type="text"
+                                    onChange={(e) => { setAdhar(e.target.value) }}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="input-pair">
+                            <div>
+                                <label>Employee Number</label>
+                                <input
+                                    type="text"
+                                    disabled
+                                    value={mobile}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="employee-alt-phone">Alternate Mobile No</label>
+                                <input
+                                    placeholder="Alternate Mobile Number"
+                                    type="text"
+                                    onChange={(e) => { setPan(e.target.value) }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="input-pair">
+                            <div>
+                                <label htmlFor="employee-email">Email</label>
+                                <input
+                                    placeholder="Employee Email"
+                                    type="email"
+                                    id="employee-email"
+                                    name="employee-email"
+                                    onChange={(e) => { setEmail(e.target.value) }}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="employee-gender">Gender</label>
+                                <select onChange={(e) => { setGender(e.target.value) }}>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="input-pair">
+                            <div>
+                                <label htmlFor="employee-address">Address</label>
+                                <textarea
+                                    id="employee-address"
+                                    name="employee-address"
+                                    placeholder="Enter Address"
+                                    rows="2"
+                                    onChange={(e) => { setAddress(e.target.value) }}
+                                ></textarea>
+                            </div>
+
+
+                        </div>
+
+                        <div className="input-pair">
+                            <div>
+                                <label htmlFor="father-name">Father Name</label>
+                                <input
+                                    placeholder="Father's Name"
+                                    type="text"
+                                    id="father-name"
+                                    name="father-name"
+                                    onChange={(e) => { setJoindate(e.target.value) }}
+                                />
+                            </div>
+                        </div>
+                        <div className="input-pair">
+
+                            {/* <div>
+                                <label htmlFor="employee-password">Password</label>
+                                <input
+                                    type="password"
+                                    name="employee-password"
+                                    placeholder="Enter Password"
+                                    onChange={(e) => { setPassword(e.target.value) }}
+                                    required
+                                />
+                            </div> */}
+                            <div>
+                                <label htmlFor="employee-password">Confirm Password</label>
+                                <input
+                                    type="password"
+                                    name="employee-password"
+                                    placeholder="Enter Password"
+                                    onChange={(e) => { setConfirmPassword(e.target.value) }}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="input-pair">
+                            <div>
+                                <label>Employee Status</label>
+                                <select onChange={(e) => { setEmpType(e.target.value) }} disabled >
+                                    <option value="active">{status}</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="employee-type">Employee Type</label>
+                                <select onChange={(e) => { setEmpType(e.target.value) }} disabled id="employee-type" name="employee-type">
+                                    <option value="distributor">{empType}</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="delivery-agent">Delivery Agent</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                    <div>
-                        <label>Assign Store</label>
-                        <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
-                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
-                            {
-                                stores.map((store, index) => {
-                                    return (
-                                        <option key={index} value={store.storeid}>{store.storename}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <button onClick={addEmployee}>Add</button>
+
+                    <button type="submit" onClick={addEmployee}>Add</button>
                 </div>
             </div>
             <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
@@ -322,8 +426,8 @@ const Employee = () => {
             {/* </div> */}
 
             {/* edit employee form  */}
-            <div onClick={emptyFields} className="edit-form-bg" ref={editFormBg}></div>
-            <div ref={editForm} className="employee-form-container edit-form">
+            <div onClick={emptyFields} className="edit-form-bg" ref={formBg}></div>
+            <div ref={form} className="employee-form-container edit-form">
                 <h3>Edit Employee Details</h3>
                 <div className="form-group">
                     <div className="input-pair">
@@ -355,22 +459,23 @@ const Employee = () => {
 
                     <div className="input-pair">
                         <div>
-                            <label>Employee Number</label>
+                            <label>Employee Mobile</label>
                             <input
                                 type="text"
+                                placeholder='Emplyee Mobile'
                                 value={mobile}
                                 onChange={(e) => { setMobile(e.target.value) }}
                             />
                         </div>
                         <div>
-                            <label htmlFor="employee-alt-phone">Alternate Mobile No</label>
+                            <label htmlFor="employee-alt-phone">PAN No</label>
                             <input
                                 placeholder="Alternate Mobile Number"
                                 type="number"
                                 id="employee-alt-phone"
-                                value={altMobile}
+                                value={pan}
                                 name="employee-alt-phone"
-                                onChange={(e) => { setAltMobile(e.target.value) }}
+                                onChange={(e) => { setPan(e.target.value) }}
                             />
                         </div>
                     </div>
@@ -390,7 +495,6 @@ const Employee = () => {
                         <div>
                             <label htmlFor="employee-gender">Gender</label>
                             <select onChange={(e) => { setGender(e.target.value) }}>
-                                <option value={gender}>{gender}</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="other">Other</option>
@@ -416,30 +520,21 @@ const Employee = () => {
 
                     <div className="input-pair">
                         <div>
-                            <label htmlFor="father-name">Father Name</label>
+                            <label htmlFor="father-name">DOB</label>
                             <input
-                                placeholder="Father's Name"
-                                type="text"
-                                id="father-name"
-                                name="father-name"
-                                value={father}
-                                onChange={(e) => { setFather(e.target.value) }}
+                                type='date'
+                                value={dob}
+                                onChange={(e) => { setDOB(e.target.value) }}
                             />
                         </div>
 
                         <div>
-                            <label>Assign Store</label>
-                            <select onChange={(e) => { setStoreId(e.target.value) }}>
-                                {/* <option value={store}></option> */}
-                                {
-                                    stores.map((store, index) => {
-                                        return (
-                                            <option key={index} value={store.storeid}>{store.storename}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-
+                            <label>Joining date</label>
+                            <input
+                                type="date"
+                                value={joinDate}
+                                onChange={(e) => { setJoindate(e.target.value) }}
+                            />
                         </div>
                     </div>
 
@@ -486,4 +581,4 @@ const Employee = () => {
     )
 }
 
-export default Employee
+export default Delboy

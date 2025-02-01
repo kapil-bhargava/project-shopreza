@@ -55,38 +55,47 @@ const Customer = () => {
 
     const getSignUpData = async () => {
         var et = "";
-        if (cookie.adminCookie != null || cookie?.managerCookie != null) {
+        if (cookie.adminCookie != null) {
             et = "admin";
         }
         else {
             et = "emp&mobile=" + cookie.empCookie;
         }
         loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?etype=" + et, {
-            // const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await re.json();
-        // console.log(data);
-        loaderLoading.current.style.display = "none";
-        // console.log(data)
-        setSignUpData(data)
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?etype=" + et, {
+                // const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            console.log(data);
+            loaderLoading.current.style.display = "none";
+            console.log(data)
+            setSignUpData(data)
+        }
+        catch (error) {
+            alert(error);
+            loaderLoading.current.style.display = "none"
+        }
     }
 
 
     useEffect(() => {
-        getSignUpData();
-        if (cookie["empCookie"] == null && cookie["adminCookie"] == null && cookie["managerCookie"] == null && cookie["deliveryboycookie"] == null) {
+
+        if (cookie["empCookie"] == null && cookie["adminCookie"] == null) {
             jump("/emplogin")
+        }
+        else {
+            getSignUpData();
         }
     }, [])
 
     return (
         <>
-           
+
             <Sidebar />
 
             <div className="new-employee-main">

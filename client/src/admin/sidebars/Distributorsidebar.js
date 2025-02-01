@@ -42,25 +42,25 @@ const Distributorsidebar = () => {
         <>
             {/* <div className="sidebar-main"> */}
             <div className="dashboard-header">
-        {/* <div className="loader-waiting" ref={loaderWaiting}>
+                {/* <div className="loader-waiting" ref={loaderWaiting}>
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div> */}
-        {/* <div className="loader-loading" ref={loaderLoading}>
+                {/* <div className="loader-loading" ref={loaderLoading}>
           <div className="spinner-grow text-primary" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div> */}
 
-        <div className="name-div">
-          <h6>{cookie.distributorCookie}</h6>
-        </div>
-      </div>
+                <div className="name-div">
+                    <h6>{cookie.empCookie}</h6>
+                </div>
+            </div>
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
 
-                <div className="logo">Distributor Emp Dashboard</div>
+                <div className="logo">Distributor Panel <br />{cookie.empCookie}</div>
                 <nav>
                     {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>

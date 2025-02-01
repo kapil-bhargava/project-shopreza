@@ -11,8 +11,8 @@ const Managersidebar = () => {
   // logout employee 
   const logoutEmployee = () => {
     if (window.confirm("Sure want to logout ?")) {
-      removecookie('managerCookie');
-      jump("/managerlogin")
+      removecookie('empCookie');
+      jump("/emplogin")
       // window.location.href = '/';
 
     }
@@ -54,20 +54,20 @@ const Managersidebar = () => {
         </div> */}
 
         <div className="name-div">
-          <h6>{cookie.managerCookie}</h6>
+          <h6>{cookie.empCookie}</h6>
         </div>
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
 
-        <div className="logo">Manager Dashboard <br />{cookie.managerCookie}</div>
+        <div className="logo">Manager Dashboard <br />{cookie.empCookie}</div>
 
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
           <div className="nav-item"><Link className="linkdb" to="/managerdashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+          <div className="nav-item"><Link className="linkdb" to="/delboy"><i className="fas fa-handshake"></i>Delivery Boys</Link></div>
+          {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>

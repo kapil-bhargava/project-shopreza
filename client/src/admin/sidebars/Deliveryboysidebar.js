@@ -11,8 +11,8 @@ const Deliveryboysidebar = () => {
   // logout employee 
   const logoutEmployee = () => {
     if (window.confirm("Sure want to logout ?")) {
-      removecookie('deliveryboyCookie');
-      jump("/deliveryboylogin")
+      removecookie('empCookie');
+      jump("/emplogin")
       // window.location.href = '/';
 
     }
@@ -54,13 +54,13 @@ const Deliveryboysidebar = () => {
         </div> */}
 
         <div className="name-div">
-          <h6>{cookie.deliveryboyCookie}</h6>
+          <h6>{cookie.empCookie}</h6>
         </div>
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
 
-        <div className="logo">Delivery Boy Dashboard</div>
+        <div className="logo">Delivery Boy Panel <br /> {cookie.empCookie}</div>
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>

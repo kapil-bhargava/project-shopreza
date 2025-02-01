@@ -29,6 +29,7 @@ import Managerlogin from './admin/managerlogin';
 import Deliveryboylogin from './admin/deliveryboylogin';
 import Sidebar from './admin/sidebars/Sidebar';
 import ManagerDashboard from './admin/dasboardmanager';
+import Delboy from './admin/Manager/delboy';
 
 
 
@@ -50,11 +51,10 @@ root.render(
           {/* login panels  */}
           <Route exact path="/emplogin" element={<Emplogin />} />
           <Route exact path="/adminlogin" element={<AdminLogin />} />
-          <Route exact path="/managerlogin" element={<Managerlogin />} />
-          <Route exact path="/deliveryboylogin" element={<Deliveryboylogin />} />
-
+ 
           {/* dashboards  */}
           <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
+          <Route exact path="/delboy" element={<Delboy />} />
 
           <Route exact path="/empsignup" element={<Empsignup />} />
           <Route exact path="/category" element={<Category />} />

@@ -115,7 +115,7 @@ const Category = () => {
                 }
             })
             const data = await re.json();
-            console.log(data)
+            // console.log(data)
             if (data.length <= 0) {
                 setSkeletonLoading(true);
             }
@@ -205,7 +205,7 @@ const Category = () => {
 
     return (
         <>
-            <Sidebar/>
+            <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div">
                     <button onClick={openAddCategory}>Add Category</button>
@@ -255,25 +255,10 @@ const Category = () => {
                 <div ref={customerFormBg} onClick={closeAddCategory} className="c-bg"></div>
                 <div ref={customerForm} className="add-customer-form">
                     <h2>{isEditMode ? "Edit Category" : "Add New category"}</h2>
-                    {/* <div className="form-group">
-                        <label>Store</label>
-                        <select onChange={(e) => { setStoreid(e.target.value) }}>
-                            <option value="">Select Store</option>
-                            {storedata.map((store, index) => {
-                                return (
-                                    <option key={index} value={store.storeid}>{store.storename}</option>
-                                )
-                            })}
-                        </select>
-                    </div> */}
                     <div className="form-group">
                         <label>Category Name</label>
                         <input value={category} onChange={(e) => { setCategory(e.target.value) }} placeholder='Enter category name' type="text" id="customer-name" name="customer-name" required />
                     </div>
-                    {/* <div className="form-group">
-                        <label>Category Pic</label>
-                        <input onChange={(e) => { setCategoryPic(e.target.files[0]) }} type='file' required />
-                    </div> */}
                     <div className="form-group">
                         <button onClick={isEditMode ? updateCategory : addCategory}>
                             {isEditMode ? "Update" : "Add"} Category
