@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import "./admin.css";
-import Customer from './customer';
-import SideBar from './admincommon';
+import "../admin.css";
+import Customer from '../customer';
+import SideBar from '../admincommon';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './sidebars/Sidebar';
+import Sidebar from '../sidebars/Sidebar';
 
 const ManagerDashboard = () => {
     const sidebar = useRef();
@@ -20,6 +20,8 @@ const ManagerDashboard = () => {
     const [cookie, createcookie, removecookie] = useCookies();
     const [skeletonLoading, setSkeletonLoading] = useState(false);
     const jump = useNavigate();
+
+    const [empData, setEmpData] = useState([]);
 
     // states for order
     const [orderId, setOrderId] = useState("");
@@ -47,6 +49,7 @@ const ManagerDashboard = () => {
 
     // NEW Orders getting 
     const getOrders = async (status) => {
+        // alert(status)
 
         try {
             loaderWaiting.current.style.display = "block";
@@ -59,7 +62,7 @@ const ManagerDashboard = () => {
             });
             loaderWaiting.current.style.display = "none";
             const data = await response.json();
-            // console.log(data);
+            console.log(data);
             setstatus(status);
             setOrderData(data);
         }
@@ -68,11 +71,68 @@ const ManagerDashboard = () => {
         }
     }
 
+    // getting Employees 
+
+    // const getEmployees = async () => {
+    //     alert(cookie.empStoreId);
+    //     var et = "etype=manager&storeid="+cookie.empStoreId;
+    //     try {
+    //         loaderLoading.current.style.display = "block"
+    //         const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php?${et}&`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         })
+    //         const data = await re.json();
+    //         // console.log(data);
+    //         loaderLoading.current.style.display = "none"
+    //         setEmpData(data);
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //         loaderLoading.current.style.display = "none"
+    //     }
+    // }
+    const getEmployees = async () => {
+        var et = "etype=Delivery Agent&storeid="+cookie.empStoreId;
+        alert(et);
+        try {
+            loaderLoading.current.style.display = "block"
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?${et}&`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            // console.log(data);
+            loaderLoading.current.style.display = "none"
+            setEmpData(data);
+        }
+        catch (error) {
+            console.error(error);
+            loaderLoading.current.style.display = "none"
+        }
+    }
+
 
     const assign = (orderid, orderstatus) => {
+        // alert(orderstatus);
         setOrderId(orderid);
         setstatus(orderstatus);
+        // get all employee data 
+        getEmployees()
         openPopup();
+
+    }
+    const assignAgain = (orderid, orderstatus) => {
+        setOrderId(orderid);
+        setstatus(orderstatus);
+        // get all employee data 
+        getEmployees()
+        openPopup();
+
     }
 
     // setting the status of the order 
@@ -159,29 +219,62 @@ const ManagerDashboard = () => {
     }
 
     // setasAssigned funcionality 
-    // const setAsAssigned = async () => {
-    //     try {
-    //         loaderWaiting.current.style.display = "block";
-    //         const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 status: status,
-    //                 orderid: orderId,
-    //             })
-    //         })
-    //         const data = await response.json();
-    //         loaderWaiting.current.style.display = "none";
-    //         console.log(data);
-    //         getOrders("Assigned");
-    //     }
-    //     catch (err) {
-    //         loaderWaiting.current.style.display = "none";
-    //         alert(err);
-    //     }
-    // }
+    const setAsAssigned = async (empid) => {
+        console.log("Order ID" + orderId);
+        console.log("Emp ID" + empid);
+        // alert(boyid)
+        // try {
+        loaderWaiting.current.style.display = "block";
+        const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
+            method: 'POST'  ,
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderid: orderId,
+                boyid: empid,
+            })
+        })
+        const data = await response.json();
+        console.log(data)
+        // alert(data.Response);
+        loaderWaiting.current.style.display = "none";
+        getOrders("Assigned");
+        // }
+        // catch (err) {
+        //     loaderWaiting.current.style.display = "none";
+        //     alert(err);
+        // }
+    }
+
+    // assigning again 
+    const setAsAssignedAgain = async (boyid) => {
+        console.log("OI" + orderId);
+        console.log("BI" + boyid);
+        // alert(boyid)
+        // try {
+        loaderWaiting.current.style.display = "block";
+        const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
+            method: 'PUT' ,
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderid: orderId,
+                boyid: boyid,
+            })
+        })
+        const data = await response.json();
+        console.log(data)
+        // alert(data.Response);
+        loaderWaiting.current.style.display = "none";
+        getOrders("Assigned");
+        // }
+        // catch (err) {
+        //     loaderWaiting.current.style.display = "none";
+        //     alert(err);
+        // }
+    }
 
 
 
@@ -192,7 +285,7 @@ const ManagerDashboard = () => {
             jump('/emplogin');
             // return null;    
         }
-        else{
+        else {
             getOrders("Pending");
 
         }
@@ -283,6 +376,17 @@ const ManagerDashboard = () => {
                                                 <th>Payment Mode</th>
                                                 <th>Payment status</th>
                                                 <th>Order status</th>
+                                                {
+                                                    status === "Assigned" ? (
+                                                        <>
+                                                            <th>Assigned to</th>
+                                                            {/* <th>Boy Contact</th> */}
+                                                            {/* <th>Action</th> */}
+                                                        </>
+                                                    )
+                                                        :
+                                                        null
+                                                }
                                                 <th>status</th>
                                                 <th>#</th>
                                                 <th>#</th>
@@ -304,6 +408,12 @@ const ManagerDashboard = () => {
                                                             <td>{x.paymentmode}</td>
                                                             <td>{x.paymentstatus}</td>
                                                             <td>{x.orderstatus}</td>
+                                                            {
+                                                                status === "Assigned" ?
+                                                                <td>{x.DelBoy} <i onClick={()=>{assignAgain(x.orderid, x.orderstatus)}} className="fa fa-pencil"></i></td>
+                                                               :
+                                                               null
+                                                            }
                                                             <td>
                                                                 <span className={`status ${x.status.toLowerCase()}`}>{x.status}</span>
                                                             </td>
@@ -345,7 +455,7 @@ const ManagerDashboard = () => {
                                                                     {status === "Pending"
                                                                         ? "Set as packed"
                                                                         : status === "Packed"
-                                                                            ? "Assign"  
+                                                                            ? "Assign"
                                                                             : status === "Assigned"
                                                                                 ? "set as way"
                                                                                 : ""}
@@ -381,25 +491,52 @@ const ManagerDashboard = () => {
 
             {/*  =========== delivery boy popup ============  */}
             <div ref={popupBg} onClick={closePopup} className="c-bg"></div>
-            <div ref={popup} className="add-customer-form">
+            <div ref={popup} className="add-customer-form assign-popup ">
                 <h2>Delivery Persons</h2>
-                {/* <div className="form-group">
-                    <label>Category Name</label>
-                    <input value={category} onChange={(e) => { setCategory(e.target.value) }} placeholder='Enter category name' type="text" id="customer-name" name="customer-name" required />
-                </div> */}
-                {/* <div className="form-group"> */}
-                <span className="d-flex justify-content-between mb-1">
-                    <p>Rahul Kumar</p> <button onClick={() => { setAs(orderId, status) }} className="btn btn-success btn-sm ">Assign</button>
-                </span>
-                <span className="d-flex justify-content-between mb-1">
-                    <p>Rahul Kumar</p> <button className="btn btn-success btn-sm ">Assign</button>
-                </span>
-                <span className="d-flex justify-content-between mb-1">
-                    <p>Rahul Kumar</p> <button className="btn btn-success btn-sm ">Assign</button>
-                </span>
-                {/* </div> */}
-                <div className="form-group">
-
+                <div className="table-responsive table-employee">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>DOB</th>
+                                <th>Adhar No.</th>
+                                <th>PAN No.</th>
+                                <th>Join Date</th>
+                                <th>Action</th>
+                                {/* <th>Referral Code</th> */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                empData.map((employee, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
+                                            <td>{employee.name + "(" + employee.gender + ")"}</td>
+                                            <td>{employee.address}</td>
+                                            <td>{employee.mobile}</td>
+                                            <td>{employee.email}</td>
+                                            <td>{employee.dob}</td>
+                                            <td>{employee.aadharno}</td>
+                                            <td>{employee.panno}</td>
+                                            <td>{employee.joindate}</td>
+                                            <td>
+                                                <button onClick={() => {status==="Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.boyid) }} className="btn btn-success btn-sm ">
+                                                     {status==="Packed"? "Assign" : "Assign Again"}
+ 
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

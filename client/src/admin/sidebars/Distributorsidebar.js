@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import Validate from '../../Validate';
 
-const Distributorsidebar = () => {
+const Distributorsidebar = (x) => {
     const [cookie, createcookie, removecookie] = useCookies()
     const sidebar = useRef();
     const sidebarBg = useRef();
@@ -40,6 +41,7 @@ const Distributorsidebar = () => {
 
     return (
         <>
+           <Validate/>
             {/* <div className="sidebar-main"> */}
             <div className="dashboard-header">
                 {/* <div className="loader-waiting" ref={loaderWaiting}>
@@ -54,7 +56,7 @@ const Distributorsidebar = () => {
         </div> */}
 
                 <div className="name-div">
-                    <h6>{cookie.empCookie}</h6>
+                    <h6>{x.name} {x.storename} Distributor {cookie.empCookie}</h6>
                 </div>
             </div>
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>

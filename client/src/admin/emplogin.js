@@ -36,10 +36,10 @@ const Emplogin = () => {
         const data = await re.json();
         console.log(data);
         if (data.response === "Valid") {
-            createcookie('empCookie', mobile);
-            // createcookie('emptype', data.etype);
-            createcookie('emptype', (data.etype).toLowerCase());
-            jump("/customers")
+            createcookie('uname', mobile);
+            createcookie('storeid', data.storeid);
+            createcookie('utype', (data.etype).toLowerCase());
+            jump("/managerdashboard")
         }
         else {
             alert("Invalid User")

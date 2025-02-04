@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import Validate from '../../Validate';
 
-const Deliveryboysidebar = () => {
+const Deliveryboysidebar = (x) => {
   const [cookie, createcookie, removecookie] = useCookies()
   const sidebar = useRef();
   const sidebarBg = useRef();
@@ -11,6 +12,7 @@ const Deliveryboysidebar = () => {
   // logout employee 
   const logoutEmployee = () => {
     if (window.confirm("Sure want to logout ?")) {
+      removecookie('adminCookie');
       removecookie('empCookie');
       jump("/emplogin")
       // window.location.href = '/';
@@ -40,6 +42,7 @@ const Deliveryboysidebar = () => {
 
   return (
     <>
+  <Validate/>
       {/* <div className="sidebar-main"> */}
       <div className="dashboard-header">
         {/* <div className="loader-waiting" ref={loaderWaiting}>
@@ -54,7 +57,7 @@ const Deliveryboysidebar = () => {
         </div> */}
 
         <div className="name-div">
-          <h6>{cookie.empCookie}</h6>
+          <h6>{x.name} {x.storename} DeliverBoy {cookie.empCookie}</h6>
         </div>
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
@@ -63,13 +66,6 @@ const Deliveryboysidebar = () => {
         <div className="logo">Delivery Boy Panel <br /> {cookie.empCookie}</div>
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
-          <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/adminorders"  ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
           <div onClick={logoutEmployee} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>

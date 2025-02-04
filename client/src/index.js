@@ -28,8 +28,9 @@ import TrackingOrder from './trackingorder';
 import Managerlogin from './admin/managerlogin';
 import Deliveryboylogin from './admin/deliveryboylogin';
 import Sidebar from './admin/sidebars/Sidebar';
-import ManagerDashboard from './admin/dasboardmanager';
+// import ManagerDashboard from './admin/dasboardmanager';
 import Delboy from './admin/Manager/delboy';
+import ManagerDashboard from './admin/Manager/dasboardmanager';
 
 
 

@@ -13,8 +13,7 @@ const AdminLogin = () => {
 
     const jump = useNavigate();
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
-
+ 
 
     // getting store 
     const getStores = async () => {
@@ -42,9 +41,9 @@ const AdminLogin = () => {
         const data = await re.json();
         // console.log(data);
         if (data.response === "Valid") {
-            createcookie('adminCookie', adminName);
-            createcookie2('adminCookie2', storeId);
-
+            createcookie('uname', adminName);
+            createcookie('storeid', storeId);
+            createcookie("utype","admin");
             jump("/dashboard")
         }
         else {

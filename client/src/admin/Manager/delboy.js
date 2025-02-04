@@ -1,14 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebars/Sidebar';
+import { useCookies } from 'react-cookie';
+import Validate from '../../Validate';
 
 const Delboy = () => {
+    const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
 
     const form = useRef();
     const formBg = useRef();
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
 
+    const [editMode, setEditMode] = useState(false);
+
+    // Employee form fields
     const [name, setName] = useState("");
     const [empType, setEmpType] = useState("");
     const [mobile, setMobile] = useState("");
@@ -17,49 +24,82 @@ const Delboy = () => {
     const [gender, setGender] = useState("Male");
     const [address, setAddress] = useState("");
     const [joinDate, setJoindate] = useState("");
-    const [status, setStatus] = useState("");
     const [dob, setDOB] = useState("");
-    var st = ["active", "inactive"];
-    var type = ["Delivery Agent", "Manager", "Distributor"]
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [pan, setPan] = useState("");
+    const [boyId, setBoyId] = useState("");
+    const [empData, setEmpData] = useState([]);
 
-    const jump = useNavigate();
-    const [signUpData, setSignUpData] = useState([]);
 
     const [stores, setStores] = useState([]);
-    const [empData, setEmpData] = useState([]);
-    const [singleEmpData, setSingleEmpData] = useState([]);
 
-    const [empMobile, setEmpMobile] = useState("");
     const [storeId, setStoreId] = useState("");
-
-    const employeeForm = useRef();
-    const employeeFormBg = useRef();
 
     const closeAddEmployee = () => {
         form.current.style.display = "none";
         formBg.current.style.display = "none";
+        setEditMode(false);
+        // emptyFields();
     }
     const openEmployeeForm = () => {
         form.current.style.display = "block";
         formBg.current.style.display = "block";
+
     }
 
+    // save employee form 
+    const saveDelBoy = async () => {
+        const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // storeid: cookie.empStoreId,
+                storeid: cookie2.adminCookie2,
+                mobile: mobile,
+                name: name,
+                aadharno: adhar,
+                email: email,
+                gender: gender,
+                address: address,
+                joindate: joinDate,
+                panno: pan,
+                dob: dob
+            })
+        })
+        const data = await re.json();
+        if (data.response === "Saved") {
+            alert(data.Response);
+            getEmployees();
+            closeAddEmployee();
+         
+
+        }
+        else {
+            alert(data.Response);
+        }
+    }
 
     // adding new employee 
-    const addEmployee = async () => {
+    const updateDelBoy = async () => {
         try {
             loaderLoading.current.style.display = "block"
             const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    mobileno: empMobile,
-                    storeid: storeId,
-                    emptype: empType
+                    boyid: boyId,
+                    mobile: mobile,
+                    name: name,
+                    aadharno: adhar,
+                    email: email,
+                    gender: gender,
+                    address: address,
+                    joindate: joinDate,
+                    panno: pan,
+                    dob: dob
                 })
             })
             const data = await re.json();
@@ -76,22 +116,59 @@ const Delboy = () => {
     }
 
     // get all employee data 
+    // const getEmployees = async () => {
+        
+    //     // var et = "";
+    //     var et = "storeid="+cookie.empStoreId;
+    //     alert(et);
+
+    //     // if(cookie.adminCookie!==null){
+    //     //     et = "admin&storeid="+cookie2.adminCookie2;
+    //     // }
+    //     // else{
+    //     //     et = "etype=manager&mobile="+cookie.empCookie;
+    //     // }
+    //     // alert(et);
+    //     try {
+    //         loaderLoading.current.style.display = "block"
+    //         const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php?${et}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         })
+    //         const data = await re.json();
+    //         // console.log(data);
+    //         loaderLoading.current.style.display = "none"
+    //         setEmpData(data);
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //         loaderLoading.current.style.display = "none"
+    //     }
+    // }
+
     const getEmployees = async () => {
+        var et = "etype=Delivery Agent&storeid="+cookie2.adminCookie2;
+        // var et = "etype=Delivery Agent&storeid="+cookie.empStoreId;
+
+        alert(et);
         try {
             loaderLoading.current.style.display = "block"
-            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?${et}&`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
             const data = await re.json();
+            console.log(data);
             loaderLoading.current.style.display = "none"
             setEmpData(data);
         }
         catch (error) {
             console.error(error);
-            // loaderLoading.current.style.display = "none"
+            loaderLoading.current.style.display = "none"
         }
     }
 
@@ -108,51 +185,49 @@ const Delboy = () => {
     }
 
     // getting single Emp Data 
-    const getSingleEmp = async (mobile) => {
+    const getSingleEmp = async (boyid) => {
+        setEditMode(true);
+        setBoyId(boyid);
         loaderLoading.current.style.display = "block";
-        const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+        const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                mobileno: mobile
+                boyid: boyid
             })
         })
         const data = await re.json();
-        // console.log(data);
+        console.log(data);
         loaderLoading.current.style.display = "none";
         setName(data[0].name);
-        setEmpType(data[0].emptype);
-        setMobile(data[0].mobileno);
+        setMobile(data[0].mobile);
         setAdhar(data[0].aadharno);
         setEmail(data[0].email);
         setGender(data[0].gender);
         setAddress(data[0].address);
-        setJoindate(data[0].fathername);
-        setPan(data[0].othercontactno);
-        setEmpMobile(mobile);
-        setStatus(data[0].status);
-        setStoreId(data[0].storeid);
-        form.current.style.display = "block";
-        formBg.current.style.display = "block";
+        setJoindate(data[0].joindate);
+        setPan(data[0].panno);
+        setDOB(data[0].dob);
+        openEmployeeForm();
     }
 
     // delete employee 
-    const deleteEmp = async (mobile) => {
-        alert(mobile)
+    const deleteEmp = async (boyid) => {
+        alert(boyid)
         if (window.confirm('Are you sure you want to delete this Employee ?')) {
-            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    mobile: mobile
+                    boyid: boyid
                 })
             })
             const data = await re.json();
-            // console.log(data);
+            console.log(data);
             // emptyFields();
             getEmployees();
         }
@@ -161,68 +236,29 @@ const Delboy = () => {
 
     const emptyFields = () => {
         setName('');
-        setEmpType('');
+        setDOB('');
         setMobile('');
         setAdhar('');
         setEmail('');
-        setGender('');
+        setGender('Male');
         setAddress('');
         setJoindate('');
         setPan('');
-        setEmpMobile('');
-        setStatus('');
         setStoreId('');
-        form.current.style.display = "none";
-        formBg.current.style.display = "none";
-        getEmployees();
+        closeAddEmployee();
     }
 
 
-    // update employee form 
-    const update = async () => {
-
-        const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                mobileno: mobile,
-                name: name,
-                aadharno: adhar,
-                email: email,
-                gender: gender,
-                address: address,
-                joindate: joinDate,
-                panno: setPan,
-                emptype: empType,
-                status: status,
-                storeid: storeId
-            })
-        })
-        const data = await re.json();
-        if (data.response === "Saved") {
-            alert("Employee updated successfully");
-            form.current.style.display = "none";
-            getEmployees();
-            emptyFields();
-
-        }
-        else {
-            alert("Failed to update employee");
-        }
-    }
 
 
     useEffect(() => {
-        getStores();
-        getEmployees();
+        //getStores();
+      //  getEmployees();
 
     }, [])
 
     return (
         <>
-
             <Sidebar />
             {/* <div className="sidebar-main"> */}
 
@@ -239,14 +275,13 @@ const Delboy = () => {
                             <tr>
                                 <th>S.No.</th>
                                 <th>Name</th>
-                                <th>Store</th>
                                 <th>Address</th>
                                 <th>Mobile</th>
-                                <th>Alt Mob</th>
                                 <th>Email</th>
-                                <th>Father&nbsp;Name</th>
-                                <th>Status</th>
-                                <th>Type</th>
+                                <th>DOB</th>
+                                <th>Adhar No.</th>
+                                <th>PAN No.</th>
+                                <th>Join Date</th>
                                 <th>Action</th>
                                 {/* <th>Referral Code</th> */}
                             </tr>
@@ -259,17 +294,16 @@ const Delboy = () => {
                                             <td>{index + 1}</td>
                                             {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
                                             <td>{employee.name + "(" + employee.gender + ")"}</td>
-                                            <td>{employee.storename}</td>
                                             <td>{employee.address}</td>
-                                            <td>{employee.mobileno}</td>
-                                            <td>{employee.othercontactno}</td>
+                                            <td>{employee.mobile}</td>
                                             <td>{employee.email}</td>
-                                            <td>{employee.fathername}</td>
-                                            <td>{employee.status}</td>
-                                            <td>{employee.emptype}</td>
+                                            <td>{employee.dob}</td>
+                                            <td>{employee.aadharno}</td>
+                                            <td>{employee.panno}</td>
+                                            <td>{employee.joindate}</td>
                                             <td>
-                                                <i onClick={() => { getSingleEmp(employee.mobileno) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                                <i onClick={() => { deleteEmp(employee.mobileno) }} className="fa fa-trash text-danger"></i>
+                                                <i onClick={() => { getSingleEmp(employee.boyid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                                <i onClick={() => { deleteEmp(employee.boyid) }} className="fa fa-trash text-danger"></i>
                                             </td>
                                             {/* <td>{employee.refCode}</td> */}
                                         </tr>
@@ -282,153 +316,14 @@ const Delboy = () => {
             </div>
 
 
-            {/* sign up form for employee */}
-            <div ref={form} className="new-employee">
-                <div className="employee-form-container">
-                    <h3>Employee Details</h3>
-                    <div className="form-group">
-                        <div className="input-pair">
-                            <div>
-                                <label htmlFor="employee-name">Name</label>
-                                <input
-                                    placeholder="Employee Name"
-                                    type="text"
-                                    onChange={(e) => { setName(e.target.value) }}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="employee-aadhar">Aadhar</label>
-                                <input
-                                    placeholder="Employee Aadhar"
-                                    type="text"
-                                    onChange={(e) => { setAdhar(e.target.value) }}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="input-pair">
-                            <div>
-                                <label>Employee Number</label>
-                                <input
-                                    type="text"
-                                    disabled
-                                    value={mobile}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="employee-alt-phone">Alternate Mobile No</label>
-                                <input
-                                    placeholder="Alternate Mobile Number"
-                                    type="text"
-                                    onChange={(e) => { setPan(e.target.value) }}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="input-pair">
-                            <div>
-                                <label htmlFor="employee-email">Email</label>
-                                <input
-                                    placeholder="Employee Email"
-                                    type="email"
-                                    id="employee-email"
-                                    name="employee-email"
-                                    onChange={(e) => { setEmail(e.target.value) }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="employee-gender">Gender</label>
-                                <select onChange={(e) => { setGender(e.target.value) }}>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="input-pair">
-                            <div>
-                                <label htmlFor="employee-address">Address</label>
-                                <textarea
-                                    id="employee-address"
-                                    name="employee-address"
-                                    placeholder="Enter Address"
-                                    rows="2"
-                                    onChange={(e) => { setAddress(e.target.value) }}
-                                ></textarea>
-                            </div>
-
-
-                        </div>
-
-                        <div className="input-pair">
-                            <div>
-                                <label htmlFor="father-name">Father Name</label>
-                                <input
-                                    placeholder="Father's Name"
-                                    type="text"
-                                    id="father-name"
-                                    name="father-name"
-                                    onChange={(e) => { setJoindate(e.target.value) }}
-                                />
-                            </div>
-                        </div>
-                        <div className="input-pair">
-
-                            {/* <div>
-                                <label htmlFor="employee-password">Password</label>
-                                <input
-                                    type="password"
-                                    name="employee-password"
-                                    placeholder="Enter Password"
-                                    onChange={(e) => { setPassword(e.target.value) }}
-                                    required
-                                />
-                            </div> */}
-                            <div>
-                                <label htmlFor="employee-password">Confirm Password</label>
-                                <input
-                                    type="password"
-                                    name="employee-password"
-                                    placeholder="Enter Password"
-                                    onChange={(e) => { setConfirmPassword(e.target.value) }}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="input-pair">
-                            <div>
-                                <label>Employee Status</label>
-                                <select onChange={(e) => { setEmpType(e.target.value) }} disabled >
-                                    <option value="active">{status}</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="employee-type">Employee Type</label>
-                                <select onChange={(e) => { setEmpType(e.target.value) }} disabled id="employee-type" name="employee-type">
-                                    <option value="distributor">{empType}</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="delivery-agent">Delivery Agent</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" onClick={addEmployee}>Add</button>
-                </div>
-            </div>
-            <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
-
-            {/* </div> */}
-
             {/* edit employee form  */}
             <div onClick={emptyFields} className="edit-form-bg" ref={formBg}></div>
             <div ref={form} className="employee-form-container edit-form">
-                <h3>Edit Employee Details</h3>
+                <h3>
+                    {
+                        editMode ? "Edit Employee" : "Add New Employee"
+                    }
+                </h3>
                 <div className="form-group">
                     <div className="input-pair">
                         <div>
@@ -471,7 +366,7 @@ const Delboy = () => {
                             <label htmlFor="employee-alt-phone">PAN No</label>
                             <input
                                 placeholder="Alternate Mobile Number"
-                                type="number"
+                                type="text"
                                 id="employee-alt-phone"
                                 value={pan}
                                 name="employee-alt-phone"
@@ -495,6 +390,8 @@ const Delboy = () => {
                         <div>
                             <label htmlFor="employee-gender">Gender</label>
                             <select onChange={(e) => { setGender(e.target.value) }}>
+                                {/* <option value={(gender).toLocaleLowerCase()==="male" ? "male" : "female"}>{gender==="male" ? gender : "female"}</option> */}
+                                {/* <option value={gender==="female" ? gender : "male"}>{gender}</option> */}
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="other">Other</option>
@@ -537,35 +434,15 @@ const Delboy = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="input-pair">
-                        <div>
-                            <label>Employee Status</label>
-                            <select onChange={(e) => { setStatus(e.target.value) }}>
-                                {st.map((x, index) => {
-                                    return (
-                                        x == status ? <option key={index} selected value={x}>{x}</option> : <option key={index} value={x}>{x}</option>
-
-                                    )
-                                })}
-                            </select>
-                        </div>
-                        <div>
-                            <label>Employee Type</label>
-                            <select onChange={(e) => { setEmpType(e.target.value) }}>
-                                {type.map((x, index) => {
-                                    return (
-                                        x === empType ? <option key={index} selected value={x}>{x}</option> : <option key={index} value={x}>{x}</option>
-
-                                    )
-                                })}
-
-                            </select>
-                        </div>
-                    </div>
                 </div>
 
-                <button type="submit" onClick={update}>Update</button>
+                <button type="submit" onClick={
+                    editMode ? updateDelBoy : saveDelBoy
+                }>
+                    {
+                        editMode ? "Update Employee" : "Add Employee"
+                    }
+                </button>
             </div>
 
             {/* loader  */}

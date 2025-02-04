@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import Validate from '../../Validate';
 
-const Managersidebar = () => {
+const Managersidebar = (x) => {
   const [cookie, createcookie, removecookie] = useCookies()
   const sidebar = useRef();
   const sidebarBg = useRef();
@@ -37,9 +38,13 @@ const Managersidebar = () => {
       e.target.classList.add('clicked');
     });
   });
+  useEffect(() =>{
+    
+  },[])
 
   return (
     <>
+    <Validate/>
       {/* <div className="sidebar-main"> */}
       <div className="dashboard-header">
         {/* <div className="loader-waiting" ref={loaderWaiting}>
@@ -60,13 +65,15 @@ const Managersidebar = () => {
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
 
-        <div className="logo">Manager Dashboard <br />{cookie.empCookie}</div>
+        <div className="logo">{x.name} {x.storename} Manager Dashboard <br />{cookie.empCookie}</div>
 
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
           <div className="nav-item"><Link className="linkdb" to="/managerdashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/delboy"><i className="fas fa-handshake"></i>Delivery Boys</Link></div>
+           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
+           <div className="nav-item"><Link className="linkdb" to="/delboy"><i className="fas fa-handshake"></i>Delivery Boy</Link></div>
+                   
           {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>

@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './sidebars/Sidebar';
+import { useCookies } from 'react-cookie';
+import Validate from '../Validate';
 
 const Employee = () => {
-    
+
+//    var et=["Manager","Distribut0r","Delivery"]
+
     const editForm = useRef();
     const editFormBg = useRef();
     const loaderWaiting = useRef();
@@ -75,17 +79,22 @@ const Employee = () => {
         }
     }
 
+    const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
     // get all employee data 
-    const getEmployees = async () => {
+    const getEmployees = async (ett) => {
+        setEmpType(ett);
+        var url = ett +"&storeid="+ cookie2.storeid;       
         try {
             loaderLoading.current.style.display = "block"
-            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?etype=${url}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
             const data = await re.json();
+            console.log(data)
             loaderLoading.current.style.display = "none"
             setEmpData(data);
         }
@@ -109,7 +118,7 @@ const Employee = () => {
 
     // getting single Emp Data 
     const getSingleEmp = async (mobile) => {
-        loaderLoading.current.style.display="block";
+        loaderLoading.current.style.display = "block";
         const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php`, {
             method: 'PATCH',
             headers: {
@@ -121,7 +130,7 @@ const Employee = () => {
         })
         const data = await re.json();
         // console.log(data);
-        loaderLoading.current.style.display="none";
+        loaderLoading.current.style.display = "none";
         setName(data[0].name);
         setEmpType(data[0].emptype);
         setMobile(data[0].mobileno);
@@ -215,20 +224,40 @@ const Employee = () => {
 
 
     useEffect(() => {
+       // Validate();
         getStores();
-        getEmployees();
+        // getEmployees();
 
     }, [])
 
     return (
         <>
+        
             {/* <div className="sidebar-main"> */}
-            <Sidebar/>
+            <Sidebar />
             <div className="new-employee-main">
-                <div className="add-c-div">
+                <div className="add-c-div justify-content-between align-items-center">
+                    <div className="form-group">
+                        {/* <label className='bg-danger'>Select Employee Type</label> */}
+                        {cookie.emptype=="manager"?
+                        <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                        <option value="Distributor">Distributor</option>
+                        <option value="Delivery Agent">Delivery Agent</option>
+                    </select>
+                        :
+                        <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                            <option value="Distributor">Distributor</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Delivery Agent">Delivery Agent</option>
+                        </select>
+                        }
+                        
+                    </div>
                     {/* <Link to="/newemployee"> */}
                     <button tpe="submit" onClick={openEmployeeForm}>Add Employee</button>
                     {/* </Link> */}
+                    <h1>{cookie.emptype}</h1>
+
                 </div>
 
                 <div className="table-responsive table-employee">

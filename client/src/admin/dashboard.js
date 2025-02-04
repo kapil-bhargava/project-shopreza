@@ -17,10 +17,7 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        if (cookie["adminCookie"] == null) {
-            jump('/adminlogin');
-            // return null;    
-        }
+        
 
     }, [])
 

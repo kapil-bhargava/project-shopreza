@@ -17,6 +17,7 @@ const Customer = () => {
     const [signUpData, setSignUpData] = useState([]);
     const [mobile, setMobile] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
+    const [cookie2, createcookie2, removecookie2] = useCookies();
     const jump = useNavigate();
     // const [address, setAddress] = useState();
 
@@ -55,15 +56,10 @@ const Customer = () => {
 
     const getSignUpData = async () => {
         var et = "";
-        if (cookie.adminCookie != null) {
-            et = "admin";
-        }
-        else {
-            et = "emp&mobile=" + cookie.empCookie;
-        }
+            et = cookie2.storeid;
         loaderLoading.current.style.display = "block";
         try {
-            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?etype=" + et, {
+            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?storeid=" + et, {
                 // const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
                 method: 'GET',
                 headers: {
@@ -71,9 +67,7 @@ const Customer = () => {
                 }
             })
             const data = await re.json();
-            console.log(data);
             loaderLoading.current.style.display = "none";
-            console.log(data)
             setSignUpData(data)
         }
         catch (error) {
@@ -85,12 +79,9 @@ const Customer = () => {
 
     useEffect(() => {
 
-        if (cookie["empCookie"] == null && cookie["adminCookie"] == null) {
-            jump("/emplogin")
-        }
-        else {
+        
             getSignUpData();
-        }
+        
     }, [])
 
     return (

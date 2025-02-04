@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import Validate from '../../Validate';
 
 const Adminsidebar = () => {
   const loaderWaiting = useRef();
@@ -20,6 +21,8 @@ const Adminsidebar = () => {
   const logoutAdmin = () => {
     if (window.confirm("Sure want to logout ?")) {
       removecookie('adminCookie');
+      removecookie('empCookie');
+      removecookie2('adminCookie2');
       jump("/adminlogin")
     }
   }
@@ -87,6 +90,7 @@ const Adminsidebar = () => {
 
 
   useEffect(() => {
+    
     getStores();
     // alert(activeStore)
     // console.log(stores);
@@ -95,7 +99,7 @@ const Adminsidebar = () => {
 
   return (
     <>
-
+    <Validate />
       {/* Sidebar of Admin  */}
       <div className="dashboard-header">
         {/* <div className="loader-waiting" ref={loaderWaiting}>
@@ -132,6 +136,7 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
+          <div className="nav-item"><Link className="linkdb" to="/delboy"><i className="fas fa-handshake"></i>Delivery Boy</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
