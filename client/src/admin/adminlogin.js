@@ -29,8 +29,9 @@ const AdminLogin = () => {
         loaderWaiting.current.style.display = "none"
         // console.log(data);
     }
-
+    
     const login = async () => {
+                loaderWaiting.current.style.display = "block"
         const re = await fetch(`${process.env.REACT_APP_URL}/validateadminapi.php`, {
             method: 'POST',
             headers: {
@@ -40,6 +41,7 @@ const AdminLogin = () => {
         })
         const data = await re.json();
         // console.log(data);
+        loaderWaiting.current.style.display = "none"
         if (data.response === "Valid") {
             createcookie('uname', adminName);
             createcookie('storeid', storeId);

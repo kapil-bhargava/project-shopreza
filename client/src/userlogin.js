@@ -75,7 +75,7 @@ const Userlogin = (props) => {
                 // window.location.reload();
 
                 closePopup();
-                // window.location.reload();
+                window.location.reload();
 
             }
             else {

@@ -17,7 +17,6 @@ const Customer = () => {
     const [signUpData, setSignUpData] = useState([]);
     const [mobile, setMobile] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
     const jump = useNavigate();
     // const [address, setAddress] = useState();
 
@@ -32,6 +31,9 @@ const Customer = () => {
     }
 
     const addCustomer = async () => {
+        console.log("umobile  "+mobile)
+        console.log("storeid  "+cookie.storeid)
+        console.log("utype  "+cookie.utype)
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
             method: 'POST',
@@ -40,11 +42,13 @@ const Customer = () => {
             },
             body: JSON.stringify({
                 mobile: mobile,
-                empmobile: cookie.empCookie
+                storeid: cookie.storeid,
+                remark: cookie.uname
                 // address
             })
         })
         const data = await re.json();
+        console.log(data);
         loaderLoading.current.style.display = "none";
         if (data.response === "Saved") {
             closeAddCustomer();
@@ -56,7 +60,7 @@ const Customer = () => {
 
     const getSignUpData = async () => {
         var et = "";
-            et = cookie2.storeid;
+            et = cookie.storeid;
         loaderLoading.current.style.display = "block";
         try {
             const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?storeid=" + et, {
@@ -67,6 +71,7 @@ const Customer = () => {
                 }
             })
             const data = await re.json();
+            console.log(data)
             loaderLoading.current.style.display = "none";
             setSignUpData(data)
         }
@@ -113,7 +118,7 @@ const Customer = () => {
                                 <th>Mobile</th>
                                 <th>Address</th>
                                 <th>Status</th>
-                                <th>Ref Code</th>
+                                <th>Remark</th>
 
                             </tr>
                         </thead>
@@ -128,7 +133,7 @@ const Customer = () => {
                                             <td>{x.mobile}</td>
                                             <td>{x.address}</td>
                                             <td>{x.status}</td>
-                                            <td>{x.vcode}</td>
+                                            <td>{x.remark}</td>
 
                                         </tr>
                                     )

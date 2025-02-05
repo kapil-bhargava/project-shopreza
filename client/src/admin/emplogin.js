@@ -26,6 +26,7 @@ const Emplogin = () => {
             setMobileError("Mobile is required");
         }
         // console.log(mobile, password)
+        loaderLoading.current.style.display="block";
         const re = await fetch(`${process.env.REACT_APP_URL}/validateempapi.php`, {
             method: 'POST',
             headers: {
@@ -34,6 +35,7 @@ const Emplogin = () => {
             body: JSON.stringify({ mobile: mobile, password: password }),
         })
         const data = await re.json();
+        loaderLoading.current.style.display="none";
         console.log(data);
         if (data.response === "Valid") {
             createcookie('uname', mobile);

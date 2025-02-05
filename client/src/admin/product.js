@@ -44,7 +44,7 @@ const Product = () => {
         try {
             loaderLoading.current.style.display = "block";
             // console.log(cookie2.adminCookie2)
-            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.adminCookie2, {
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

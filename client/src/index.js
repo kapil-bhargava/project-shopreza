@@ -28,9 +28,9 @@ import TrackingOrder from './trackingorder';
 import Managerlogin from './admin/managerlogin';
 import Deliveryboylogin from './admin/deliveryboylogin';
 import Sidebar from './admin/sidebars/Sidebar';
-// import ManagerDashboard from './admin/dasboardmanager';
 import Delboy from './admin/Manager/delboy';
 import ManagerDashboard from './admin/Manager/dasboardmanager';
+import Profile from './admin/profile';
 
 
 
@@ -65,6 +65,7 @@ root.render(
           <Route exact path="/trackingorder" element={<TrackingOrder />} />
           <Route exact path="/userorders" element={<Userorders />} />
           <Route exact path="/adminorders" element={<Adminorder />} />
+          <Route exact path="/empprofile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </Provider>

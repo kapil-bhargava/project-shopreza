@@ -21,7 +21,6 @@ const Category = () => {
     const [category, setCategory] = useState();
     const [categoryPic, setCategoryPic] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
     const openAddCategory = () => {
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
@@ -60,7 +59,7 @@ const Category = () => {
             body: JSON.stringify({
                 catname: category,
                 // storeid: storeid
-                storeid: cookie2.adminCookie2
+                storeid: cookie.storeid
             })
         })
         const data = await re.json();
@@ -108,7 +107,7 @@ const Category = () => {
         //  //cookie2.adminCookie2)
         try {
             loaderLoading.current.style.display = "block";
-            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -186,7 +185,7 @@ const Category = () => {
             body: JSON.stringify({
                 catid: catId,
                 catname: category,
-                storeid: cookie2.adminCookie2,
+                storeid: cookie.storeid,
             })
         })
         const data = await re.json();

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import Validate from '../../Validate';
 
 const Adminsidebar = () => {
   const loaderWaiting = useRef();
@@ -15,15 +14,14 @@ const Adminsidebar = () => {
   const sidebar = useRef();
   const sidebarBg = useRef();
   const [cookie, createcookie, removecookie] = useCookies();
-  const [cookie2, createcookie2, removecookie2] = useCookies();
 
   // logout admin 
   const logoutAdmin = () => {
-    if (window.confirm("Sure want to logout ?")) {
-      removecookie('adminCookie');
-      removecookie('empCookie');
-      removecookie2('adminCookie2');
-      jump("/adminlogin")
+    if (window.confirm("Sure want to logouts ?")) {
+      removecookie('uname');
+      removecookie('storeid');
+      removecookie('utype');
+      jump("/adminlogin");
     }
   }
 
@@ -41,7 +39,7 @@ const Adminsidebar = () => {
     // setStoreId(cookie2.adminCookie2);
     setStores(data);
     loaderWaiting.current.style.display = "none"
-    const selectedStore = data.find((store) => store.storeid == cookie2.adminCookie2);
+    const selectedStore = data.find((store) => store.storeid == cookie.storeid);
     if (selectedStore) {
       setActiveStore(selectedStore.storename);
       setActiveStoreId(selectedStore.storeid);
@@ -78,19 +76,17 @@ const Adminsidebar = () => {
   // changing the store 
   const changeStore = (storeId) => {
     setStoreId(storeId);
-    createcookie2('adminCookie2', storeId);
+    createcookie('storeid', storeId);
     getStores()
     window.location.reload();
-    // setActiveStore(storeId);
-    window.location.reload();
-    // console.log(storeId);
+
   }
 
 
 
 
   useEffect(() => {
-    
+
     getStores();
     // alert(activeStore)
     // console.log(stores);
@@ -99,28 +95,29 @@ const Adminsidebar = () => {
 
   return (
     <>
-    <Validate />
       {/* Sidebar of Admin  */}
       <div className="dashboard-header">
-        {/* <div className="loader-waiting" ref={loaderWaiting}>
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div> */}
-        {/* <div className="loader-loading" ref={loaderLoading}>
-          <div className="spinner-grow text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div> */}
-
+    
         <div className="name-div">
-          <h6>{cookie.adminCookie}</h6>
+          <div className="btn-group">
+            <i type="button" className="fa fa-user dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul className="dropdown-menu">
+              <h6 className='text-primary p-1 text-center fw-bold'>{cookie.uname}</h6>
+              <Link className="linkdb text-dark p-1 ps-2" >Profile</Link>
+              <Link className="linkdb text-dark p-1 ps-2" >Settings</Link>
+              <li><hr className="dropdown-divider" /></li>
+              <a onClick={logoutAdmin} className="linkdb text-danger p-1 ps-2" >
+                <i className="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </ul>
+          </div>
         </div>
+
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
         <div className="form-group">
-          <h5>{cookie2.adminCookie2}{activeStore}</h5>
+          <h5>{(cookie.storeid)} {activeStore}</h5>
           <label>Store</label>
           <select value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
             {/* <option>Select Store</option> */}
@@ -136,15 +133,14 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/delboy"><i className="fas fa-handshake"></i>Delivery Boy</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+         S <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/adminorders"  ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
-          <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
+          {/* <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div> */}
         </nav>
       </div>
 

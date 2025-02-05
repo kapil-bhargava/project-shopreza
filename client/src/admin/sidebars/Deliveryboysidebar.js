@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import Validate from '../../Validate';
 
 const Deliveryboysidebar = (x) => {
   const [cookie, createcookie, removecookie] = useCookies()
@@ -42,7 +41,6 @@ const Deliveryboysidebar = (x) => {
 
   return (
     <>
-  <Validate/>
       {/* <div className="sidebar-main"> */}
       <div className="dashboard-header">
         {/* <div className="loader-waiting" ref={loaderWaiting}>
@@ -57,18 +55,18 @@ const Deliveryboysidebar = (x) => {
         </div> */}
 
         <div className="name-div">
-          <h6>{x.name} {x.storename} DeliverBoy {cookie.empCookie}</h6>
+          <h6>{x.name} {x.storename} DeliverBoy {cookie.uname}</h6>
         </div>
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
 
-        <div className="logo">Delivery Boy Panel <br /> {cookie.empCookie}</div>
+        <div className="logo">Delivery Boy Panel <br /> {cookie.uname}</div>
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
           <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
-          <div onClick={logoutEmployee} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
+          <div className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
         </nav>
       </div>
 

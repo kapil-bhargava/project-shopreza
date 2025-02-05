@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import Validate from '../../Validate';
 
 const Distributorsidebar = (x) => {
     const [cookie, createcookie, removecookie] = useCookies()
@@ -12,7 +11,9 @@ const Distributorsidebar = (x) => {
     // logout employee 
     const logoutEmployee = () => {
         if (window.confirm("Sure want to logout ?")) {
-            removecookie('empCookie');
+            removecookie('uname');
+            removecookie('storeid');
+            removecookie('utype');
             jump("/emplogin")
             // window.location.href = '/';
 
@@ -41,7 +42,6 @@ const Distributorsidebar = (x) => {
 
     return (
         <>
-           <Validate/>
             {/* <div className="sidebar-main"> */}
             <div className="dashboard-header">
                 {/* <div className="loader-waiting" ref={loaderWaiting}>

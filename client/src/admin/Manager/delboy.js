@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebars/Sidebar';
 import { useCookies } from 'react-cookie';
-import Validate from '../../Validate';
 
 const Delboy = () => {
     const [cookie, createcookie, removecookie] = useCookies();
@@ -55,7 +54,7 @@ const Delboy = () => {
             },
             body: JSON.stringify({
                 // storeid: cookie.empStoreId,
-                storeid: cookie2.adminCookie2,
+                storeid: cookie.storeid,
                 mobile: mobile,
                 name: name,
                 aadharno: adhar,
@@ -149,7 +148,7 @@ const Delboy = () => {
     // }
 
     const getEmployees = async () => {
-        var et = "etype=Delivery Agent&storeid="+cookie2.adminCookie2;
+        var et = "etype=Delivery Agent&storeid="+cookie.storeid;
         // var et = "etype=Delivery Agent&storeid="+cookie.empStoreId;
 
         alert(et);
@@ -253,7 +252,7 @@ const Delboy = () => {
 
     useEffect(() => {
         //getStores();
-      //  getEmployees();
+       getEmployees();
 
     }, [])
 

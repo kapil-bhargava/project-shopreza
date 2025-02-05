@@ -53,7 +53,7 @@ const ManagerDashboard = () => {
 
         try {
             loaderWaiting.current.style.display = "block";
-            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.empCookie}&status=${status}`, {
+            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
                 method: 'GET',
                 headers: {
                     'content-type': 'application/json',
@@ -62,7 +62,7 @@ const ManagerDashboard = () => {
             });
             loaderWaiting.current.style.display = "none";
             const data = await response.json();
-            console.log(data);
+            console.log(data)
             setstatus(status);
             setOrderData(data);
         }
@@ -95,8 +95,7 @@ const ManagerDashboard = () => {
     //     }
     // }
     const getEmployees = async () => {
-        var et = "etype=Delivery Agent&storeid="+cookie.empStoreId;
-        alert(et);
+        var et = "etype=Delivery Agent&storeid="+cookie.storeid;
         try {
             loaderLoading.current.style.display = "block"
             const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?${et}&`, {
@@ -281,7 +280,7 @@ const ManagerDashboard = () => {
 
 
     useEffect(() => {
-        if (cookie["empCookie"] == null) {
+        if (cookie.uname == null && cookie.utype!= "manager") {
             jump('/emplogin');
             // return null;    
         }

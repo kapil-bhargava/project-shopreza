@@ -20,7 +20,7 @@ const Subcategory = () => {
     const [catData, setCatData] = useState([]);
     const [category, setCategory] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
+
     // const [categoryData, setCategoryData] = useState([]);
     const openAddSubcategory = () => {
         customerForm.current.style.display = "block";
@@ -107,14 +107,14 @@ const Subcategory = () => {
     const getCategory = async () => {
         try {
             loaderLoading.current.style.display = "block";
-            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.adminCookie2, {
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
             const data = await re.json();
-            getSubCategory(data[1].catid)
+            getSubCategory(data[0].catid)
             loaderLoading.current.style.display = "none";
             setCatData(data);
         }

@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './sidebars/Sidebar';
 import { useCookies } from 'react-cookie';
-import Validate from '../Validate';
 
 const Employee = () => {
 
-//    var et=["Manager","Distribut0r","Delivery"]
 
     const editForm = useRef();
     const editFormBg = useRef();
@@ -62,13 +60,14 @@ const Employee = () => {
                 },
                 body: JSON.stringify({
                     mobileno: empMobile,
-                    storeid: storeId,
+                    storeid: cookie.storeid,
                     emptype: empType
                 })
             })
             const data = await re.json();
-            alert(data.Response);
-            getEmployees();
+            console.log(data)
+            alert(data.response);
+            getEmployees(empType);
             loaderLoading.current.style.display = "none"
             closeAddEmployee();
         }
@@ -80,11 +79,10 @@ const Employee = () => {
     }
 
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
     // get all employee data 
     const getEmployees = async (ett) => {
         setEmpType(ett);
-        var url = ett +"&storeid="+ cookie2.storeid;       
+        var url = ett +"&storeid="+ cookie.storeid;       
         try {
             loaderLoading.current.style.display = "block"
             const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?etype=${url}`, {
@@ -239,7 +237,7 @@ const Employee = () => {
                 <div className="add-c-div justify-content-between align-items-center">
                     <div className="form-group">
                         {/* <label className='bg-danger'>Select Employee Type</label> */}
-                        {cookie.emptype=="manager"?
+                        {cookie.utype=="manager"?
                         <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
                         <option value="Distributor">Distributor</option>
                         <option value="Delivery Agent">Delivery Agent</option>
@@ -256,7 +254,7 @@ const Employee = () => {
                     {/* <Link to="/newemployee"> */}
                     <button tpe="submit" onClick={openEmployeeForm}>Add Employee</button>
                     {/* </Link> */}
-                    <h1>{cookie.emptype}</h1>
+                    
 
                 </div>
 
@@ -316,32 +314,8 @@ const Employee = () => {
                     <label>Mobile</label>
                     <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
                 </div>
-                <div className="form-group">
-                    <div>
-                        <label>Employee Type</label>
-                        <select onChange={(e) => { setEmpType(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
-                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Employee Type --</option>
-                            <option value="Distributor">Distributor</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Delivery Agent">Delivery Agent</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <div>
-                        <label>Assign Store</label>
-                        <select onChange={(e) => { setStoreId(e.target.value) }} className='employee-type-signup'>
-                            <option style={{ textAlign: 'center' }} value="distributor">-- Select Store --</option>
-                            {
-                                stores.map((store, index) => {
-                                    return (
-                                        <option key={index} value={store.storeid}>{store.storename}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
+                
+               
                 <div className="form-group">
                     <button onClick={addEmployee}>Add</button>
                 </div>
