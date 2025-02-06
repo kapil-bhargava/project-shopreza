@@ -94,6 +94,20 @@ input::-webkit-inner-spin-button {
     box-shadow: var(--soft-shadow);
     transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+/* aniimated popup class for login force  */
+.effected-popup{
+    animation: 0.2s cubic-bezier(0.390, 0.575, 0.565, 1) infinite alternate shakeEffect;
+}
+@keyframes shakeEffect {
+    0%, 100% {
+        transform: translate(-45%, -50%);
+    }
+    50% {
+        transform: translate(-50%, -50%);
+    }
+
+    
+}
 
 .login-popup-container i {
     cursor: pointer;
@@ -124,6 +138,7 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
     border: 1px solid var(--primary-green);
     box-shadow: var(--soft-shadow);
+    border: 1px solid red;
 
 }
 
@@ -131,9 +146,6 @@ input::-webkit-inner-spin-button {
     width: 100%;
     outline: initial;
     padding: 2px 5px;
-    /* border-radius: 0px; */
-    /* border: 1px solid black; */
-    /* outline: none; */
 }
 
 .incorrect-input {
@@ -171,7 +183,6 @@ input::-webkit-inner-spin-button {
 
 .sp {
     border: 1px solid var(--primary-yellow);
-    /* display: none; */
 }
 
 .sp span {

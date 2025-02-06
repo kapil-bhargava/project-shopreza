@@ -21,7 +21,7 @@ const Home = () => {
     const getCategory = async () => {
 
         loaderLoading.current.style.display = "block"
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie2.sp2, {
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -37,17 +37,11 @@ const Home = () => {
 
 
     useEffect(() => {
-        // if ((cookie2.sp2 !== null || cookie2.sp2 ==undefined) && ((cookie.sp !== null || cookie.sp == undefined) )){
-        //     // alert(cookie.sp)
-        //     getCategory();
-        //     // jump('/userlogin');
-        // }
-        // else {
-        //     alert("Please Login First")
-        // }
-        if (cookie2.sp2 !== null && cookie2.sp2 !== undefined) {
+        if (cookie.sp !== null || cookie.sp !== undefined){
             getCategory();
         }
+        
+       
     }, [])
 
 
@@ -87,20 +81,7 @@ const Home = () => {
                         })
                     }
                 </div>
-                {/* <div className="container">
-                    <div className="category">
-                        <img src={require("./images/vegetable.png")} alt="" />
-                        <h6>Vegetables</h6>
-                    </div>
-                    <div className="category">
-                        <img src={require("./images/fruits.png")} alt="" />
-                        <h6>Fruits</h6>
-                    </div>
-                    <div className="category">
-                        <img src={require("./images/snacks.png")} alt="" />
-                        <h6>Snacks</h6>
-                    </div>
-                </div> */}
+               
             </section>
 
             {/* items secton  */}

@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "../admin.css";
-import Customer from '../customer';
-import SideBar from '../admincommon';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebars/Sidebar';
@@ -16,7 +14,6 @@ const ManagerDashboard = () => {
     const orderPopupBg = useRef();
     const [orderData, setOrderData] = useState([]);
     const [orderDetailsData, setOrderDetailsData] = useState([]);
-    // const [status, setstatus] = useState("");
     const [cookie, createcookie, removecookie] = useCookies();
     const [skeletonLoading, setSkeletonLoading] = useState(false);
     const jump = useNavigate();
@@ -47,55 +44,11 @@ const ManagerDashboard = () => {
 
 
 
-    // NEW Orders getting 
-    const getOrders = async (status) => {
-        // alert(status)
+  
 
-        try {
-            loaderWaiting.current.style.display = "block";
-            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
-                method: 'GET',
-                headers: {
-                    'content-type': 'application/json',
-                }
-
-            });
-            loaderWaiting.current.style.display = "none";
-            const data = await response.json();
-            console.log(data)
-            setstatus(status);
-            setOrderData(data);
-        }
-        catch (error) {
-            alert(error);
-        }
-    }
-
-    // getting Employees 
-
-    // const getEmployees = async () => {
-    //     alert(cookie.empStoreId);
-    //     var et = "etype=manager&storeid="+cookie.empStoreId;
-    //     try {
-    //         loaderLoading.current.style.display = "block"
-    //         const re = await fetch(`${process.env.REACT_APP_URL}/delboyapi.php?${et}&`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             }
-    //         })
-    //         const data = await re.json();
-    //         // console.log(data);
-    //         loaderLoading.current.style.display = "none"
-    //         setEmpData(data);
-    //     }
-    //     catch (error) {
-    //         console.error(error);
-    //         loaderLoading.current.style.display = "none"
-    //     }
-    // }
+    //    getting employees 
     const getEmployees = async () => {
-        var et = "etype=Delivery Agent&storeid="+cookie.storeid;
+        var et = "etype=Delivery Agent&storeid=" + cookie.storeid;
         try {
             loaderLoading.current.style.display = "block"
             const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?${et}&`, {
@@ -117,10 +70,8 @@ const ManagerDashboard = () => {
 
 
     const assign = (orderid, orderstatus) => {
-        // alert(orderstatus);
         setOrderId(orderid);
         setstatus(orderstatus);
-        // get all employee data 
         getEmployees()
         openPopup();
 
@@ -128,10 +79,30 @@ const ManagerDashboard = () => {
     const assignAgain = (orderid, orderstatus) => {
         setOrderId(orderid);
         setstatus(orderstatus);
-        // get all employee data 
         getEmployees()
         openPopup();
 
+    }
+
+      // NEW Orders getting 
+      const getOrders = async (status) => {
+        try {
+            loaderWaiting.current.style.display = "block";
+            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
+                method: 'GET',
+                headers: {
+                    'content-type': 'application/json',
+                }
+            });
+            loaderWaiting.current.style.display = "none";
+            const data = await response.json();
+            console.log(data)
+            setstatus(status);
+            setOrderData(data);
+        }
+        catch (error) {
+            alert(error);
+        }
     }
 
     // setting the status of the order 
@@ -164,7 +135,7 @@ const ManagerDashboard = () => {
                         orderid: orderid,
                     })
                 })
-                const data = await response.json();
+                // const data = await response.json();
                 // console.log(data);
                 getOrders(orderstatus);
                 setstatus(orderstatus);
@@ -194,7 +165,7 @@ const ManagerDashboard = () => {
             });
             const data = await response.json();
             // console.log(data);
-            if (data.length == 0) {
+            if (data.length === 0) {
                 // alert("No order found");
                 setSkeletonLoading(true);
                 // return;
@@ -225,7 +196,7 @@ const ManagerDashboard = () => {
         // try {
         loaderWaiting.current.style.display = "block";
         const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
-            method: 'POST'  ,
+            method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
@@ -254,7 +225,7 @@ const ManagerDashboard = () => {
         // try {
         loaderWaiting.current.style.display = "block";
         const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
-            method: 'PUT' ,
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json',
             },
@@ -275,22 +246,15 @@ const ManagerDashboard = () => {
         // }
     }
 
-
-
-
-
     useEffect(() => {
-        if (cookie.uname == null && cookie.utype!= "manager") {
+        if (cookie.uname == null && cookie.utype !== "manager") {
             jump('/emplogin');
-            // return null;    
         }
         else {
             getOrders("Pending");
-
         }
 
     }, [])
-
 
     return (
         <>
@@ -409,9 +373,9 @@ const ManagerDashboard = () => {
                                                             <td>{x.orderstatus}</td>
                                                             {
                                                                 status === "Assigned" ?
-                                                                <td>{x.DelBoy} <i onClick={()=>{assignAgain(x.orderid, x.orderstatus)}} className="fa fa-pencil"></i></td>
-                                                               :
-                                                               null
+                                                                    <td>{x.DelBoy} <i onClick={() => { assignAgain(x.orderid, x.orderstatus) }} className="fa fa-pencil"></i></td>
+                                                                    :
+                                                                    null
                                                             }
                                                             <td>
                                                                 <span className={`status ${x.status.toLowerCase()}`}>{x.status}</span>
@@ -525,9 +489,9 @@ const ManagerDashboard = () => {
                                             <td>{employee.panno}</td>
                                             <td>{employee.joindate}</td>
                                             <td>
-                                                <button onClick={() => {status==="Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.boyid) }} className="btn btn-success btn-sm ">
-                                                     {status==="Packed"? "Assign" : "Assign Again"}
- 
+                                                <button onClick={() => { status === "Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.boyid) }} className="btn btn-success btn-sm ">
+                                                    {status === "Packed" ? "Assign" : "Assign Again"}
+
                                                 </button>
                                             </td>
                                         </tr>

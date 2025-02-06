@@ -9,7 +9,7 @@ const Adminsidebar = () => {
 
   const [stores, setStores] = useState([]);
   const [activeStore, setActiveStore] = useState();
-  const [storeId, setStoreId] = useState();
+  // const [storeId, setStoreId] = useState();
   const jump = useNavigate();
   const sidebar = useRef();
   const sidebarBg = useRef();
@@ -43,7 +43,6 @@ const Adminsidebar = () => {
     if (selectedStore) {
       setActiveStore(selectedStore.storename);
       setActiveStoreId(selectedStore.storeid);
-      // console.log(activeStore)
     } else {
       setActiveStore(''); // Reset if no store matches the id
       // console.log("else")
@@ -75,7 +74,7 @@ const Adminsidebar = () => {
 
   // changing the store 
   const changeStore = (storeId) => {
-    setStoreId(storeId);
+    // setStoreId(storeId);
     createcookie('storeid', storeId);
     getStores()
     window.location.reload();
@@ -133,7 +132,7 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-         S <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+         <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>

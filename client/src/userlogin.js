@@ -53,19 +53,19 @@ const Userlogin = (props) => {
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
                 createcookie("sp", usermobile, {
-                    path: "/", // Cookie is available on all routes
-                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                    secure: true, // Use for HTTPS
+                    path: "/",
+                    maxAge: 3600 * 24 * 30 * 12 * 10, 
+                    secure: true, 
                 });
-                createcookie2("sp2", data.storeid, {
-                    path: "/", // Cookie is available on all routes
-                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                    secure: true, // Use for HTTPS
+                createcookie("storeid", data.storeid, {
+                    path: "/", 
+                    maxAge: 3600 * 24 * 30 * 12 * 10, 
+                    secure: true, 
                 });
-                createcookie_userAddress("address", data.address,{
-                    path: "/", // Cookie is available on all routes
-                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                    secure: true, // Use for HTTPS
+                createcookie("address", data.address, {
+                    path: "/", 
+                    maxAge: 3600 * 24 * 30 * 12 * 10,
+                    secure: true,
                 });
                 // createcookie_username("username", data.name,{
                 //     path: "/", // Cookie is available on all routes
@@ -75,7 +75,7 @@ const Userlogin = (props) => {
                 // window.location.reload();
 
                 closePopup();
-                window.location.reload();
+                // window.location.reload();
 
             }
             else {
@@ -193,9 +193,6 @@ const Userlogin = (props) => {
         }
 
     }
-    // const goBack = () => {
-    //     loginPopup.current.style.display = "none";
-    // }
 
     const mobileChange = (e) => {
         const mobileValue = e.target.value;
@@ -222,9 +219,20 @@ const Userlogin = (props) => {
     }
 
     const closePopup = () => {
-        props.ref.current.classList.remove("active-popup");
-        signupPopup.current.classList.remove("active-popup");
-        props.ref1.current.classList.remove("active-popupBg");
+        if ( cookie.sp !== undefined) {
+            props.ref.current.classList.remove("active-popup");
+            signupPopup.current.classList.remove("active-popup");
+            props.ref1.current.classList.remove("active-popupBg");
+        }
+        else{
+            signupPopup.current.classList.add("effected-popup");
+            props.ref.current.classList.add("effected-popup");
+            setTimeout(()=>{
+                props.ref.current.classList.remove("effected-popup");
+                signupPopup.current.classList.remove("effected-popup");
+            },1000)
+            
+        }
     }
 
 
@@ -250,7 +258,7 @@ const Userlogin = (props) => {
             <div onClick={closePopup} ref={props.ref1} className="popup-bg"></div>
 
             {/* sign up popup  */}
-            <section ref={signupPopup} className="login-popup-container sp">
+            <section ref={signupPopup} className="sp login-popup-container ">
                 <i onClick={goBackToLogin} className="fa-solid fa-arrow-left"></i>
                 <h4>SignUp</h4>
                 <label  >Enter Name</label>

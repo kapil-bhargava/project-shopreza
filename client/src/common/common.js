@@ -76,9 +76,8 @@ const Header = ({ loginPopup, popupBg }) => {
     // logout function 
     const logout = () => {
         removecookie("sp");
-        removecookie2("sp2");
-        // removecookie_username("username");
-        removecookie_userAddress("address");
+        removecookie("storeid");
+        removecookie("address");
         closeUserProfile();
         jump('/')
         window.location.reload();
@@ -106,7 +105,14 @@ const Header = ({ loginPopup, popupBg }) => {
 
 
     useEffect(() => {
-        getCartData();
+        if (cookie.sp == null){
+            openLogin()
+        }
+        else {
+            getCartData();
+        }
+       
+
     }, [])
 
     return (
