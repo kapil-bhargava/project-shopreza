@@ -14,6 +14,7 @@ const Adminsidebar = () => {
   const sidebar = useRef();
   const sidebarBg = useRef();
   const [cookie, createcookie, removecookie] = useCookies();
+  
 
   // logout admin 
   const logoutAdmin = () => {
@@ -96,7 +97,7 @@ const Adminsidebar = () => {
     <>
       {/* Sidebar of Admin  */}
       <div className="dashboard-header">
-    
+
         <div className="name-div">
           <div className="btn-group">
             <i type="button" className="fa fa-user dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></i>
@@ -132,7 +133,7 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-         <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+          <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>

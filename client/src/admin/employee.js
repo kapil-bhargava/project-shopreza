@@ -82,7 +82,7 @@ const Employee = () => {
     // get all employee data 
     const getEmployees = async (ett) => {
         setEmpType(ett);
-        var url = ett +"&storeid="+ cookie.storeid;       
+        var url = ett + "&storeid=" + cookie.storeid;
         try {
             loaderLoading.current.style.display = "block"
             const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?etype=${url}`, {
@@ -222,7 +222,7 @@ const Employee = () => {
 
 
     useEffect(() => {
-       // Validate();
+        // Validate();
         getStores();
         // getEmployees();
 
@@ -230,31 +230,31 @@ const Employee = () => {
 
     return (
         <>
-        
+
             {/* <div className="sidebar-main"> */}
             <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div justify-content-between align-items-center">
                     <div className="form-group">
                         {/* <label className='bg-danger'>Select Employee Type</label> */}
-                        {cookie.utype=="manager"?
-                        <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
-                        <option value="Distributor">Distributor</option>
-                        <option value="Delivery Agent">Delivery Agent</option>
-                    </select>
-                        :
-                        <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
-                            <option value="Distributor">Distributor</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Delivery Agent">Delivery Agent</option>
-                        </select>
+                        {cookie.utype == "manager" ?
+                            <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Delivery Agent">Delivery Agent</option>
+                            </select>
+                            :
+                            <select onChange={(e) => { getEmployees(e.target.value) }} id="employee-type" name="employee-type" className='employee-type-signup'>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Delivery Agent">Delivery Agent</option>
+                            </select>
                         }
-                        
+
                     </div>
                     {/* <Link to="/newemployee"> */}
                     <button tpe="submit" onClick={openEmployeeForm}>Add Employee</button>
                     {/* </Link> */}
-                    
+
 
                 </div>
 
@@ -309,24 +309,27 @@ const Employee = () => {
 
             {/* sign up form for employee */}
             <div ref={employeeForm} className="add-customer-form">
+
                 <h2>Add New Employee</h2>
                 <div className="form-group">
                     <label>Mobile</label>
                     <input onChange={(e) => { setEmpMobile(e.target.value) }} placeholder='Enter Mobile' type="number" required />
                 </div>
-                
-               
+
                 <div className="form-group">
                     <button onClick={addEmployee}>Add</button>
                 </div>
             </div>
-            <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
+            <div ref={employeeFormBg} className="c-bg"></div>
 
             {/* </div> */}
 
             {/* edit employee form  */}
-            <div onClick={emptyFields} className="edit-form-bg" ref={editFormBg}></div>
+            <div className="edit-form-bg" ref={editFormBg}></div>
             <div ref={editForm} className="employee-form-container edit-form">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeAddEmployee}></i>
+                </div>
                 <h3>Edit Employee Details</h3>
                 <div className="form-group">
                     <div className="input-pair">

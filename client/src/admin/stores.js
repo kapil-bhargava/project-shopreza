@@ -193,6 +193,9 @@ const Store = () => {
 
             {/* sign up form for employee */}
             <div ref={employeeForm} className="add-customer-form">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeAddEmployee}></i>
+                </div>
                 <h2> {isEditMode ? "Update Store" : "Add Store"}</h2>
                 <div className="form-group">
                     <label>Store Name</label>
@@ -218,7 +221,7 @@ const Store = () => {
 
                 </div>
             </div>
-            <div ref={employeeFormBg} onClick={closeAddEmployee} className="c-bg"></div>
+            <div ref={employeeFormBg} className="c-bg"></div>
 
 
             {/* loader  */}

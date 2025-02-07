@@ -251,8 +251,11 @@ const Category = () => {
                     }
                 </div>
 
-                <div ref={customerFormBg} onClick={closeAddCategory} className="c-bg"></div>
+                <div ref={customerFormBg} className="c-bg"></div>
                 <div ref={customerForm} className="add-customer-form">
+                    <div className="cross-entity">
+                        <i className="fas fa-times" onClick={closeAddCategory}></i>
+                    </div>
                     <h2>{isEditMode ? "Edit Category" : "Add New category"}</h2>
                     <div className="form-group">
                         <label>Category Name</label>

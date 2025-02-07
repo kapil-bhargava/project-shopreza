@@ -614,6 +614,7 @@ const Product = () => {
             {/* Modal of Product Units */}
             <div ref={customerFormBg} onClick={closeAddProductUnit} className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form product-unit">
+            
                 <h2>{isEditMode ? "Edit Product  Unit" : "Add New Product Unit"}</h2>
                 <div className="input-pair-container">
                     <div className="input-pair">

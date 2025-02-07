@@ -98,8 +98,11 @@ const Customer = () => {
                 <div className="add-c-div">
                     <button onClick={openAddCustomer}>Add Customer</button>
                 </div>
-                <div ref={customerFormBg} onClick={closeAddCustomer} className="c-bg"></div>
+                <div ref={customerFormBg} className="c-bg"></div>
                 <div ref={customerForm} className="add-customer-form">
+                    <div className="cross-entity">
+                        <i className="fas fa-times" onClick={closeAddCustomer}></i>
+                    </div>
                     <h2>Add New Customer</h2>
                     <div className="form-group">
                         <label>Customer Mobile</label>
