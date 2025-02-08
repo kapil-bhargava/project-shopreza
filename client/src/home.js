@@ -37,10 +37,11 @@ const Home = () => {
 
 
     useEffect(() => {
-        if (cookie.sp !== null || cookie.sp !== undefined){
+        if (cookie.sp !== undefined){
             getCategory();
+            // alert("Cookie:  "+cookie.sp)
         }
-        
+       
        
     }, [])
 

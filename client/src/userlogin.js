@@ -72,9 +72,13 @@ const Userlogin = (props) => {
                 //     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                 //     secure: true, // Use for HTTPS
                 // });
-                // window.location.reload();
+                window.location.reload();
 
-                closePopup();
+                // closePopup();
+                props.ref.current.classList.remove("active-popup");
+                props.ref1.current.classList.remove("active-popupBg");
+                // props.ref.current.classList.remove("active-popup");
+                // props.ref1.current.classList.remove("active-popupBg");
                 // window.location.reload();
 
             }
@@ -185,7 +189,7 @@ const Userlogin = (props) => {
 
 
     const login = () => {
-        if (cookie["sp"] == null) {
+        if (cookie.sp == null || cookie.sp == undefined) {
             loginValidation()
         }
         else {
@@ -220,11 +224,13 @@ const Userlogin = (props) => {
 
     const closePopup = () => {
         if ( cookie.sp !== undefined) {
+            // alert("If Cookie: " + cookie.sp)
             props.ref.current.classList.remove("active-popup");
             signupPopup.current.classList.remove("active-popup");
             props.ref1.current.classList.remove("active-popupBg");
         }
         else{
+            // alert("Else Cookie: " + cookie.sp)
             signupPopup.current.classList.add("effected-popup");
             props.ref.current.classList.add("effected-popup");
             setTimeout(()=>{
@@ -245,12 +251,12 @@ const Userlogin = (props) => {
                 <h4>Login</h4>
                 <label  >Enter Mobile Number</label>
                 <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" />
-                {/* {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>} */}
-                {/* <br /> */}
+                {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
+                <br />
                 <label  >Enter Password</label>
                 <input onChange={(e) => { setuserpassword(e.target.value) }} placeholder='Password' type="password" />
-                {/* {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>} */}
-                {/* <br /> */}
+                {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
+                <br />
 
                 <button className="btn btn-success" onClick={login}>Login</button> <br />
                 <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
@@ -268,7 +274,7 @@ const Userlogin = (props) => {
                 <label  >Enter Mobile Number</label>
                 <input value={usermobile} onChange={mobileChange} placeholder='915468XXXX' type="number" />
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
-                {/* <br /> */}
+                <br />
                 <label  >Enter Address</label>
                 <textarea value={address} onChange={(e) => { setAddress(e.target.value) }} placeholder='Address here'></textarea>
                 {/* <label>Gender</label> */}

@@ -9,7 +9,24 @@ const Userorders = () => {
     const [cookie_userAddress, createcookie_userAddress, removecookie_userAddress] = useCookies();
     const [cookie_username, createcookie_username, removecookie_username] = useCookies();
 
-    const jump = useNavigate()
+    const jump = useNavigate();
+
+    const getCurrentLocation = () => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("Latitude: ", position.coords.latitude);
+                    console.log("Longitude: ", position.coords.longitude);
+                },
+                (error) => {
+                    console.error("Error fetching location: ", error.message);
+                }
+            );
+        }
+        else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
 
 
 
@@ -18,13 +35,13 @@ const Userorders = () => {
     // getting productorder
     const getProductOrders = async () => {
         try {
-            const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&storeid=${cookie2.sp2}`, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=customer&mobile=${cookie.sp}&storeid=${cookie.storeid}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
             const dt = await re.json();
             setOrderData(dt);
-            // console.log(dt);
+            console.log(dt);
         }
         catch (error) {
             console.log(error)

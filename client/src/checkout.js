@@ -59,7 +59,7 @@ const Checkout = () => {
                 },
                 body: JSON.stringify({
                     mobile: cookie.sp,
-                    storeid: cookie2.sp2,
+                    storeid: cookie.storeid,
                     amount: total,
                     paymentmode: "COD"
                 })
@@ -132,9 +132,6 @@ const Checkout = () => {
         getCartData()
     }, [])
 
-    const cartCount = () => {
-        // update cart count here
-    }
     return (
         <>
             <Header />
@@ -158,11 +155,7 @@ const Checkout = () => {
                                         <p>{x.unitname}</p>
                                         <strong><p>{x.offerprice}</p></strong>
                                     </div>
-                                    <div className="quantity">
-                                        <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
-                                        <span>{x.quantity}</span>
-                                        <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
-                                    </div>
+                                  
                                 </div>
                             )
                         })
