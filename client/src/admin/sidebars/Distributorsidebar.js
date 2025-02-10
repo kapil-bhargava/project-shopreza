@@ -44,34 +44,20 @@ const Distributorsidebar = (x) => {
         <>
             {/* <div className="sidebar-main"> */}
             <div className="dashboard-header">
-                {/* <div className="loader-waiting" ref={loaderWaiting}>
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div> */}
-                {/* <div className="loader-loading" ref={loaderLoading}>
-          <div className="spinner-grow text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div> */}
-
+                <h6>1</h6>
+                {x.storename}
                 <div className="name-div">
-                    <h6>{x.name} {x.storename} Distributor {cookie.empCookie}</h6>
+                    <h6>{x.name} Distributor {cookie.empCookie}</h6>
                 </div>
             </div>
             <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
             <div className="sidebardb" ref={sidebar}>
-
                 <div className="logo">Distributor Panel <br />{cookie.empCookie}</div>
                 <nav>
-                    {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}
                     <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
-
-                    {/* <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div> */}
                     <div onClick={logoutEmployee} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div>
                 </nav>
             </div>
-
             <div ref={sidebarBg} onClick={closeSidebar} className="sidebar-bg"></div>
             {/* </div> */}
 

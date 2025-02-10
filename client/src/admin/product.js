@@ -391,7 +391,7 @@ const Product = () => {
         const data = await re.json();
         loaderLoading.current.style.display = "none";
         setPicData(data);
-        
+
     }
 
     // useStates for pic 
@@ -456,7 +456,7 @@ const Product = () => {
                 },
                 body: JSON.stringify({
                     unitid: unitId,
-                    pic: picName,   
+                    pic: picName,
                 })
             })
             const data = await re.json();
@@ -523,7 +523,7 @@ const Product = () => {
 
     return (
         <>
-            <Sidebar/>
+            <Sidebar />
             <div className="new-employee-main">
                 <div className="row">
                     <div className="col-md-2">
@@ -612,9 +612,12 @@ const Product = () => {
             </div>
 
             {/* Modal of Product Units */}
-            <div ref={customerFormBg} onClick={closeAddProductUnit} className="c-bg"></div>
+            <div ref={customerFormBg}  className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form product-unit">
-            
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeAddProductUnit} ></i>
+                </div>
+
                 <h2>{isEditMode ? "Edit Product  Unit" : "Add New Product Unit"}</h2>
                 <div className="input-pair-container">
                     <div className="input-pair">

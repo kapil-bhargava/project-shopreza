@@ -44,10 +44,11 @@ const Adminorder = () => {
 
     // getting orders 
     const getOrders = async (status) => {
+
         try {
             loaderWaiting.current.style.display = "block";
-            // const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
-            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=admin&status=${status}`, {
+            //const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
+            const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=admin&storeid=${cookie.storeid}&status=${status}&mobile=${cookie.uname}`, {
                 method: 'GET',
                 headers: {
                     'content-type': 'application/json',
@@ -65,18 +66,54 @@ const Adminorder = () => {
     }
 
 
+    const [empData, setEmpData] = useState([]);
+
     const assign = (orderid, orderstatus) => {
         setOrderId(orderid);
         setstatus(orderstatus);
+        getEmployees()
         openPopup();
 
     }
+
+
     const assignAgain = (orderid, orderstatus) => {
         setOrderId(orderid);
         setstatus(orderstatus);
         openPopup();
 
     }
+
+
+    // setasAssigned funcionality 
+    const setAsAssigned = async (empid) => {
+        console.log("Order ID" + orderId);
+        console.log("Emp ID" + empid);
+        // alert(boyid)
+        // try {
+        loaderWaiting.current.style.display = "block";
+        const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderid: orderId,
+                boyid: empid,
+            })
+        })
+        const data = await response.json();
+        console.log(data)
+        // alert(data.Response);
+        loaderWaiting.current.style.display = "none";
+        getOrders("Assigned");
+        // }
+        // catch (err) {
+        //     loaderWaiting.current.style.display = "none";
+        //     alert(err);
+        // }
+    }
+
 
 
 
@@ -92,9 +129,7 @@ const Adminorder = () => {
         else if (orderstatus === "Assigned") {
             orderstatus = "Ontheway"
         }
-        else {
-            orderstatus = ""
-        }
+        alert(orderstatus);
         // console.log(orderstatus)
         setOrderId(orderid);
         if (window.confirm("sure to set as " + orderstatus)) {
@@ -119,7 +154,7 @@ const Adminorder = () => {
                 // console.log(data);
             }
             catch (error) {
-                loaderWaiting.current.style.display = "none";
+                //loaderWaiting.current.style.display = "none";
                 alert(error);
             }
         }
@@ -186,6 +221,29 @@ const Adminorder = () => {
         //     loaderWaiting.current.style.display = "none";
         //     alert(err);
         // }
+    }
+
+
+    //    getting employees 
+    const getEmployees = async () => {
+        var et = "etype=Delivery Agent&storeid=" + cookie.storeid;
+        try {
+            loaderLoading.current.style.display = "block"
+            const re = await fetch(`${process.env.REACT_APP_URL}/empsignupapi.php?${et}&`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await re.json();
+            // console.log(data);
+            loaderLoading.current.style.display = "none"
+            setEmpData(data);
+        }
+        catch (error) {
+            console.error(error);
+            loaderLoading.current.style.display = "none"
+        }
     }
 
 
@@ -258,6 +316,7 @@ const Adminorder = () => {
                                             <th>Payment Mode</th>
                                             <th>Payment status</th>
                                             <th>Order status</th>
+                                            <th>Del Boy</th>
                                             {
                                                 status === "Assigned" ? (
                                                     <>
@@ -290,6 +349,7 @@ const Adminorder = () => {
                                                         <td>{x.paymentmode}</td>
                                                         <td>{x.paymentstatus}</td>
                                                         <td>{x.orderstatus}</td>
+                                                        <td>{x.DelBoy}</td>
                                                         {
                                                             status === "Assigned" ?
                                                                 <td>{x.DelBoy} <i onClick={() => { assignAgain(x.orderid, x.orderstatus) }} className="fa fa-pencil"></i></td>
@@ -314,14 +374,15 @@ const Adminorder = () => {
                                                             {/* ternary method  */}
                                                             <button
                                                                 onClick={() =>
+                                                                    status === "Packed" ? assign(x.orderid, x.orderstatus) : setAs(x.orderid, x.orderstatus)
                                                                     // function names 
-                                                                    status === "Pending"
-                                                                        ? setAs(x.orderid, x.orderstatus)
-                                                                        : status === "Packed"
-                                                                            ? assign(x.orderid, x.orderstatus)
-                                                                            : status === "Assigned"
-                                                                                ? setAs(x.orderid, x.orderstatus)
-                                                                                : setAs(x.orderid, x.orderstatus)
+                                                                    // status==="Pending"?():()
+
+                                                                    // status === "Pending"?(setAs(x.orderid, "Packed")): (status === "Packed"
+                                                                    //         ?(assign(x.orderid, "Assigned"))
+                                                                    //         :(status === "Assigned"
+                                                                    //             ? setAs(x.orderid, x.orderstatus)
+                                                                    //             : setAs(x.orderid, x.orderstatus)))
                                                                 }
                                                                 // classNames 
                                                                 className={`btn btn-sm ${status === "Pending"
@@ -365,6 +426,61 @@ const Adminorder = () => {
                                 </div>
                             )
                     }
+                </div>
+            </div>
+
+
+            {/*  =========== delivery boy popup ============  */}
+            <div ref={popupBg} className="c-bg"></div>
+            <div ref={popup} className="add-customer-form assign-popup ">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closePopup}></i>
+                </div>
+                <h2>Delivery Persons</h2>
+                <div className="table-responsive table-employee">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>DOB</th>
+                                <th>Adhar No.</th>
+                                <th>PAN No.</th>
+                                <th>Join Date</th>
+                                <th>Action</th>
+                                {/* <th>Referral Code</th> */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                empData.map((employee, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
+                                            <td>{employee.name + "(" + employee.gender + ")"}</td>
+                                            <td>{employee.address}</td>
+                                            <td>{employee.mobile}</td>
+                                            <td>{employee.email}</td>
+                                            <td>{employee.dob}</td>
+                                            <td>{employee.aadharno}</td>
+                                            <td>{employee.panno}</td>
+                                            <td>{employee.joindate}</td>
+                                            <td>
+                                                <button onClick={() => { status === "Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.boyid) }} className="btn btn-success btn-sm ">
+                                                    {status === "Packed" ? "Assign" : "Assign Again"}
+
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

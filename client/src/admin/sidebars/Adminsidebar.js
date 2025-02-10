@@ -82,6 +82,21 @@ const Adminsidebar = () => {
 
   }
 
+  const select = useRef();
+  const cross= useRef();
+  const pencil = useRef();
+
+  const showSelect = () => {
+    select.current.style.display = "block";
+    cross.current.style.display = "block";
+    pencil.current.style.display = "none";
+  }
+  const hideSelect = () => {
+    select.current.style.display = "none";
+    cross.current.style.display = "none";
+    pencil.current.style.display = "block";
+  }
+
 
 
 
@@ -97,6 +112,8 @@ const Adminsidebar = () => {
     <>
       {/* Sidebar of Admin  */}
       <div className="dashboard-header">
+      <h6>1</h6>
+      <h6>{activeStore}</h6>
 
         <div className="name-div">
           <div className="btn-group">
@@ -117,9 +134,9 @@ const Adminsidebar = () => {
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
         <div className="form-group">
-          <h5>{(cookie.storeid)} {activeStore}</h5>
-          <label>Store</label>
-          <select value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
+          <strong><span style={{fontSize:"20px"}}> {activeStore}</span></strong> <i ref={pencil} onClick={showSelect} style={{cursor:"pointer"}} className="fa fa-pencil"></i>
+          <i ref={cross} onClick={hideSelect} style={{display:"none"}} className="fas fa-times"></i>
+          <select style={{display:"none"}} ref={select} value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
             {/* <option>Select Store</option> */}
             {stores.map((store, index) => {
               return (
@@ -128,7 +145,7 @@ const Adminsidebar = () => {
             })}
           </select>
         </div>
-        <div className="logo">{cookie.adminCookie} Dashboard </div>
+        <div className="logo">{cookie.uname} Dashboard </div>
         <nav>
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>

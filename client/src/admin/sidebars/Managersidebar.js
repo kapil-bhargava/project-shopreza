@@ -48,6 +48,8 @@ const Managersidebar = (x) => {
       {/* <Validate/> */}
       {/* <div className="sidebar-main"> */}
       <div className="dashboard-header">
+        <h6>1</h6>
+        <h6>{x.storename}</h6>
 
         <div className="name-div">
           <div className="btn-group">
@@ -65,10 +67,11 @@ const Managersidebar = (x) => {
         </div>
 
       </div>
+
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
 
-        <div className="logo">{x.name} {x.storename} {cookie.utype} Dashboard <br />{cookie.uname}</div>
+        <div className="logo">{x.name} {cookie.utype} Dashboard <br />{cookie.uname}</div>
 
         <nav>
           {/* <div className="nav-item"><Link className="linkdb clicked" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div> */}

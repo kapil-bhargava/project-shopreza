@@ -43,6 +43,8 @@ const Deliveryboysidebar = (x) => {
     <>
       {/* <div className="sidebar-main"> */}
       <div className="dashboard-header">
+        <h6>1</h6>
+        {x.storename}
         {/* <div className="loader-waiting" ref={loaderWaiting}>
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
@@ -55,7 +57,7 @@ const Deliveryboysidebar = (x) => {
         </div> */}
 
         <div className="name-div">
-          <h6>{x.name} {x.storename} DeliverBoy {cookie.uname}</h6>
+          <h6>{x.name} DeliverBoy  {cookie.uname}</h6>
         </div>
       </div>
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>

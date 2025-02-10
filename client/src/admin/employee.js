@@ -309,6 +309,9 @@ const Employee = () => {
 
             {/* sign up form for employee */}
             <div ref={employeeForm} className="add-customer-form">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeAddEmployee}></i>
+                </div>
 
                 <h2>Add New Employee</h2>
                 <div className="form-group">

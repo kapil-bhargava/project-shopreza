@@ -80,7 +80,7 @@
     color: var(--white);
     padding: 10px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     font-size: 18px;
     position: fixed;

@@ -62,7 +62,7 @@ const Subcategory = () => {
     const openPicForm = (x) => {
         picPopup.current.style.display = "block";
         setSubcatId(x)
-        
+
     }
     const closePicPopup = () => {
         picPopup.current.style.display = "none";
@@ -83,7 +83,7 @@ const Subcategory = () => {
         getSubCategory(catId);
         closePicPopup();
 
-      
+
         loaderLoading.current.style.display = 'none';
     }
 
@@ -203,11 +203,11 @@ const Subcategory = () => {
 
     return (
         <>
-            <Sidebar/>
+            <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div selection">
                     <div style={{ width: "200px" }} className="form-group">
-                        <label htmlFor="subcatrgory">Select Category</label>    
+                        <label htmlFor="subcatrgory">Select Category</label>
                         <select value={catId} onChange={(e) => { getSubCategory(e.target.value) }}>
                             {catData.map((cat, index) => {
                                 return (
@@ -242,7 +242,7 @@ const Subcategory = () => {
                                         return (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
-                                                <td><img onClick={()=>{openPicForm(sub.subcatid)}} src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
+                                                <td><img onClick={() => { openPicForm(sub.subcatid) }} src={sub.pic} alt={sub.pic} /> {sub.subcatname}</td>
 
                                                 <td>
                                                     <i onClick={() => { openEditSubcategory(sub.subcatid) }} className="fa fa-edit text-success"></i> &nbsp;&nbsp;&nbsp;
@@ -260,8 +260,11 @@ const Subcategory = () => {
 
             {/*  subcategory Modal  */}
 
-            <div ref={customerFormBg} onClick={closeAddSubcategory} className="c-bg"></div>
+            <div ref={customerFormBg} className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeAddSubcategory} ></i>
+                </div>
                 <h2>{isEditMode ? "Edit Subcaegory" : "Add New Subcategory"}</h2>
                 <div className="form-group">
                     <select value={catId} onChange={(e) => { setCatId(e.target.value) }}>
@@ -297,8 +300,8 @@ const Subcategory = () => {
                 <p>Please wait....</p>
             </div>
 
-             {/* picPopup */}
-             <div ref={picPopup} className="pic-popup">
+            {/* picPopup */}
+            <div ref={picPopup} className="pic-popup">
                 <h5>Select Pic</h5>
                 <div className="input-pair">
                     <input onChange={(e) => { setSubcategoryPic(e.target.files[0]) }} type="file" />

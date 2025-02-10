@@ -44,7 +44,7 @@ const ManagerDashboard = () => {
 
 
 
-  
+
 
     //    getting employees 
     const getEmployees = async () => {
@@ -84,8 +84,8 @@ const ManagerDashboard = () => {
 
     }
 
-      // NEW Orders getting 
-      const getOrders = async (status) => {
+    // NEW Orders getting 
+    const getOrders = async (status) => {
         try {
             loaderWaiting.current.style.display = "block";
             const response = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=manager&mobile=${cookie.uname}&status=${status}`, {
@@ -453,8 +453,11 @@ const ManagerDashboard = () => {
 
 
             {/*  =========== delivery boy popup ============  */}
-            <div ref={popupBg} onClick={closePopup} className="c-bg"></div>
+            <div ref={popupBg} className="c-bg"></div>
             <div ref={popup} className="add-customer-form assign-popup ">
+                <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closePopup}></i>
+                </div>
                 <h2>Delivery Persons</h2>
                 <div className="table-responsive table-employee">
                     <table>
