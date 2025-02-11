@@ -1584,9 +1584,17 @@ header {
     min-width: 100px;
 }
 
-.order-container .status.Processing {
+.order-container .status.Ontheway {
     background-color: var(--primary-yellow);
     color: black;
+}
+.order-container .status.Packed {
+    background-color: var(--primary-blue);
+    color: white;
+}
+.order-container .status.Assigned {
+    background-color: plum;
+    color: white;
 }
 
 .order-container .status.Delivered {
@@ -1672,11 +1680,19 @@ header {
 .tracking-container .progress-bar {
     position: absolute;
     width: 4px;
-    height: calc(85% - 35px);
+    height: calc(85% - 30px);
     background: var(--grey-light);
-    left: 18px;
+    left: 15px;
     top: 30px;
-    background-color: red; 
+    /* background-color: var(--) ; */
+}
+.progress-bar-fills{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    background-color: var(--primary-yellow);
+    transition:all 0.3s ease-in-out;
 }
 
 .tracking-container .step {
@@ -1701,6 +1717,21 @@ header {
     z-index: 2;
     transition: all 0.3s ease-in-out;
 }
+/* status details div for delivery updates in details  */
+.status-details-div{
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 200px;
+    padding-left: 10px;
+    /* border-left: 1px solid black; */
+    /* background-color: rgb(7, 175, 175); */
+}
+.status-details-div p{
+    margin: 0;
+    color: rgb(70, 70, 70);
+    font-size: 13px;
+}
 
 .tracking-container .step.active .circle {
     background: var(--primary-blue);
@@ -1714,7 +1745,12 @@ header {
     margin-left: 15px;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    position: relative;
+    /* color: #333; */
+    color: var(--grey-light);
+}
+.tracking-container .step.done .step-text.done{
+    color: var(--primary-green);
 }
 
 /* Fixing animation to stop at last completed step */

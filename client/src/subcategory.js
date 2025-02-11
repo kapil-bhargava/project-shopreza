@@ -8,7 +8,7 @@ import Userlogin from './userlogin';
 const SubCategory = () => {
     const mynum = useSelector((state) => state.cartitem);
     const dispatch = useDispatch();
-    const { cid } = useParams()
+    const { cid } = useParams();
     const [subcatdata, setsubcatdata] = useState([]);
     const [productdata, setproductdata] = useState([]);
     const [aitem, setaitem] = useState([]);

@@ -48,7 +48,7 @@ const Userlogin = (props) => {
                 body: JSON.stringify({ mobile: usermobile, password: userpassword })
             });
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             // setAddress(data.address);
             loaderWaiting.current.style.display = "none"
             if (data.response === "Valid") {
@@ -67,11 +67,11 @@ const Userlogin = (props) => {
                     maxAge: 3600 * 24 * 30 * 12 * 10,
                     secure: true,
                 });
-                // createcookie_username("username", data.name,{
-                //     path: "/", // Cookie is available on all routes
-                //     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                //     secure: true, // Use for HTTPS
-                // });
+                createcookie_username("username", data.name,{
+                    path: "/", // Cookie is available on all routes
+                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
+                    secure: true, // Use for HTTPS
+                });
                 window.location.reload();
 
                 // closePopup();

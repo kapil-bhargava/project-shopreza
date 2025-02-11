@@ -1,15 +1,122 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Header from './common/common'
+import { useParams } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const TrackingOrder = () => {
+    const { orderid } = useParams();
+    const [cookie, createcookie, removecookie] = useCookies();
+    const [orderData, setOrderData] = useState([]);
+    var [status, setStatus] = useState();
+    var [delBoyName, setDelBoyName] = useState();
+    const [orderDate, setOrderDate] = useState();
+    const [orderTime, setOrderTime] = useState();
+    const [otp, setOTP] = useState();
+
+    // refs 
+    const progressBar = useRef();
+
+    const orderPlacedStep = useRef();
+    const orderPlacedText = useRef();
+    const orderPackedStep = useRef();
+    const orderPackedText = useRef();
+    const orderOnTheWayStep = useRef();
+    const orderOnTheWayText = useRef();
+    const orderAssignedStep = useRef();
+    const orderAssignedText = useRef();
+    const orderDeliveredStep = useRef();
+    const orderDeliveredText = useRef();
+
 
     document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             document.querySelector(".status-tracker").classList.add("animate");
-        }, 500);
+        }, 50);
     });
 
+    const getProductOrders = async () => {
+        try {
+            const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderid: orderid
+                })
+            });
+            const dt = await re.json();
+            console.log(dt)
+            setOrderDate(dt[0].orderdate);
+            setOrderTime(dt[0].ordertime);
+            if (dt[0].orderstatus === "Pending") {
+                orderPlacedStep.current.classList.add("done");
+                orderPlacedText.current.classList.add("done");
+                progressBar.current.style.height = "0%";
+                setStatus(dt[0].orderstatus);
+            }
+            else if (dt[0].orderstatus === "Packed") {
+                orderPackedStep.current.classList.add("done");
+                orderPackedText.current.classList.add("done");
+                orderPlacedStep.current.classList.add("done");
+                orderPlacedText.current.classList.add("done");
+                progressBar.current.style.height = "20%";
+                setStatus(dt[0].orderstatus);
+            }
+            else if (dt[0].orderstatus === "Assigned") {
+                orderAssignedStep.current.classList.add("done");
+                orderAssignedText.current.classList.add("done");
+                orderPackedStep.current.classList.add("done");
+                orderPackedText.current.classList.add("done");
+                orderPlacedStep.current.classList.add("done");
+                orderPlacedText.current.classList.add("done");
+                progressBar.current.style.height = "50%";
+                setDelBoyName(dt[0].delboyname);
+                setStatus(dt[0].orderstatus);
+            }
+            else if (dt[0].orderstatus === "Ontheway") {
+                orderOnTheWayStep.current.classList.add("done");
+                orderOnTheWayText.current.classList.add("done");
+                orderAssignedStep.current.classList.add("done");
+                orderAssignedText.current.classList.add("done");
+                orderPackedStep.current.classList.add("done");
+                orderPackedText.current.classList.add("done");
+                orderPlacedStep.current.classList.add("done");
+                orderPlacedText.current.classList.add("done");
+                progressBar.current.style.height = "75%";
+                setStatus(dt[0].orderstatus);
+                setOTP(dt[0].otp);
 
+            }
+            else if (dt[0].orderstatus === "Delivered") {
+                orderDeliveredStep.current.classList.add("done");
+                orderDeliveredText.current.classList.add("done");
+                orderOnTheWayStep.current.classList.add("done");
+                orderOnTheWayText.current.classList.add("done");
+                orderAssignedStep.current.classList.add("done");
+                orderAssignedText.current.classList.add("done");
+                orderPackedStep.current.classList.add("done");
+                orderPackedText.current.classList.add("done");
+                orderPlacedStep.current.classList.add("done");
+                orderPlacedText.current.classList.add("done");
+                progressBar.current.style.height = "100%";
+                setStatus(dt[0].orderstatus);
+
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const isFirstRender = useRef(true);
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return; // Skip the first duplicate execution
+        }
+        getProductOrders();
+    }, [status]);
 
     return (
         <>
@@ -32,35 +139,66 @@ const TrackingOrder = () => {
                 </div>
 
                 <div className="status-tracker">
-                    <div className="progress-bar"></div>
-                    <div className="progress-bar-fill"></div>
-
-                    <div className="step done">
-                        <div className="circle">✔</div>
-                        <div className="step-text">Order Placed
-                        {/* <p>Order placed on <strong>2022-01-15</strong></p> */}
+                    <div className="progress-bar">
+                        <div ref={progressBar} className="progress-bar-fills">
                         </div>
-                        
+
                     </div>
 
-                    <div className="step done">
+                    <div ref={orderPlacedStep} className="step">
                         <div className="circle">✔</div>
-                        <div className="step-text">Order Confirmed</div>
+                        <div ref={orderPlacedText} className="step-text">Order Placed
+
+                            {["Pending"].includes(status) ? (
+                                <span className="status-details-div">
+                                    <p>order placed on <strong>{orderDate} <br />{orderTime}</strong></p>
+                                </span>
+                            ) : null}
+                        </div>
+                    </div>
+                    <div ref={orderPackedStep} className="step">
+                        <div className="circle">✔</div>
+                        <div ref={orderPackedText} className="step-text">Order Packed
+                            {["Pending", "Packed"].includes(status) ? (
+                                <span className="status-details-div">
+                                    <p>Your Order has been Packed</p>
+                                </span>
+                            ) : null}
+                        </div>
+
                     </div>
 
-                    <div className="step active">
-                        <div className="circle">⏳</div>
-                        <div className="step-text">Shipped</div>
+                    <div ref={orderAssignedStep} className="step">
+                        <div className="circle">✔</div>
+                        <div ref={orderAssignedText} className="step-text">Assigned to Delivery Boy
+                            {["Pending", "Packed", "Assigned"].includes(status) ? (
+                                <span className="status-details-div">
+                                    <p>Your OTP is <strong>{otp}</strong></p>
+                                </span>
+                            ) : null}
+                        </div>
                     </div>
 
-                    <div className="step">
-                        <div className="circle">🚚</div>
-                        <div className="step-text">Out for Delivery</div>
+                    <div ref={orderOnTheWayStep} className="step">
+                        <div className="circle">✔</div>
+                        <div ref={orderOnTheWayText} className="step-text">On the Way
+                            {["Pending", "Packed", "Assigned", "Ontheway"].includes(status) ? (
+                                <span className="status-details-div">
+                                    <p>Your OTP is <strong>{otp}</strong></p>
+                                </span>
+                            ) : null}
+                        </div>
                     </div>
 
-                    <div className="step">
-                        <div className="circle">📦</div>
-                        <div className="step-text">Delivered</div>
+                    <div ref={orderDeliveredStep} className="step">
+                        <div className="circle">✔</div>
+                        <div ref={orderDeliveredText} className="step-text">Delivered
+                            {["Pending", "Packed", "Assigned", "Ontheway", "Delivered"].includes(status) ? (
+                                <span className="status-details-div">
+                                    <p>Your OTP is <strong>{otp}</strong></p>
+                                </span>
+                            ) : null}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -44,7 +44,7 @@ const Checkout = () => {
         setSaved(saved)
         settotal(itot);
         setCartData(data);
-        dispatch({ type: 'INC', cdata: qty });
+        // dispatch({ type: 'INC', cdata: qty });
 
     }
 

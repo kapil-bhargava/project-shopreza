@@ -78,6 +78,7 @@ const Header = ({ loginPopup, popupBg }) => {
         removecookie("sp");
         removecookie("storeid");
         removecookie("address");
+        removecookie("username");
         closeUserProfile();
         jump('/')
         window.location.reload();
@@ -264,7 +265,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
             {/* user icon click section part  */}
             <section ref={userProfile} className="user-profile">
-                <h3>{cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
+                <h3>{cookie.username} <br /> {cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
                 <div className="user-dropdown">
                     <ul>
                         <li><Link className='link-m' to="/profile">Profile</Link></li>

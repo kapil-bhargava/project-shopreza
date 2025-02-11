@@ -41,7 +41,13 @@ const Emplogin = () => {
             createcookie('uname', mobile);
             createcookie('storeid', data.storeid);
             createcookie('utype', (data.etype).toLowerCase());
-            jump("/managerdashboard")
+            if(data.etype.toLowerCase()==="manager"){
+                jump("/managerdashboard")
+            }
+            else{
+                jump("/delboydashboard")
+            }
+            
         }
         else {
             alert("Invalid User")

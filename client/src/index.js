@@ -31,6 +31,8 @@ import Sidebar from './admin/sidebars/Sidebar';
 import Delboy from './admin/Manager/delboy';
 import ManagerDashboard from './admin/Manager/dasboardmanager';
 import Profile from './admin/profile';
+import DelBoyDashboard from './admin/Manager/dasboarddelboy';
+import DelboyOrders from './admin/DelboyOrders';
 
 
 
@@ -55,6 +57,7 @@ root.render(
  
           {/* dashboards  */}
           <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
+          <Route exact path="/delboydashboard" element={<DelBoyDashboard />} />
           <Route exact path="/delboy" element={<Delboy />} />
 
           <Route exact path="/empsignup" element={<Empsignup />} />
@@ -62,8 +65,10 @@ root.render(
           <Route exact path="/subcategory" element={<Subcategory />} />
           <Route exact path="/product" element={<Product />} />
           <Route exact path="/checkout" element={<Checkout />} />
-          <Route exact path="/trackingorder" element={<TrackingOrder />} />
+          <Route exact path="/trackingorder/:orderid" element={<TrackingOrder />} />
+          {/* orders  */}
           <Route exact path="/userorders" element={<Userorders />} />
+          <Route exact path="/delboyorders" element={<DelboyOrders />} />
           <Route exact path="/adminorders" element={<Adminorder />} />
           <Route exact path="/empprofile" element={<Profile />} />
         </Routes>

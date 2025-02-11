@@ -5,30 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Userorders = () => {
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
-    const [cookie_userAddress, createcookie_userAddress, removecookie_userAddress] = useCookies();
-    const [cookie_username, createcookie_username, removecookie_username] = useCookies();
 
     const jump = useNavigate();
-
-    const getCurrentLocation = () => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log("Latitude: ", position.coords.latitude);
-                    console.log("Longitude: ", position.coords.longitude);
-                },
-                (error) => {
-                    console.error("Error fetching location: ", error.message);
-                }
-            );
-        }
-        else {
-            console.log("Geolocation is not supported by this browser.");
-        }
-    }
-
-
 
     // useState for setting order Data 
     const [orderData, setOrderData] = useState([]);
@@ -41,7 +19,7 @@ const Userorders = () => {
             });
             const dt = await re.json();
             setOrderData(dt);
-            console.log(dt);
+            // console.log(dt);
         }
         catch (error) {
             console.log(error)
@@ -49,15 +27,8 @@ const Userorders = () => {
     }
 
     // opening single page order view for tracking 
-    const openTracking = (e, orderId) => {
-        // e.preventDefault();
-        // createcookie_userAddress(cookie_username, cookie_userAddress);
-        // createcookie_username(cookie_username, cookie_username);
-        // createcookie2(cookie2.sp2, cookie2.sp2);
-        // createcookie_userAddress(cookie_username, cookie_userAddress);
-        // createcookie_username(cookie_username, cookie_username);
-        // window.location.href = `/ordertracking/${orderId}`;
-        jump("/trackingorder")
+    const openTracking = (orderid) => {
+        jump(`/trackingorder/${orderid}`)
     }
 
 
@@ -76,7 +47,7 @@ const Userorders = () => {
                 {
                     orderData.map((order, index) => {
                         return (
-                            <div onClick={openTracking} key={index} className="order">
+                            <div onClick={()=>{openTracking(order.orderid)}} key={index} className="order">
                                 <div className="details">
                                     <img src={require("./images/fruits.png")} alt="Fruits" />
                                     <div className="info">
@@ -88,7 +59,7 @@ const Userorders = () => {
                                     </div>
                                 </div>
                                 {/* <span className={`status ${order.order_status.toLowerCase()}`}>{order.order_status}</span> */}
-                                <span className={`status ${order.status}`}>{order.status}</span>
+                                <span className={`status ${order.orderstatus}`}>{order.orderstatus}</span>
                             </div>
                         )
                     })
