@@ -20,12 +20,15 @@ const Header = ({ loginPopup, popupBg }) => {
     const cart = useRef();
     const cartbg = useRef();
     const userProfile = useRef();
+    const userProfileBg = useRef();
 
     const closeUserProfile = () => {
         userProfile.current.style.transform = 'translateX(100%)';
+        userProfileBg.current.classList.remove("user-profileBg-active")
     }
     const openUserProfile = () => {
         userProfile.current.style.transform = 'translateX(0)';
+        userProfileBg.current.classList.add("user-profileBg-active")
     }
 
     const cartOpen = () => {
@@ -266,6 +269,7 @@ const Header = ({ loginPopup, popupBg }) => {
             </div>
 
             {/* user icon click section part  */}
+            <div onClick={closeUserProfile} ref={userProfileBg}  className="user-profileBg"></div>
             <section ref={userProfile} className="user-profile">
                 <h3>{cookie.username} <br /> {cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
                 <div className="user-dropdown">

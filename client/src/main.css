@@ -94,19 +94,24 @@ input::-webkit-inner-spin-button {
     box-shadow: var(--soft-shadow);
     transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+
 /* aniimated popup class for login force  */
-.effected-popup{
+.effected-popup {
     animation: 0.2s cubic-bezier(0.390, 0.575, 0.565, 1) infinite alternate shakeEffect;
 }
+
 @keyframes shakeEffect {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(-45%, -50%);
     }
+
     50% {
         transform: translate(-50%, -50%);
     }
 
-    
+
 }
 
 .login-popup-container i {
@@ -205,14 +210,37 @@ input::-webkit-inner-spin-button {
 .user-profile {
     width: 300px;
     min-height: 100vh;
-    background-color: var(--primary-green);
-    position: fixed;
+    /* background-color: var(--primary-green); */
+    /* background-color: var(--primary-white); */
+    background-color: rgb(238, 241, 236);
     z-index: 500;
+    position: fixed;
     top: 0;
     right: 0;
     transition: 0.3s ease;
     transform: translateX(100%);
     /* display: none; */
+}
+
+.user-profileBg {
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 499;
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    /* display: none; */
+}
+
+
+
+.user-profileBg-active {
+    visibility: visible;
+    opacity: 1;
 }
 
 .cross-mobile {
@@ -222,12 +250,12 @@ input::-webkit-inner-spin-button {
     font-size: 25px;
     padding: 0px 10px;
     cursor: pointer;
-    background-color: red;
+    /* background-color: red; */
 }
 
 .user-profile h3 {
     padding: 5px;
-    color: white;
+    color: black;
 }
 
 .user-profile ul {
@@ -328,7 +356,7 @@ header {
 .search {
     padding: 2px 5px;
     width: 100%;
-    height:40px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -429,9 +457,10 @@ header {
     /* background-color: yellow; */
     padding: 3px;
 }
-.scroll-cart{
+
+.scroll-cart {
     height: 650px;
-    overflow-y: scroll ;
+    overflow-y: scroll;
 
     /* padding: 20px; */
 }
@@ -1588,10 +1617,12 @@ header {
     background-color: var(--primary-yellow);
     color: black;
 }
+
 .order-container .status.Packed {
     background-color: var(--primary-blue);
     color: white;
 }
+
 .order-container .status.Assigned {
     background-color: plum;
     color: white;
@@ -1602,7 +1633,7 @@ header {
     color: white;
 }
 
-.order-container  .status.Pending {
+.order-container .status.Pending {
     background-color: var(--primary-red);
     color: white;
 }
@@ -1628,6 +1659,7 @@ header {
         margin-top: 10px;
     }
 }
+
 /* ======= User Orders page css Ended ====== */
 
 /* ======= User Order Single (Tracking) page css Started ====== */
@@ -1636,7 +1668,7 @@ header {
     max-width: 1200px;
     background: white;
     margin-top: 80px;
-    margin-inline:auto;
+    margin-inline: auto;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1687,15 +1719,17 @@ header {
     /* background-color: var(--) ; */
     overflow: initial;
 }
-.progress-bar-fills{
+
+.progress-bar-fills {
     position: absolute;
     left: 0px;
     top: 0px;
     width: 100%;
-    
+
     background-color: var(--primary-yellow);
-    transition:all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
+
 .point-container {
     width: 20px;
     position: absolute;
@@ -1706,6 +1740,7 @@ header {
     /* background-color: red; */
     height: 20px;
 }
+
 .point {
     width: 10px;
     height: 10px;
@@ -1716,6 +1751,7 @@ header {
     bottom: 0%;
     transform: translate(-50%, 0%);
 }
+
 .pulse {
     position: absolute;
     left: 50%;
@@ -1727,9 +1763,11 @@ header {
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.3);
 }
+
 .pulse:nth-child(2) {
     animation-delay: 1s;
 }
+
 .pulse:nth-child(3) {
     animation-delay: 1.5s;
 }
@@ -1739,6 +1777,7 @@ header {
         transform: translate(-50%, 0%) scale(1);
         opacity: 1;
     }
+
     100% {
         transform: translate(-50%, 0%) scale(2.5);
         opacity: 0;
@@ -1768,8 +1807,9 @@ header {
     z-index: 2;
     transition: all 0.3s ease-in-out;
 }
+
 /* status details div for delivery updates in details  */
-.status-details-div{
+.status-details-div {
     position: absolute;
     left: 20px;
     top: 20px;
@@ -1778,7 +1818,8 @@ header {
     /* border-left: 1px solid black; */
     /* background-color: rgb(7, 175, 175); */
 }
-.status-details-div p{
+
+.status-details-div p {
     margin: 0;
     color: rgb(70, 70, 70);
     font-size: 13px;
@@ -1800,7 +1841,8 @@ header {
     /* color: #333; */
     color: var(--grey-light);
 }
-.tracking-container .step.done .step-text.done{
+
+.tracking-container .step.done .step-text.done {
     color: var(--primary-green);
 }
 
@@ -1832,29 +1874,33 @@ header {
         margin-bottom: 10px;
     }
 }
+
 /* ======= User Order Single (Tracking) page css Ended ====== */
 
 /* ======= Checkout page css Started ====== */
- .checkout-container {
+.checkout-container {
     max-width: 1200px;
-    margin-inline: auto ;
+    margin-inline: auto;
     margin-top: 80px;
     background-color: var(--primary-white);
 }
 
-.checkout-product-container{
+.checkout-product-container {
     width: 100%;
     margin-right: 20px;
-    background-color: green;  
+    background-color: green;
 }
-.checkout-product-container img{
+
+.checkout-product-container img {
     width: 100px;
 }
-.place-order-btn-div{
+
+.place-order-btn-div {
     text-align: center;
     padding: 10px;
     /* background-color: blue; */
 }
+
 .place-order-btn-div button {
     padding: 10px 20px;
     width: 100%;
@@ -1865,8 +1911,8 @@ header {
 }
 
 /* placed ordr animation  css STARTED  */
- /* Falling Leaves Animation */
- .leaf-container {
+/* Falling Leaves Animation */
+.leaf-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -2005,6 +2051,7 @@ header {
         font-size: 1.6rem;
     }
 }
+
 /* placed ordr animation  css ENDED  */
 
 
@@ -2015,8 +2062,9 @@ header {
         /* background-color: red; */
         align-items: center;
     }
-    
+
 }
+
 /* ======= Checkout page css Ended ====== */
 
 

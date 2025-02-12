@@ -48,6 +48,7 @@ const TrackingOrder = () => {
                 })
             });
             const dt = await re.json();
+            console.log(dt);
             loaderLoading.current.style.display = "none";
             setOrderDate(dt[0].orderdate);
             setOrderTime(dt[0].ordertime);
@@ -122,7 +123,7 @@ const TrackingOrder = () => {
             return; // Skip the first duplicate execution
         }
         getProductOrders();
-    }, [status]);
+    }, []);
 
     return (
         <>
