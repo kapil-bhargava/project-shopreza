@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './common/common'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
 import Userlogin from './userlogin';
@@ -30,6 +30,7 @@ const SubCategory = () => {
     const animatedImg = useRef();
     const unitOptionsBgDiv = useRef();
     const unitOptionsDiv = useRef();
+    const unitOptionsDivBg = useRef();
     const mobileCart = useRef();
     const headerRef = useRef();
 
@@ -48,7 +49,7 @@ const SubCategory = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: "1" })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
         if (ctype === "plus") {
@@ -97,11 +98,17 @@ const SubCategory = () => {
         const data = await re.json();
         // console.log(data);
         setaitem(data);
+        openUnitOptions()
+
+    }
+    const openUnitOptions = () => {
+        unitOptionsDivBg.current.classList.add("active-unit-options-bg-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
     }
-
+    
     const closeUnitOptions = (l) => {
+        unitOptionsDivBg.current.classList.remove("active-unit-options-bg-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
     }
@@ -191,31 +198,26 @@ const SubCategory = () => {
     }
     // adding to the cart 
     const addToCart = async (unitId, x, au) => {
-        //  alert(spid);
-        if (cookie["sp"] == null) {
-            loginPopup.current.classList.add("active-popup");
-            popupBg.current.classList.add("active-popupBg");
-        } else {
-            loaderLoading.current.style.display = "block";
-            const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: "1" })
-            });
-            const data = await re.json();
 
-            dispatch({ type: 'INC', cdata: data.cdata });
-            if (au === "yes") { showUnitOptions(spid) };
-            audio.current.play();
-            mobileCart.current.classList.add("active-mobile-cart");
-            animatedImg.current.classList.add("active-animated-img");
-            setTimeout(() => {
-                animatedImg.current.classList.remove("active-animated-img");
-            }, 500);
-            loaderLoading.current.style.display = "none";
-        }
+        loaderLoading.current.style.display = "block";
+        const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: cookie.storeid })
+        });
+        const data = await re.json();
+
+        dispatch({ type: 'INC', cdata: data.cdata });
+        if (au === "yes") { showUnitOptions(spid) };
+        audio.current.play();
+        mobileCart.current.classList.add("active-mobile-cart");
+        animatedImg.current.classList.add("active-animated-img");
+        setTimeout(() => {
+            animatedImg.current.classList.remove("active-animated-img");
+        }, 500);
+        loaderLoading.current.style.display = "none";
     }
 
 
@@ -403,7 +405,7 @@ const SubCategory = () => {
                     }
                 </aside>
                 <aside className="sidebar-right">
-
+                    <div ref={unitOptionsDivBg} className="unit-options-bg-div"></div>
                     <div ref={unitOptionsDiv} className="unit-options-div">
                         <div onClick={closeUnitOptions} className="unit-options-div-cross-btn">
                             &times;
@@ -471,7 +473,9 @@ const SubCategory = () => {
                         {mynum}
                     </span>
 
-                    <i onClick={opencart} className="fa-solid fa-chevron-right"></i>
+                    <Link to="/checkout">
+                        <i onClick={opencart} className="fa-solid fa-chevron-right"></i>
+                    </Link>
                 </div>
             </ div>
 

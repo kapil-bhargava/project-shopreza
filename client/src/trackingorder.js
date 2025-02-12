@@ -115,13 +115,13 @@ const TrackingOrder = () => {
     }
 
 
-    const isFirstRender = useRef(true);
+    // const isFirstRender = useRef(true);
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return; // Skip the first duplicate execution
-        }
+        // if (isFirstRender.current) {
+        //     isFirstRender.current = false;
+        //     return; // Skip the first duplicate execution
+        // }
         getProductOrders();
     }, []);
 

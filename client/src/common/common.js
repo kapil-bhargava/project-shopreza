@@ -58,7 +58,7 @@ const Header = ({ loginPopup, popupBg }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
+            body: JSON.stringify({ mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
         var itot = 0;
