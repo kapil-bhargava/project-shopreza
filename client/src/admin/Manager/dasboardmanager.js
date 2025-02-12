@@ -190,6 +190,7 @@ const ManagerDashboard = () => {
 
     // setasAssigned funcionality 
     const setAsAssigned = async (empid) => {
+       
         console.log("Order ID" + orderId);
         console.log("Emp ID" + empid);
         // alert(boyid)
@@ -206,10 +207,17 @@ const ManagerDashboard = () => {
             })
         })
         const data = await response.json();
-        console.log(data)
-        // alert(data.Response);
-        loaderWaiting.current.style.display = "none";
-        getOrders("Assigned");
+        if(data.Reponse=="Saved"){
+            loaderWaiting.current.style.display = "none";
+            getOrders("Assigned");
+            closePopup();
+        }
+        else{
+            loaderWaiting.current.style.display = "none";
+            alert(data.Response);
+        }
+         
+        
         // }
         // catch (err) {
         //     loaderWaiting.current.style.display = "none";
@@ -221,6 +229,7 @@ const ManagerDashboard = () => {
     const setAsAssignedAgain = async (boyid) => {
         console.log("OI" + orderId);
         console.log("BI" + boyid);
+        alert(boyid);
         // alert(boyid)
         // try {
         loaderWaiting.current.style.display = "block";
@@ -423,6 +432,7 @@ const ManagerDashboard = () => {
                                                                                 ? "set as way"
                                                                                 : ""}
                                                                 </button>
+                                                                
 
 
                                                             </td>
@@ -485,14 +495,14 @@ const ManagerDashboard = () => {
                                             {/* <td><img src={employee.photo} alt="Employee Photo" /></td> */}
                                             <td>{employee.name + "(" + employee.gender + ")"}</td>
                                             <td>{employee.address}</td>
-                                            <td>{employee.mobile}</td>
+                                            <td>{employee.mobileno}</td>
                                             <td>{employee.email}</td>
                                             <td>{employee.dob}</td>
                                             <td>{employee.aadharno}</td>
                                             <td>{employee.panno}</td>
                                             <td>{employee.joindate}</td>
                                             <td>
-                                                <button onClick={() => { status === "Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.boyid) }} className="btn btn-success btn-sm ">
+                                                <button onClick={() => { status === "Packed" ? setAsAssigned(employee.empid) : setAsAssignedAgain(employee.empid) }} className="btn btn-success btn-sm ">
                                                     {status === "Packed" ? "Assign" : "Assign Again"}
 
                                                 </button>

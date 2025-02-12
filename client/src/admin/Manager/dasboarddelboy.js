@@ -13,6 +13,7 @@ const DelBoyDashboard = () => {
     const orderPopup = useRef();
     const orderPopupBg = useRef();
     const [orderData, setOrderData] = useState([]);
+    const [otp, setOTP] = useState();
     const [orderDetailsData, setOrderDetailsData] = useState([]);
     const [cookie, createcookie, removecookie] = useCookies();
     const [skeletonLoading, setSkeletonLoading] = useState(false);
@@ -84,6 +85,7 @@ const DelBoyDashboard = () => {
 
     // NEW Orders getting 
     const getOrders = async (status) => {
+        console.log(status)
         try {
             setstatus(status);
             loaderWaiting.current.style.display = "block";
@@ -118,7 +120,7 @@ const DelBoyDashboard = () => {
                     body: JSON.stringify({
                         status: "Delivered",
                         orderid: orderId,
-                        otp: "7834"
+                        otp: otp
                     })
                 })
                 const data = await response.json();
@@ -169,70 +171,8 @@ const DelBoyDashboard = () => {
         }
     }
 
-    // edit order functionality
-    const editOrder = () => {
-
-    }
-
-    // setasAssigned funcionality 
-    const setAsAssigned = async (empid) => {
-        console.log("Order ID" + orderId);
-        console.log("Emp ID" + empid);
-        // alert(boyid)
-        // try {
-        loaderWaiting.current.style.display = "block";
-        const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                orderid: orderId,
-                boyid: empid,
-            })
-        })
-        const data = await response.json();
-        console.log(data)
-        // alert(data.Response);
-        loaderWaiting.current.style.display = "none";
-        getOrders("Assigned");
-        // }
-        // catch (err) {
-        //     loaderWaiting.current.style.display = "none";
-        //     alert(err);
-        // }
-    }
 
 
-
-    // assigning again 
-    const setAsAssignedAgain = async (boyid) => {
-        console.log("OI" + orderId);
-        console.log("BI" + boyid);
-        // alert(boyid)
-        // try {
-        loaderWaiting.current.style.display = "block";
-        const response = await fetch(`${process.env.REACT_APP_URL}/orderassign.php`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                orderid: orderId,
-                boyid: boyid,
-            })
-        })
-        const data = await response.json();
-        console.log(data)
-        // alert(data.Response);
-        loaderWaiting.current.style.display = "none";
-        getOrders("Assigned");
-        // }
-        // catch (err) {
-        //     loaderWaiting.current.style.display = "none";
-        //     alert(err);
-        // }
-    }
 
     useEffect(() => {
         if (cookie.uname == null && cookie.utype !== "manager") {
@@ -416,7 +356,7 @@ const DelBoyDashboard = () => {
                 </div>
                 <h2>Enter OTP</h2>
                 <div className="form-group">
-                    <input placeholder='Enter OTP' type="number" />
+                    <input onChange={(e)=>{setOTP(e.target.value)}} placeholder='Enter OTP' type="number" />
                 </div>
 
                 <div className="form-group">

@@ -1685,15 +1685,66 @@ header {
     left: 15px;
     top: 30px;
     /* background-color: var(--) ; */
+    overflow: initial;
 }
 .progress-bar-fills{
     position: absolute;
     left: 0px;
     top: 0px;
     width: 100%;
+    
     background-color: var(--primary-yellow);
     transition:all 0.3s ease-in-out;
 }
+.point-container {
+    width: 20px;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    z-index: 600;
+    transform: translate(-50%, 0%);
+    /* background-color: red; */
+    height: 20px;
+}
+.point {
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary-yellow);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+}
+.pulse {
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    width: 20px;
+    height: 20px;
+    animation: pulseAnim 1.5s infinite;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.pulse:nth-child(2) {
+    animation-delay: 1s;
+}
+.pulse:nth-child(3) {
+    animation-delay: 1.5s;
+}
+
+@keyframes pulseAnim {
+    0% {
+        transform: translate(-50%, 0%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, 0%) scale(2.5);
+        opacity: 0;
+    }
+}
+
 
 .tracking-container .step {
     display: flex;

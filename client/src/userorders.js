@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Header from './common/common'
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const Userorders = () => {
     const [cookie, createcookie, removecookie] = useCookies();
+
+    const loaderLoading = useRef();
+    const loaderWaiting = useRef();
 
     const jump = useNavigate();
 
@@ -13,6 +16,7 @@ const Userorders = () => {
     // getting productorder
     const getProductOrders = async () => {
         try {
+            loaderLoading.current.style.display = "block";
             const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=customer&mobile=${cookie.sp}&storeid=${cookie.storeid}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
@@ -20,6 +24,7 @@ const Userorders = () => {
             const dt = await re.json();
             setOrderData(dt);
             // console.log(dt);
+            loaderLoading.current.style.display = "none";
         }
         catch (error) {
             console.log(error)
@@ -64,44 +69,20 @@ const Userorders = () => {
                         )
                     })
                 }
-
-                {/* <div className="order">
-                    <div className="details">
-                        <img src={require("./images/snacks.png")} alt="Smart Watch" />
-                        <div className="info">
-                            <p><strong>Order #12345</strong></p>
-                            <p>Product: Wireless Earbuds</p>
-                            <p>Price: ₹1,999</p>
-                        </div>
-                    </div>
-                    <span className="status processing">Processing</span>
-                </div>
-
-                <div className="order">
-                    <div className="details">
-                        <img src={require("./images/fruits.png")} alt="Smart Watch" />
-                        <div className="info">
-                            <p><strong>Order #12346</strong></p>
-                            <p>Product: Smart Watch</p>
-                            <p>Price: ₹3,499</p>
-                        </div>
-                    </div>
-                    <span className="status Delivered">Delivered</span>
-                </div> */}
-                {/* 
-                <div className="order">
-                    <div className="details">
-                        <img src={require("./images/snacks.png")} alt="Smart Watch" />
-                        <div className="info">
-                            <p><strong>Order #12347</strong></p>
-                            <p>Product: Gaming Mouse</p>
-                            <p>Price: ₹899</p>
-                        </div>
-                    </div>
-                    <span className="status Delivered">Pending</span>
-                </div> */}
+            </div>
 
 
+
+
+             {/* ======== loader and waiter ===== */}
+            {/* loader  */}
+            <div ref={loaderLoading} className="loading">
+                <p>Loading....</p>
+            </div>
+
+            {/* wait  */}
+            <div ref={loaderWaiting} className="loading">
+                <p>Please wait....</p>
             </div>
         </>
     )

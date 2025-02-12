@@ -75,17 +75,19 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // logout function 
     const logout = () => {
-        removecookie("sp");
-        removecookie("storeid");
-        removecookie("address");
-        removecookie("username");
-        closeUserProfile();
-        jump('/')
-        window.location.reload();
-        setTimeout(() => {
-            openLogin()
-        }, 5000)
+        if (window.confirm("Are you sure ?")) {
+            removecookie("sp");
+            removecookie("storeid");
+            removecookie("address");
+            removecookie("username");
+            closeUserProfile();
+            jump('/')
+            window.location.reload();
+            setTimeout(() => {
+                openLogin()
+            }, 5000)
 
+        }
     };
 
 
@@ -106,13 +108,13 @@ const Header = ({ loginPopup, popupBg }) => {
 
 
     useEffect(() => {
-        if (cookie.sp == null){
+        if (cookie.sp == null) {
             openLogin()
         }
         else {
             getCartData();
         }
-       
+
 
     }, [])
 
