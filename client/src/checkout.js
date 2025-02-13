@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Header from "./common/common"
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Checkout = () => {
     const mynum = useSelector((state) => state.cartitem);
@@ -30,7 +30,7 @@ const Checkout = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ mobile: cookie.sp, storeid: "1" })
+            body: JSON.stringify({ mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
         var itot = 0;
@@ -65,8 +65,10 @@ const Checkout = () => {
                 })
             });
             const data = await re.json();
+
             console.log(data);
-            showOrderPopup();
+            // console.log(data[0].orderid);
+            showOrderPopup(data.orderid);
             // createLeaves();
             // if (data.status === "success") {
             //     alert("Order placed successfully");
@@ -84,8 +86,8 @@ const Checkout = () => {
     }
 
     // function for animation of placing order 
-    function showOrderPopup() {
-    jump("/trackingorder")
+    function showOrderPopup(orderid) {
+        jump(`/trackingorder/${orderid}`)
         let popup = document.getElementById("orderPopup");
         popup.classList.add("show");
         createLeaves();

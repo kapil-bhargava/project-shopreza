@@ -194,7 +194,7 @@ const Product = () => {
                 })
             })
             const data = await re.json();
-            // console.log(data);
+            console.log(data);
             if (data.Response === "Saved") {
                 alert(data.Response);
                 getProducts(subCatId);
@@ -207,7 +207,7 @@ const Product = () => {
             }
         }
         catch (error) {
-            // loaderLoading.current.style.display = "none";
+            loaderLoading.current.style.display = "none";
             alert("add unit error: " + error.message)
         }
     }
@@ -612,7 +612,7 @@ const Product = () => {
             </div>
 
             {/* Modal of Product Units */}
-            <div ref={customerFormBg}  className="c-bg"></div>
+            <div ref={customerFormBg} className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form product-unit">
                 <div className="cross-entity">
                     <i className="fas fa-times" onClick={closeAddProductUnit} ></i>

@@ -34,10 +34,11 @@ const TrackingOrder = () => {
     document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             document.querySelector(".status-tracker").classList.add("animate");
-        }, 50);
+        }, 10000);
     });
 
     const getProductOrders = async () => {
+        progressBar.current.style.height = "0%";
         try {
             loaderLoading.current.style.display = "block";
             const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php`, {
@@ -48,7 +49,7 @@ const TrackingOrder = () => {
                 })
             });
             const dt = await re.json();
-            console.log(dt);
+            // console.log(dt);
             loaderLoading.current.style.display = "none";
             setOrderDate(dt[0].orderdate);
             setOrderTime(dt[0].ordertime);
@@ -57,7 +58,7 @@ const TrackingOrder = () => {
             if (dt[0].orderstatus === "Pending") {
                 orderPlacedStep.current.classList.add("done");
                 orderPlacedText.current.classList.add("done");
-                progressBar.current.style.height = "0%";
+                progressBar.current.style.height = "15%";
                 setStatus(dt[0].orderstatus);
             }
             else if (dt[0].orderstatus === "Packed") {
@@ -88,10 +89,8 @@ const TrackingOrder = () => {
                 orderPackedText.current.classList.add("done");
                 orderPlacedStep.current.classList.add("done");
                 orderPlacedText.current.classList.add("done");
-                progressBar.current.style.height = "75%";
+                progressBar.current.style.height = "85%";
                 setStatus(dt[0].orderstatus);
-
-
             }
             else if (dt[0].orderstatus === "Delivered") {
                 orderDeliveredStep.current.classList.add("done");
@@ -110,7 +109,7 @@ const TrackingOrder = () => {
             }
         }
         catch (error) {
-            console.log(error)
+            alert(error)
         }
     }
 
@@ -204,7 +203,7 @@ const TrackingOrder = () => {
                         <div ref={orderOnTheWayText} className="step-text">On the Way
                             {["Ontheway", "Delivered"].includes(status) ? (
                                 <span className="status-details-div">
-                                    <p>Your OTP is <strong>{otp}</strong></p>
+                                    <p>Share this OTP to Delivery Boy <strong>{otp}</strong></p>
                                 </span>
                             ) : null}
                         </div>

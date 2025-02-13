@@ -1725,6 +1725,7 @@ header {
     top: 30px;
     /* background-color: var(--) ; */
     overflow: initial;
+    /* transition: all 0.3s ease-in-out; */
 }
 
 .progress-bar-fills {
@@ -1734,7 +1735,7 @@ header {
     width: 100%;
 
     background-color: var(--primary-yellow);
-    transition: all 0.3s ease-in-out;
+    transition: all 2s ease-in-out;
 }
 
 .point-container {

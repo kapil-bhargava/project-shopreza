@@ -86,9 +86,9 @@ const Header = ({ loginPopup, popupBg }) => {
             closeUserProfile();
             jump('/')
             window.location.reload();
-            setTimeout(() => {
-                openLogin()
-            }, 5000)
+            // setTimeout(() => {
+            //     openLogin()
+            // }, 5000)
 
         }
     };

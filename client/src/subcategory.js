@@ -3,7 +3,6 @@ import Header from './common/common'
 import { Link, useParams } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
-import Userlogin from './userlogin';
 
 const SubCategory = () => {
     const mynum = useSelector((state) => state.cartitem);
@@ -13,31 +12,16 @@ const SubCategory = () => {
     const [productdata, setproductdata] = useState([]);
     const [aitem, setaitem] = useState([]);
     const [cookie, createcookie, removecookie] = useCookies();
-    const [cookie2, createcookie2, removecookie2] = useCookies();
-    const [username, setusername] = useState()
-    const [usermobile, setusermobile] = useState()
-    const [userpassword, setuserpassword] = useState()
-    const [userGender, setUserGender] = useState();
-    const [confirmuserpassword, setconfirmuserpassword] = useState()
-    const [otp, setOtp] = useState();
     const loginPopup = useRef()
     const popupBg = useRef()
-    const signupPopup = useRef()
-    const otpPopup = useRef()
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
     const audio = useRef()
     const animatedImg = useRef();
-    const unitOptionsBgDiv = useRef();
     const unitOptionsDiv = useRef();
     const unitOptionsDivBg = useRef();
     const mobileCart = useRef();
-    const headerRef = useRef();
 
-    const [nameError, setNameError] = useState();
-    const [mobileError, setMobileError] = useState();
-    const [passwordError, setPasswordError] = useState();
-    const [confirmPasswordError, setconfirmPasswordError] = useState();
 
     const [spid, setspid] = useState();
 
@@ -71,7 +55,7 @@ const SubCategory = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: "1" })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
         if (ctype === "plus") {
@@ -89,7 +73,7 @@ const SubCategory = () => {
     // unit options div close and open functions 
     const showUnitOptions = async (spid) => {
         setspid(spid);
-        const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=1`, {
+        const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=${cookie.storeid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +90,7 @@ const SubCategory = () => {
         unitOptionsDiv.current.classList.add("active-unit-options-div");
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
     }
-    
+
     const closeUnitOptions = (l) => {
         unitOptionsDivBg.current.classList.remove("active-unit-options-bg-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div");
@@ -133,69 +117,24 @@ const SubCategory = () => {
 
     // getting all products 
     const getProduct = async (scid) => {
-
         loaderLoading.current.style.display = "block"
         var mob = cookie["sp"];
-        const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=1`, {
+        console.log(scid, mob, cookie.storeid);
+        // alert(cookie.storeid)
+        const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=${cookie.storeid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         })
         const data = await re.json()
-        // console.log(data);
+        console.log(data);
         // console.table(data);
         loaderLoading.current.style.display = "none";
         setproductdata(data)
     }
 
-    //login Validation function 
-    const loginValidation = async () => {
-        if (!usermobile && !userpassword) {
-            setMobileError("Mobile is required");
-            setPasswordError("Password is required");
-        }
-        else if (!userpassword) {
-            setPasswordError("Password is required");
-        }
-        else if (!usermobile) {
-            setMobileError("Mobile is required");
-        }
-        else {
-            loaderWaiting.current.style.display = "block"
-            const re = await fetch(process.env.REACT_APP_URL + "/validateapi.php", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mobile: usermobile, password: userpassword, storeid: "1" })
-            });
-            const data = await re.json();
-            console.log(data)
-            loaderWaiting.current.style.display = "none"
-            if (data.response === "Valid") {
-                createcookie("sp", usermobile, {
-                    path: "/", // Cookie is available on all routes
-                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                    secure: true, // Use for HTTPS
-                });
-                createcookie2("sp2", data.storeid, {
-                    path: "/", // Cookie is available on all routes
-                    maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
-                    secure: true, // Use for HTTPS
-                });
 
-                // createcookie2("sp2", storeid)
-                loginPopup.current.classList.remove('active-popup');
-                popupBg.current.classList.remove("active-popupBg");
-                // loginPopup.current.classList.remove('active-popup');              
-
-            }
-            else {
-                alert("Invalid Mobile or Password")
-            }
-        }
-    }
     // adding to the cart 
     const addToCart = async (unitId, x, au) => {
 
@@ -220,160 +159,6 @@ const SubCategory = () => {
         loaderLoading.current.style.display = "none";
     }
 
-
-    // opening login and signup popups 
-    const openSignup = () => {
-        loginPopup.current.classList.remove("active-popup");
-        signupPopup.current.classList.add("active-popup");
-        // loginPopup.current.style.display = "none";
-    }
-    const openLogin = () => {
-        loginPopup.current.classList.add("active-popup");
-        signupPopup.current.classList.remove("active-popup");
-    }
-
-
-    // signUp onChange functions 
-    const nameChange = (e) => {
-        const nameValue = e.target.value;
-        const regex = /^[A-zA-Z\s]{2,50}$/;
-        if (nameValue && !regex.test(nameValue)) {
-            setNameError(
-                "Name must only contain letters and spaces"
-            );
-        } else {
-            setNameError(""); // Clear error if valid
-        }
-        setusername(nameValue);
-    }
-
-    const mobileChange = (e) => {
-        const mobileValue = e.target.value;
-        const regex = /^[6-9]\d{9}$/;
-        if (!/^\d*$/.test(mobileValue)) {
-            setMobileError("Only numeric values are allowed");
-            return;
-        }
-        if (mobileValue.length > 10) {
-            setMobileError("Mobile number must not exceed 10 digits");
-        } else if (mobileValue && !regex.test(mobileValue)) {
-            setMobileError("Invalid mobile number");
-        } else {
-            setMobileError(""); // Clear error if valid
-        }
-        setusermobile(mobileValue);
-    }
-
-    const signUpPassword = (e) => {
-        setuserpassword(e.target.value)
-    }
-    const signUpConfirmPassword = (e) => {
-        setconfirmuserpassword(e.target.value)
-    }
-
-    // for login up back button 
-    const goBack = () => {
-        popupBg.current.classList.remove("active-popupBg");
-        loginPopup.current.classList.remove("active-popup");
-        signupPopup.current.classList.remove("active-popup");
-
-    }
-    // for sign up back button 
-    const goBackToLogin = () => {
-        // popupBg.current.classList.remove("active-popupBg");
-        loginPopup.current.classList.add("active-popup");
-        signupPopup.current.classList.remove("active-popup");
-
-    }
-
-    // fetching sign up api 
-    const signUp = async () => {
-        if (!username && !usermobile && !userpassword) {
-            setNameError("Name is required");
-            setMobileError("Mobile is required");
-            setPasswordError("Password is required");
-        }
-        else if (!usermobile && !userpassword) {
-            setMobileError("Mobile is required");
-            setPasswordError("Password is required");
-        }
-        else if (!usermobile && !username) {
-            setMobileError("Mobile is required");
-            setNameError("Name is required");
-        }
-        else if (!username && !userpassword) {
-            setPasswordError("Password is required");
-            setNameError("Name is required");
-        }
-        else if (!username && !usermobile) {
-            setMobileError("Mobile is required");
-            setNameError("Name is required");
-        }
-        else if (!username) {
-            setNameError("Name is required");
-        }
-        else if (!usermobile) {
-            setMobileError("Mobile is required");
-        }
-        else if (!userpassword) {
-            setPasswordError("Password is required");
-        }
-        else if (userpassword !== confirmuserpassword) {
-            setconfirmPasswordError("Password do not match");
-        }
-        else {
-            alert(userGender)
-            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender: userGender })
-            });
-            const data = await re.json();
-            // console.log(data);
-            if (data.response === "Saved") {
-
-                loginPopup.current.classList.add('active-popup');
-                signupPopup.current.classList.remove('active-popup');
-            }
-            else {
-                alert(data.response)
-            }
-        }
-
-    }
-
-    // otp otpVerification
-    const otpVerification = async () => {
-        const re = await fetch(process.env.REACT_APP_URL + "/verifyotpapi.php", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ mobile: usermobile, otp: otp })
-        });
-        const data = await re.json();
-        console.log(data)
-        if (data.response === "Valid") {
-            createcookie("sp", usermobile);
-            createcookie2("sp2", data.storeid);
-            console.log(data.storeid)
-            console.log(cookie2.sp2)
-            otpPopup.current.classList.remove('active-popup');
-        }
-    }
-
-    //login
-    const login = () => {
-        if (cookie["sp"] == null) {
-            loginValidation()
-        }
-        else {
-            alert("Already logged in")
-        }
-
-    }
 
     useEffect(() => {
         sub();
@@ -459,7 +244,6 @@ const SubCategory = () => {
                                             </span>
                                     )
                             }
-
                         </div>
                     ))}
                 </aside>
@@ -479,10 +263,6 @@ const SubCategory = () => {
                 </div>
             </ div>
 
-
-
-            {/* i have to setup these codes somewhere */}
-
             {/* popup background */}
             <div ref={popupBg} className="popup-bg"></div>
             {/* audio  */}
@@ -496,64 +276,6 @@ const SubCategory = () => {
             <div ref={loaderWaiting} className="loading">
                 <p>Please wait....</p>
             </div>
-            {/* login popup */}
-            <section ref={loginPopup} className="login-popup-container">
-                <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
-                <h4>Login</h4>
-                <label  >Enter Mobile Number</label>
-                <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" /> <br />
-                {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
-                <label  >Enter Password</label>
-                <input onChange={(e) => { setuserpassword(e.target.value) }} placeholder='Password' type="password" /> <br />
-                {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
-                <button className="btn btn-success" onClick={login}>Login</button> <br />
-                <p>Not have an account ? <span onClick={openSignup}>Signup</span></p>
-            </section>
-
-            {/* <Userlogin ref={loginPopup} ref1={popupBg}/> */}
-
-            {/* signup popup */}
-            <section ref={signupPopup} className="login-popup-container sp">
-                <i onClick={goBackToLogin} className="fa-solid fa-arrow-left"></i>
-                <h4>SignUp</h4>
-                <label  >Enter Name</label>
-                <input value={username} onChange={nameChange} placeholder='Your Name' type="name" /> <br />
-                {nameError && <span style={{ color: "red", fontSize: "12px" }}>{nameError}</span>}
-                <br />
-                <label  >Enter Mobile Number</label>
-                <input value={usermobile} onChange={mobileChange} placeholder='915468XXXX' type="number" /> <br />
-                {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
-                <br />
-                <label>Gender</label>
-                <select onChange={(e) => { setUserGender(e.target.value) }} className='employee-type-signup'>
-                    <option style={{ textAlign: 'center' }} value="female">-- Select Gender --</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                    <option value="other">Other</option>
-                </select>
-                <label  >Enter Password</label>
-                <input onChange={signUpPassword} placeholder='Password' type="password" /> <br />
-                {passwordError && <span style={{ color: "red", fontSize: "12px" }}>{passwordError}</span>}
-                <br />
-                <label  >Confirm Password</label>
-                <input onChange={signUpConfirmPassword} placeholder='Password' type="password" /> <br />
-                {confirmPasswordError && <span style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</span>}
-                <br />
-
-                <button className="btn btn-warning" onClick={signUp}>SignUp</button> <br />
-                <p>Already have an account ? <span onClick={openLogin}>Login</span></p>
-            </section>
-
-            {/* otp popup  */}
-            <section ref={otpPopup} className="login-popup-container otp">
-                <p>Please Enter the Verification code </p>
-                {/* <strong>{usermobile}</strong> */}
-                {/* <label>Enter OTP</label> */}
-                <input onChange={(e) => { setOtp(e.target.value) }} placeholder='XXXX' type="number" /> <br /> <br />
-                <button className="btn btn-primary" onClick={otpVerification}>Verify</button> <br />
-            </section>
-            {/* <button onClick={()=>{cc("INC")}}>Inc</button>
-            <button onClick={()=>{cc("DEC")}}>Dec</button> */}
 
         </>
     )
