@@ -14,7 +14,7 @@ const Adminsidebar = () => {
   const sidebar = useRef();
   const sidebarBg = useRef();
   const [cookie, createcookie, removecookie] = useCookies();
-  
+
 
   // logout admin 
   const logoutAdmin = () => {
@@ -83,7 +83,7 @@ const Adminsidebar = () => {
   }
 
   const select = useRef();
-  const cross= useRef();
+  const cross = useRef();
   const pencil = useRef();
 
   const showSelect = () => {
@@ -96,9 +96,24 @@ const Adminsidebar = () => {
     cross.current.style.display = "none";
     pencil.current.style.display = "block";
   }
+  const sm = useRef();
+  const leftArrow = useRef();
 
-
-
+  function toggleSubmenu(element) {
+    let submenu = sm.current;
+    if (submenu.style.height === "0px" || submenu.style.height === "") {
+      submenu.style.height = submenu.scrollHeight + "px";
+      submenu.style.border = "1px solid var(--primary-green";
+      leftArrow.current.style.transform="rotate(-90deg)"
+      // submenu.classList.add("expanded");
+      // alert(submenu.scrollHeight)
+    } else {
+      submenu.style.height = "0px";
+      leftArrow.current.style.transform="rotate(0deg)"
+      submenu.style.border = "1px solid var(--primary-green";
+      // submenu.classList.remove("expanded");
+    }
+  }
 
   useEffect(() => {
 
@@ -112,8 +127,8 @@ const Adminsidebar = () => {
     <>
       {/* Sidebar of Admin  */}
       <div className="dashboard-header">
-      <h6>1</h6>
-      <h6>{activeStore}</h6>
+        <h6>1</h6>
+        <h6>{activeStore}</h6>
 
         <div className="name-div">
           <div className="btn-group">
@@ -134,9 +149,9 @@ const Adminsidebar = () => {
       <button className="menu-toggle" onClick={openSidebar}><i className="fas fa-bars"></i></button>
       <div className="sidebardb" ref={sidebar}>
         <div className="form-group">
-          <strong><span style={{fontSize:"20px"}}> {activeStore}</span></strong> <i ref={pencil} onClick={showSelect} style={{cursor:"pointer"}} className="fa fa-pencil"></i>
-          <i ref={cross} onClick={hideSelect} style={{display:"none"}} className="fas fa-times"></i>
-          <select style={{display:"none"}} ref={select} value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
+          <strong><span style={{ fontSize: "20px" }}> {activeStore}</span></strong> <i ref={pencil} onClick={showSelect} style={{ cursor: "pointer" }} className="fa fa-pencil"></i>
+          <i ref={cross} onClick={hideSelect} style={{ display: "none" }} className="fas fa-times"></i>
+          <select style={{ display: "none" }} ref={select} value={activeStoreId} onChange={(e) => { changeStore(e.target.value) }}>
             {/* <option>Select Store</option> */}
             {stores.map((store, index) => {
               return (
@@ -150,14 +165,27 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/dashboard"><i className="fas fa-home"></i>Dashboard</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
+          {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
+          <div onClick={toggleSubmenu} className="nav-item"><Link className="linkdb subm">Store & Products <i ref={leftArrow} class="fa-solid fa-chevron-left"></i></Link></div>
+          <div ref={sm} className=" submenu">
+          <div className="sub-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
+          </div>
+          {/* {Stores and Products menu} */}
+
+          {/* <div className="nav-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
-          <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
+          <div className="nav-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div> */}
+          {/* <div onClick={toggleSubmenu} className="nav-item an"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link>
+            <div className=" submenu">
+              <Link className="dro">sub 1</Link>
+              <Link className="dro">sub 2</Link>
+              <Link className="dro">sub 3</Link>
+            </div>
+          </div> */}
           <div className="nav-item"><Link className="linkdb" to="/adminorders"  ><i className="fas fa-shopping-cart"></i>Orders</Link></div>
-          <div className="nav-item"><Link className="linkdb" ><i className="fas fa-chart-bar"></i>Analytics</Link></div>
-          <div className="nav-item"><Link className="linkdb" ><i className="fas fa-cog"></i>Settings</Link></div>
-          {/* <div onClick={logoutAdmin} className="nav-item"><Link className="linkdb" ><i className="fas fa-sign-out-alt"></i>Logout</Link></div> */}
         </nav>
       </div>
 

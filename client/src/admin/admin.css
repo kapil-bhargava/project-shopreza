@@ -47,9 +47,10 @@
 
 .sidebardb .nav-item {
     color: var(--white);
+    border: 1px solid var(--primary-green);
     font-size: 16px;
     display: block;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     /* background-color: blue; */
     transition: background-color 0.3s;
 }
@@ -59,10 +60,62 @@
     color: var(--white);
 }
 
+.an {
+    background-color: green;
+    /* height: 140px; */
+    height: initial;
+    position: relative;
+    transition: 0.3s ease-in-out;
+}
+
+.submenu {
+    /* display: none; */
+    transition: 0.3s ease-in-out;
+    overflow: hidden;
+    height: 0;
+    margin-top: -15px;
+    margin-bottom: 15px;
+    /* background-color: var(--dark-gray); */
+    /* background-color: var(--primary-yellow); */
+    width: 100%;
+    z-index: 999;
+}
+
+.sub-item {
+    margin-bottom: 5px;
+    padding-left: 10px;
+    color: var(--white);
+    font-size: 14px;
+    display: block;
+    /* border-radius: 5px; */
+    /* background-color: blue; */
+    transition: background-color 0.3s;
+}
+
+.nav-item .fa-chevron-left {
+    transition: 0.3s ease;
+    transform-origin: center;
+    /* background-color: blue; */
+    display: block;
+    padding: 5px;
+    /* height: initial; */
+}
+
+.sub-item i {
+    margin-right: 5px;
+}
+
+.linkdb.subm {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .linkdb {
     padding: 10px;
     /* background-color: red; */
-    border-radius: 5px;
+    /* border-radius: 5px; */
     width: 100%;
     display: block;
     text-decoration: none;
@@ -308,8 +361,9 @@ td {
     display: flex;
     padding: 5px;
 }
-.cross-entity i{
-        cursor: pointer;
+
+.cross-entity i {
+    cursor: pointer;
 }
 
 .assign-popup {
