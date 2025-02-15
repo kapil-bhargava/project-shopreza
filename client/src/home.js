@@ -37,7 +37,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        if (cookie.sp !== undefined) {
+        if (cookie.storeid !== undefined || cookie.sp !== null) {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
         }
@@ -69,7 +69,7 @@ const Home = () => {
             {/* category section  */}
             <section className="cat">
                 {/* checking login then showing category */}
-                {cookie2.sp2 !== null && cookie2.sp2 !== undefined ? (<h2>Categories</h2>) : null}
+                {cookie.sp !== null && cookie.sp !== undefined ? (<h2>Categories</h2>) : null}
 
                 <div className="container">
                     {
