@@ -954,7 +954,7 @@ header {
     visibility: visible;
     opacity: 1;
     transform: translate(-50%, -50%);
-    
+
 }
 
 
@@ -970,11 +970,13 @@ header {
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.2);
 }
-.active-unit-options-bg-div{
+
+.active-unit-options-bg-div {
     visibility: visible;
     opacity: 1;
     /* transform: translate(-50%, -50%); */
 }
+
 .unit-options-div-cross-btn {
     position: absolute;
     top: 5px;
@@ -1063,7 +1065,7 @@ header {
 .sidebar-right .product-pic-div {
     width: 100%;
     /* height: 200px; */
-    background-color: red;
+    /* background-color: red; */
     position: relative;
     margin-bottom: 5px;
 
@@ -1149,7 +1151,7 @@ header {
     }
 
     .sub-cat-main-container .items {
-        width: 138px;
+        width: 130px;
         flex-grow: 1;
     }
 
@@ -2081,7 +2083,22 @@ header {
 
 
 
+/* Tracking Component Css  */
 
+.tracking-container {
+    width: 90%;
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: red;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 /* ======= Footer css Started ====== */
 footer {

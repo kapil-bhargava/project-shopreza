@@ -8,19 +8,24 @@ const Category = () => {
     const customerFormBg = useRef();
     const loaderLoading = useRef();
     const loaderWaiting = useRef();
+
+    const res = useRef();
+    const confirmPopup = useRef();
+    const confirmPopupBg = useRef();
+    const [response, setresponse] = useState("");
     const picPopup = useRef();
     const [catId, setCatId] = useState();
     const [skeletonLoading, setSkeletonLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
 
-    const [storeid, setStoreid] = useState();
     const [storedata, setstoreData] = useState([]);
     const [catData, setCatData] = useState([]);
 
     const [category, setCategory] = useState();
     const [categoryPic, setCategoryPic] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
+
     const openAddCategory = () => {
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
@@ -30,6 +35,24 @@ const Category = () => {
         customerFormBg.current.style.display = "none";
         setCategory('')
         setIsEditMode(false)
+    }
+    const showRes = (re) => {
+        setresponse(re);
+        res.current.classList.add("active-response-popup")
+        setTimeout(() => {
+            res.current.classList.remove("active-response-popup")
+            // showRes();
+        }, 2000);
+    }
+
+    const openConfirmPopup = (catid) => {
+        setCatId(catid);
+        confirmPopup.current.classList.add("active-confirmation-popup");
+        confirmPopupBg.current.classList.add("active-confirmationBg");
+    }
+    const closeConfirmPopup = () => {
+        confirmPopup.current.classList.remove("active-confirmation-popup");
+        confirmPopupBg.current.classList.remove("active-confirmationBg");
     }
 
     // getting store 
@@ -63,10 +86,13 @@ const Category = () => {
             })
         })
         const data = await re.json();
+        // setresponse(data.Response);
+        showRes(data.Response);
+        console.log(data)
 
         loaderLoading.current.style.display = "none";
         getCategory();
-        closeAddCategory();
+        // closeAddCategory();
         // }
 
     }
@@ -94,7 +120,7 @@ const Category = () => {
             body: formData,
         })
         const data = await re.json();
-        alert(data.Response);
+        showRes(data.Response);
         getCategory();
         closePicPopup();
         loaderWaiting.current.style.display = "none";
@@ -130,24 +156,22 @@ const Category = () => {
     }
 
     // delete category 
-    const deleteCategory = async (catid) => {
-        if (window.confirm('Are you sure')) {
-            loaderLoading.current.style.display = "block";
-            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    catid: catid
-                })
+    const deleteCategory = async () => {
+        loaderLoading.current.style.display = "block";
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
+            method: 'DELETE',
+            headers: {
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify({
+                catid: catId
             })
-            const data = await re.json();
-            alert(data.Response);
-            loaderLoading.current.style.display = "none";
-            getCategory();
-            closeAddCategory();
-        }
+        })
+        const data = await re.json();
+        loaderLoading.current.style.display = "none";
+        showRes(data.Response);
+        closeConfirmPopup();
+        getCategory();
     }
 
     const openEditCategory = async (catid) => {
@@ -168,10 +192,7 @@ const Category = () => {
         loaderLoading.current.style.display = "none";
         setCategory(data[0].catname);
         openAddCategory();
-        if (data.response === "Updated") {
-            closeAddCategory();
-            getCategory()
-        }
+
     }
 
     // update category 
@@ -189,8 +210,13 @@ const Category = () => {
             })
         })
         const data = await re.json();
-        alert(data.Response)
+        // alert(data.Response)
         loaderLoading.current.style.display = "none";
+        // if (data.response === "Updated") {
+        showRes(data.Response);
+        closeAddCategory();
+        getCategory()
+        // }
         closeAddCategory();
         getCategory()
     }
@@ -239,7 +265,7 @@ const Category = () => {
                                             <td>{cat.description}</td> */}
                                                 <td>
                                                     <i onClick={() => { openEditCategory(cat.catid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
-                                                    <i onClick={() => { deleteCategory(catData[index].catid) }} className="fa fa-trash text-danger"></i>
+                                                    <i onClick={() => { openConfirmPopup(catData[index].catid) }} className="fa fa-trash text-danger"></i>
                                                 </td>
                                             </tr>
                                         );
@@ -303,6 +329,29 @@ const Category = () => {
                     }
                 </div> */}
 
+            </div>
+
+            {/* Response Popup  */}
+            <div ref={res} className="response-popup">
+                {/* <p>{responseMessage}</p> */}
+                <p>  {response}</p>
+                {/* <button onClick={closeResponsePopup}>Close</button> */}
+            </div>
+
+            {/* Confirm Popup  */}
+            <div ref={confirmPopupBg} className="confirmation-popupBg">
+                <div ref={confirmPopup} className="confirmation-popup">
+                    <div className="cross-confirm-main-div d-flex justify-content-end">
+                        <div onClick={closeConfirmPopup} className="cross-confirm-popup-div">
+                            <i className="fas fa-times" ></i>
+                        </div>
+                    </div>
+                    <h6 className='text-center'>Are you Sure to Delete ?</h6>
+                    <div className="del-btn-div d-flex justify-content-around">
+                        <button onClick={deleteCategory} className="btn btn-danger btn-sm">Delete</button>
+                        <button onClick={closeConfirmPopup} className="btn btn-light border btn-sm">Cancel</button>
+                    </div>
+                </div>
             </div>
         </>
     )

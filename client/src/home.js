@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Header, { Footer } from './common/common'
+import Header, { Footer, Tracking } from './common/common'
 import './main.css'
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
@@ -37,17 +37,18 @@ const Home = () => {
 
 
     useEffect(() => {
-        if (cookie.sp !== undefined){
+        if (cookie.sp !== undefined) {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
         }
-       
-       
+
+
     }, [])
 
 
     return (
         <>
+            <Tracking />
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
@@ -82,7 +83,7 @@ const Home = () => {
                         })
                     }
                 </div>
-               
+
             </section>
 
             {/* items secton  */}

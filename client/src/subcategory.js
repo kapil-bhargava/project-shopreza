@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Header from './common/common'
+import Header, { Tracking } from './common/common'
 import { Link, useParams } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ const SubCategory = () => {
     const dispatch = useDispatch();
     const { cid } = useParams();
     const [subcatdata, setsubcatdata] = useState([]);
+    const [scid, setscid] = useState([]);
     const [productdata, setproductdata] = useState([]);
     const [aitem, setaitem] = useState([]);
     const [cookie, createcookie, removecookie] = useCookies();
@@ -66,7 +67,7 @@ const SubCategory = () => {
         console.log(data);
         //       alert(data.cdata);
         dispatch({ type: 'INC', cdata: data.cdata });
-        getProduct(cid);
+        getProduct(scid);
 
     };
 
@@ -111,14 +112,17 @@ const SubCategory = () => {
             },
         })
         const data = await re.json()
+        getProduct(data[0].subcatid)
         loaderLoading.current.style.display = "none"
         setsubcatdata(data)
     }
 
     // getting all products 
     const getProduct = async (scid) => {
+        
         loaderLoading.current.style.display = "block"
         var mob = cookie["sp"];
+        setscid(scid);
         console.log(scid, mob, cookie.storeid);
         // alert(cookie.storeid)
         const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=${cookie.storeid}`, {
@@ -137,7 +141,6 @@ const SubCategory = () => {
 
     // adding to the cart 
     const addToCart = async (unitId, x, au) => {
-
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'POST',
@@ -149,7 +152,7 @@ const SubCategory = () => {
         const data = await re.json();
 
         dispatch({ type: 'INC', cdata: data.cdata });
-        if (au === "yes") { showUnitOptions(spid) };
+        if (au === "yes") { showUnitOptions(spid) }else{getProduct(scid);};
         audio.current.play();
         mobileCart.current.classList.add("active-mobile-cart");
         animatedImg.current.classList.add("active-animated-img");
@@ -168,7 +171,7 @@ const SubCategory = () => {
     return (
         <>
 
-
+            <Tracking />
 
             {/* Header */}
             <Header loginPopup={loginPopup} popupBg={popupBg} />
@@ -235,7 +238,7 @@ const SubCategory = () => {
                                     )}</button> :
                                     (
                                         x.cart === "no"
-                                            ? <button className='items-options-single-btn' onClick={() => addToCart(x.unitid, index, 'yes')} >Add</button>
+                                            ? <button className='items-options-single-btn' onClick={() => addToCart(x.unitid, index, 'no')} >Adds</button>
                                             :
                                             <span className="quantity">
                                                 <button className="quantity-btn" onClick={() => { handleButtonClick1("minus", x.cartid, index) }}>-</button>

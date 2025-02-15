@@ -985,3 +985,77 @@ select {
     align-items: start;
     font-size: 40px;
 }
+
+/* Response Popup Css  */
+
+.response-popup {
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    max-width: 400px;
+    width: initial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-yellow);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 0 10px;
+    box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.1);
+    z-index: 5000;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+}
+.active-response-popup{
+    transform: translate(-50%, 0%);
+
+}
+.confirmation-popup{
+    box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 10px;
+    background-color: var(--primary-white);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -80%);
+    transition: 0.3s cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    border-radius: 10px;
+    z-index: 300;
+    opacity: 0;
+    visibility: hidden;
+}
+.active-confirmation-popup{
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%);
+
+}
+.confirmation-popupBg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+.active-confirmationBg{
+    visibility: visible;
+    opacity: 1;
+}
+.cross-confirm-popup-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: var(--primary-white);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--primary-green);
+}

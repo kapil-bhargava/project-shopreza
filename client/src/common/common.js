@@ -96,13 +96,12 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // Increment and Decrement of Product in Cart 
     const cartCount = async (ctype, cartid) => {
-
         const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ctype: ctype, cartid: cartid })
+            body: JSON.stringify({ ctype: ctype, cartid: cartid, mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
         dispatch({ type: 'INC', cdata: data.cdata });
@@ -269,7 +268,7 @@ const Header = ({ loginPopup, popupBg }) => {
             </div>
 
             {/* user icon click section part  */}
-            <div onClick={closeUserProfile} ref={userProfileBg}  className="user-profileBg"></div>
+            <div onClick={closeUserProfile} ref={userProfileBg} className="user-profileBg"></div>
             <section ref={userProfile} className="user-profile">
                 <h3>{cookie.username} <br /> {cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
                 <div className="user-dropdown">
@@ -302,8 +301,18 @@ const Footer = () => {
         </>
     )
 }
+const Tracking = () => {
+    return (
+        <>
+            {/* Tracking fixed section in bottom  */}
+            <div className="tracking-container">
+                <h1>this is tracking div</h1>
+            </div>
+        </>
+    )
+}
 
 
 export default Header
 
-export { Footer }
+export { Footer, Tracking }
