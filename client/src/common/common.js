@@ -301,18 +301,18 @@ const Footer = () => {
         </>
     )
 }
-const Tracking = () => {
-    return (
-        <>
-            {/* Tracking fixed section in bottom  */}
-            <div className="tracking-container">
-                <h1>this is tracking div</h1>
-            </div>
-        </>
-    )
-}
+// const Tracking = () => {
+//     return (
+//         <>
+//             {/* Tracking fixed section in bottom  */}
+//             <div className="tracking-container">
+//                 <h1>this is tracking div</h1>
+//             </div>
+//         </>
+//     )
+// }
 
 
 export default Header
 
-export { Footer, Tracking }
+export { Footer }

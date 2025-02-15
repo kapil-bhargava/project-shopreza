@@ -48,7 +48,7 @@ const Home = () => {
 
     return (
         <>
-            <Tracking />
+            {/* <Tracking /> */}
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>

@@ -2085,7 +2085,7 @@ header {
 
 /* Tracking Component Css  */
 
-.tracking-container {
+/* .tracking-container {
     width: 90%;
     margin-inline: auto;
     display: flex;
@@ -2098,7 +2098,7 @@ header {
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-}
+} */
 
 /* ======= Footer css Started ====== */
 footer {
