@@ -206,4 +206,25 @@ const SideBarDeliveryboy = () => {
         </>
     )
 }
-export { SideBarEmp, SideBarManager, SideBarDeliveryboy }
+
+
+// ConfirmPopup.js
+const ConfirmPopup = ({ resp, showRes }) => { 
+    const [response, setResponse] = useState("");
+    const res = useRef();
+
+    useEffect(() => {
+        if (resp) {
+            showRes(); // Call showRes when the response is passed
+        }
+    }, [resp, showRes]);
+
+    return (
+        <div ref={res} className="response-popup">
+            <p>{resp}</p>
+        </div>
+    );  
+}
+
+
+export { SideBarEmp, SideBarManager, SideBarDeliveryboy, ConfirmPopup }

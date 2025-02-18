@@ -22,7 +22,7 @@ const Category = () => {
     const [storedata, setstoreData] = useState([]);
     const [catData, setCatData] = useState([]);
 
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState("");
     const [categoryPic, setCategoryPic] = useState();
     const [cookie, createcookie, removecookie] = useCookies();
 
@@ -36,6 +36,7 @@ const Category = () => {
         setCategory('')
         setIsEditMode(false)
     }
+    
     const showRes = (re) => {
         setresponse(re);
         res.current.classList.add("active-response-popup")
@@ -70,10 +71,33 @@ const Category = () => {
     }
 
     // adding new category function 
+    // const addCategory = async () => {
+    //     loaderLoading.current.style.display = "block";
+    //     const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             catname: category,
+    //             storeid: cookie.storeid
+    //         })
+    //     })
+    //     const data = await re.json();
+    //     showRes(data.Response);
+    //     console.log(data)
+
+    //     loaderLoading.current.style.display = "none";
+    //     getCategory();
+
+    // }
+
+
+    const [newItemId, setNewItemId] = useState(null);
+
     const addCategory = async () => {
-
-
         loaderLoading.current.style.display = "block";
+
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
             method: 'POST',
             headers: {
@@ -81,21 +105,22 @@ const Category = () => {
             },
             body: JSON.stringify({
                 catname: category,
-                // storeid: storeid
                 storeid: cookie.storeid
             })
-        })
+        });
+
         const data = await re.json();
-        // setresponse(data.Response);
         showRes(data.Response);
-        console.log(data)
+
 
         loaderLoading.current.style.display = "none";
-        getCategory();
-        // closeAddCategory();
-        // }
 
-    }
+        // Fetch categories after adding
+        await getCategory();
+
+
+    };
+
 
     // pic popup 
     const openPicForm = (x) => {
@@ -109,7 +134,6 @@ const Category = () => {
 
     // upload cat pic 
     const uploadPic = async () => {
-        console.log(catId)
         const formData = new FormData();
         formData.append('pic', categoryPic);
         formData.append('catid', catId);
@@ -130,6 +154,7 @@ const Category = () => {
 
     // getCategory
     const getCategory = async () => {
+        setDel(false);
         //  //cookie2.adminCookie2)
         try {
             loaderLoading.current.style.display = "block";
@@ -140,7 +165,15 @@ const Category = () => {
                 }
             })
             const data = await re.json();
-            // console.log(data)
+            // Set newly added category ID (assuming data contains 'id' of the new category)
+            if (!del) {
+                if (data[data.length - 1].catid) {
+                    setNewItemId(data[data.length - 1].catid);
+                    setTimeout(() => setNewItemId(null), 1000);
+                }
+                // Remove the animation class after delay
+            }
+            // console.log(data[data.length-1].catid)
             if (data.length <= 0) {
                 setSkeletonLoading(true);
             }
@@ -151,17 +184,22 @@ const Category = () => {
             loaderLoading.current.style.display = "none";
         }
         catch (e) {
-            console.log("running getCategory catch")
+            alert(e.message)
         }
     }
 
+
+    const [del, setDel] = useState(false);
+
     // delete category 
     const deleteCategory = async () => {
+        setDel(true);
+        setNewItemId(catId);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
             method: 'DELETE',
             headers: {
-                'Content-Type':'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 catid: catId
@@ -171,7 +209,7 @@ const Category = () => {
         loaderLoading.current.style.display = "none";
         showRes(data.Response);
         closeConfirmPopup();
-        getCategory();
+        await getCategory();
     }
 
     const openEditCategory = async (catid) => {
@@ -219,6 +257,7 @@ const Category = () => {
         // }
         closeAddCategory();
         getCategory()
+
     }
 
 
@@ -233,6 +272,7 @@ const Category = () => {
             <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div">
+                   
                     <button onClick={openAddCategory}>Add Category</button>
                 </div>
 
@@ -257,7 +297,10 @@ const Category = () => {
                                 {
                                     catData.map((cat, index) => {
                                         return (
-                                            <tr key={index}>
+                                            // <tr key={index}>
+                                            <tr key={index} className={`tbrow ${newItemId === cat.catid ? (del ? "del-row" : "new-row") : ""}`}>
+
+
                                                 <td>{index + 1}</td>
                                                 <td> <img onClick={() => { openPicForm(cat.catid) }} src={cat.pic} alt={cat.pic} /> {cat.catname}</td>
                                                 {/* <td>{cat.price}</td>

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from 'react-redux';
-import Userlogin from '../userlogin';
 
 const Header = ({ loginPopup, popupBg }) => {
     const mynum = useSelector((state) => state.cartitem);
@@ -301,18 +300,18 @@ const Footer = () => {
         </>
     )
 }
-// const Tracking = () => {
-//     return (
-//         <>
-//             {/* Tracking fixed section in bottom  */}
-//             <div className="tracking-container">
-//                 <h1>this is tracking div</h1>
-//             </div>
-//         </>
-//     )
-// }
+const Tracking = () => {
+    return (
+        <>
+            {/* Tracking fixed section in bottom  */}
+            <div className="track-main">
+                <h1>this is tracking div</h1>
+            </div>
+        </>
+    )
+}
 
 
 export default Header
 
-export { Footer }
+export { Footer,Tracking }

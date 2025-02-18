@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 const Adminsidebar = () => {
   const loaderWaiting = useRef();
   const loaderLoading = useRef();
+  const confirmPopup = useRef();
+  const confirmPopupBg = useRef();
 
 
   const [stores, setStores] = useState([]);
@@ -15,15 +17,22 @@ const Adminsidebar = () => {
   const sidebarBg = useRef();
   const [cookie, createcookie, removecookie] = useCookies();
 
+  const openConfirmPopup = (catid) => {
+    confirmPopup.current.classList.add("active-confirmation-popup");
+    confirmPopupBg.current.classList.add("active-confirmationBg");
+  }
+  const closeConfirmPopup = () => {
+    confirmPopup.current.classList.remove("active-confirmation-popup");
+    confirmPopupBg.current.classList.remove("active-confirmationBg");
+  }
+
 
   // logout admin 
   const logoutAdmin = () => {
-    if (window.confirm("Sure want to logouts ?")) {
-      removecookie('uname');
-      removecookie('storeid');
-      removecookie('utype');
-      jump("/adminlogin");
-    }
+    removecookie('uname');
+    removecookie('storeid');
+    removecookie('utype');
+    jump("/adminlogin");
   }
 
   const [activeStoreId, setActiveStoreId] = useState();
@@ -104,14 +113,22 @@ const Adminsidebar = () => {
     if (submenu.style.height === "0px" || submenu.style.height === "") {
       submenu.style.height = submenu.scrollHeight + "px";
       submenu.style.border = "1px solid var(--primary-green";
-      leftArrow.current.style.transform="rotate(-90deg)"
+      leftArrow.current.style.transform = "rotate(-90deg)"
       // submenu.classList.add("expanded");
       // alert(submenu.scrollHeight)
     } else {
       submenu.style.height = "0px";
-      leftArrow.current.style.transform="rotate(0deg)"
+      leftArrow.current.style.transform = "rotate(0deg)"
       submenu.style.border = "1px solid var(--primary-green";
       // submenu.classList.remove("expanded");
+    }
+  }
+
+  const togglefullScreen = ()=>{
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
     }
   }
 
@@ -131,6 +148,7 @@ const Adminsidebar = () => {
         <h6>{activeStore}</h6>
 
         <div className="name-div">
+        <button onClick={togglefullScreen} className='btn btn-primary'>FullScreen</button>
           <div className="btn-group">
             <i type="button" className="fa fa-user dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></i>
             <ul className="dropdown-menu">
@@ -138,7 +156,7 @@ const Adminsidebar = () => {
               <Link className="linkdb text-dark p-1 ps-2" >Profile</Link>
               <Link className="linkdb text-dark p-1 ps-2" >Settings</Link>
               <li><hr className="dropdown-divider" /></li>
-              <a onClick={logoutAdmin} className="linkdb text-danger p-1 ps-2" >
+              <a onClick={openConfirmPopup} className="linkdb text-danger p-1 ps-2" >
                 <i className="fas fa-sign-out-alt"></i> Logout
               </a>
             </ul>
@@ -166,9 +184,9 @@ const Adminsidebar = () => {
           <div className="nav-item"><Link className="linkdb" to="/customers"><i className="fas fa-users"></i>Customers</Link></div>
           <div className="nav-item"><Link className="linkdb" to="/employee"><i className="fas fa-handshake"></i>Employees</Link></div>
           {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
-          <div onClick={toggleSubmenu} className="nav-item"><Link className="linkdb subm">Store & Products <i ref={leftArrow} class="fa-solid fa-chevron-left"></i></Link></div>
+          <div onClick={toggleSubmenu} className="nav-item"><Link className="linkdb subm">Store & Products <i ref={leftArrow} className="fa-solid fa-chevron-left"></i></Link></div>
           <div ref={sm} className=" submenu">
-          <div className="sub-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/product" ><i className="fas fa-box"></i>Products</Link></div>
@@ -199,6 +217,26 @@ const Adminsidebar = () => {
       {/* wait  */}
       <div ref={loaderWaiting} className="loading">
         <p>Please wait....</p>
+      </div>
+
+      {/* Confirm Popup  */}
+      <div ref={confirmPopupBg} className="confirmation-popupBg">
+        <div ref={confirmPopup} className="confirmation-popup">
+          <div className="cross-confirm-main-div d-flex justify-content-end">
+            <div onClick={closeConfirmPopup} className="cross-confirm-popup-div">
+              <i className="fas fa-times" ></i>
+            </div>
+          </div>
+          <h6 className='text-center'>
+            Are you sure want to Logout ?</h6>
+          {/* <p style={{fontSize:"12px"}}>
+            This action will log you out from the system.
+          </p> */}
+          <div className="del-btn-div d-flex justify-content-around">
+            <button onClick={logoutAdmin} className="btn btn-danger btn-sm">Yes, Logout</button>
+            <button onClick={closeConfirmPopup} className="btn btn-light border btn-sm">Cancel</button>
+          </div>
+        </div>
       </div>
 
     </>

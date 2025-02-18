@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SideBar, { SideBarEmp } from './admincommon'
+import SideBar, { ConfirmPopup, SideBarEmp } from './admincommon'
 import { useCookies } from 'react-cookie';
 import Sidebar from './sidebars/Sidebar';
 
@@ -34,6 +34,19 @@ const Subcategory = () => {
         setIsEditMode(false);
         setSubcategoryName('');
     }
+
+    // const [response, setResponse] = useState("");
+    // const confirmPopupRef = useRef();
+
+    // const showRes = () => {
+    //     confirmPopupRef.current.classList.add("active-response-popup");
+    //     setTimeout(() => {
+    //         confirmPopupRef.current.classList.remove("active-response-popup");
+    //     }, 2000);
+    // };
+
+
+
     // adding new subcategory function 
     const addSubcategory = async () => {
         loaderLoading.current.style.display = "block";
@@ -49,7 +62,8 @@ const Subcategory = () => {
         })
         const data = await re.json();
         if (data.Response === "Saved") {
-            alert(data.Response);
+            // alert(data.Response);
+            // setResponse(data.Response);
             closeAddSubcategory();
             getSubCategory(catId)
         }
@@ -90,7 +104,7 @@ const Subcategory = () => {
     // get subcategory 
     const getSubCategory = async (catid) => {
         setCatId(catid);
-        loaderLoading.current.style.display = "block";
+        // loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/subcategoryapi.php?cid=" + catid, {
             method: 'GET',
             headers: {
@@ -98,8 +112,7 @@ const Subcategory = () => {
             }
         })
         const data = await re.json();
-        loaderLoading.current.style.display = "none";
-        // console.log(data);
+        // loaderLoading.current.style.display = "none";
         setSubcategory(data);
     }
 
@@ -171,6 +184,7 @@ const Subcategory = () => {
         openAddSubcategory()
     }
 
+    
     // updating subcategory 
     const updateSubcategory = async () => {
         // alert(subcatId)
@@ -188,7 +202,7 @@ const Subcategory = () => {
         const data = await re.json();
         // console.log(data);
         if (data.Response === "Updated") {
-            alert(data.Response);
+            // setResponse(data.Response);
             closeAddSubcategory();
             loaderLoading.current.style.display = 'none';
             setIsEditMode(false);
@@ -203,6 +217,7 @@ const Subcategory = () => {
 
     return (
         <>
+             {/* <ConfirmPopup ref={confirmPopupRef} resp={response} showRes={showRes} /> */}
             <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div selection">

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Header from "./common/common"
+import Header, { Tracking } from "./common/common"
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -91,7 +91,7 @@ const Checkout = () => {
         let popup = document.getElementById("orderPopup");
         popup.classList.add("show");
         createLeaves();
-        
+
         // Auto-hide after 3 seconds
         setTimeout(() => {
             popup.classList.remove("show");
@@ -136,6 +136,8 @@ const Checkout = () => {
 
     return (
         <>
+            <Tracking />
+
             <Header />
             {/* checkout page */}
             <div className="checkout-container">
@@ -157,7 +159,7 @@ const Checkout = () => {
                                         <p>{x.unitname}</p>
                                         <strong><p>{x.offerprice}</p></strong>
                                     </div>
-                                  
+
                                 </div>
                             )
                         })

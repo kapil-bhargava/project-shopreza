@@ -309,7 +309,7 @@ td img {
 
 .table-responsive th,
 td {
-    padding: 15px;
+    padding: 5px;
     text-align: left;
     border-bottom: 1px solid var(--light-gray);
 }

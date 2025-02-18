@@ -11,7 +11,6 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
 
-    const [cookie2, createCookie2, removeCookie2] = useCookies();
     const [cookie, createCookie, removeCookie] = useCookies();
 
 
@@ -20,15 +19,15 @@ const Home = () => {
 
     const getCategory = async () => {
 
-        loaderLoading.current.style.display = "block"
+        loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
 
         const dt = await re.json();
-        loaderLoading.current.style.display = "none"
-        setCategories(dt)
+        loaderLoading.current.style.display = "none";
+        setCategories(dt);
     }
 
     const catClicked = (cid) => {
@@ -46,9 +45,34 @@ const Home = () => {
     }, [])
 
 
+    function updateStatus() {
+        const statusDiv = document.getElementById('status');
+        if (navigator.onLine) {
+            statusDiv.textContent = "You are Online";
+            statusDiv.className = "status-popup online show";
+        } else {
+            statusDiv.textContent = "You are Offline";
+            statusDiv.className = "status-popup offline show";
+        }
+        statusDiv.style.display = "block";
+        setTimeout(() => {
+            statusDiv.classList.remove("show");
+            setTimeout(() => {
+                statusDiv.style.display = "none";
+            }, 500);
+        }, 3000);
+    }
+
+    window.addEventListener("online", updateStatus);
+    window.addEventListener("offline", updateStatus);
+
+
     return (
         <>
-            {/* <Tracking /> */}
+
+            <Tracking/>
+            <div id="status" class="status-popup"></div>
+
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
