@@ -36,7 +36,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        if (cookie.storeid !== undefined || cookie.sp !== null) {
+        if ( cookie.sp != null) {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
         }

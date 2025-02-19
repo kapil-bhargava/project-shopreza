@@ -15,10 +15,10 @@ const Customer = () => {
     const loaderWaiting = useRef();
 
     const [signUpData, setSignUpData] = useState([]);
-    const [mobile, setMobile] = useState();
+    const [mobile, setMobile] = useState("");
     const [cookie, createcookie, removecookie] = useCookies();
     const jump = useNavigate();
-    // const [address, setAddress] = useState();
+    // const [address, setAddress] = useState("");
 
 
     const openAddCustomer = () => {
@@ -26,14 +26,18 @@ const Customer = () => {
         customerFormBg.current.style.display = "block";
     }
     const closeAddCustomer = () => {
+        setEditMode(false)
         customerForm.current.style.display = "none";
         customerFormBg.current.style.display = "none";
     }
 
+    const [username, setUsername] = useState("");
+    const [userGender, setUserGender] = useState("");
+    const [address, setAddress] = useState("");
+
+
     const addCustomer = async () => {
-        console.log("umobile  "+mobile)
-        console.log("storeid  "+cookie.storeid)
-        console.log("utype  "+cookie.utype)
+        alert(userGender);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
             method: 'POST',
@@ -41,6 +45,8 @@ const Customer = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                name: username,
+                gender: userGender,
                 mobile: mobile,
                 storeid: cookie.storeid,
                 remark: cookie.uname
@@ -58,9 +64,27 @@ const Customer = () => {
         }
     }
 
+    // const re =  fetch(process.env.REACT_APP_URL + "/signupapi.php", {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ name: username, mobile: usermobile, password: userpassword, gender: userGender })
+    //   });
+    //   const data =  re.json();
+    //   // console.log(data);
+    //   if (data.response === "Saved") {
+
+    //     loginPopup.current.classList.add('active-popup');
+    //     signupPopup.current.classList.remove('active-popup');
+    //   }
+    //   else {
+    //     alert(data.response)
+    //   }
+
     const getSignUpData = async () => {
         var et = "";
-            et = cookie.storeid;
+        et = cookie.storeid;
         loaderLoading.current.style.display = "block";
         try {
             const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php?storeid=" + et, {
@@ -80,13 +104,100 @@ const Customer = () => {
             loaderLoading.current.style.display = "none"
         }
     }
+    const [editMode, setEditMode] = useState(false);
+
+    // opening edit modal and getting single customer data 
+    const openEditCustomer = async (mob) => {
+        setEditMode(true);
+        alert(mob)
+        loaderWaiting.current.style.display = "block";
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mobile: mob
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+            loaderWaiting.current.style.display = "none";
+            setUsername(data[0].name);
+            setUserGender(data[0].gender);
+            setAddress(data[0].address);
+            openAddCustomer();
+        }
+        catch (error) {
+            alert(error);
+            loaderWaiting.current.style.display = "none";
+        }
+    }
+
+    // deleting the customer 
+    const deleteCustomer = async (mob) => {
+        alert(mob);
+        loaderWaiting.current.style.display = "block";
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mob: mob
+                })
+            })
+            const data = await re.json();
+            console.log(data);
+            loaderWaiting.current.style.display = "none";
+            getSignUpData();
+        }
+        catch (error) {
+            alert(error);
+            loaderWaiting.current.style.display = "none";
+        }
+    }
+
+    const update = () => {
+        alert("update")
+    }
+    // // updating the customer data
+    // const updateCustomer = async () => {
+    //     loaderWaiting.current.style.display = "block";
+    //     try {
+    //         const re = await fetch(process.env.REACT_APP_URL + "/signupapi.php", {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 id: customerId,
+    //                 name: username,
+    //                 gender: userGender,
+    //                 // address: address
+    //             })
+    //         })
+    //         const data = await re.json();
+    //         console.log(data);
+    //         loaderWaiting.current.style.display = "none";
+    //         getSignUpData();
+    //         closeAddCustomer();
+    //     }
+    //     catch (error) {
+    //         alert(error);
+    //         loaderWaiting.current.style.display = "none";
+    //     }
+    // }
+
 
 
     useEffect(() => {
 
-        
-            getSignUpData();
-        
+
+        getSignUpData();
+
     }, [])
 
     return (
@@ -99,17 +210,40 @@ const Customer = () => {
                     <button onClick={openAddCustomer}>Add Customer</button>
                 </div>
                 <div ref={customerFormBg} className="c-bg"></div>
+                {/* =========   Customer Form Modal ===== */}
                 <div ref={customerForm} className="add-customer-form">
                     <div className="cross-entity">
                         <i className="fas fa-times" onClick={closeAddCustomer}></i>
                     </div>
-                    <h2>Add New Customer</h2>
+                    <h2>
+                        {
+                            editMode ? "Edit Customer" : "Add New Customer"
+                        }
+                    </h2>
                     <div className="form-group">
-                        <label>Customer Mobile</label>
-                        <input onChange={(e) => { setMobile(e.target.value) }} placeholder='Customer Mobile' type="text" id="customer-name" name="customer-name" required />
+                        <label>Name</label>
+                        <input value={username} onChange={(e) => { setUsername(e.target.value) }} placeholder='Customer Name' type="text" id="customer-name" name="customer-name" required />
                     </div>
                     <div className="form-group">
-                        <button onClick={addCustomer}>Add Customer</button>
+                        <label>Mobile</label>
+                        <input value={mobile} onChange={(e) => { setMobile(e.target.value) }} placeholder='Customer Mobile' type="number" id="customer-name" name="customer-name" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Gender</label>
+                        <input value={userGender} onChange={(e) => { setUserGender(e.target.value) }} placeholder='Customer Gender' type="text" id="customer-name" name="customer-name" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Address</label>
+                        <textarea value={address} onChange={(e) => { setAddress(e.target.value) }} placeholder='Customer Address' type="text" id="customer-name" name="customer-name" required ></textarea>
+                    </div>
+                    <div className="form-group">
+                        <button onClick={
+                            editMode ? update : addCustomer
+                        }>
+                            {
+                                editMode ? "Update" : "Add"
+                            }
+                        </button>
                     </div>
                 </div>
                 <div className="table-responsive">
@@ -122,6 +256,8 @@ const Customer = () => {
                                 <th>Address</th>
                                 <th>Status</th>
                                 <th>Remark</th>
+                                <th>#</th>
+                                <th>#</th>
 
                             </tr>
                         </thead>
@@ -137,6 +273,12 @@ const Customer = () => {
                                             <td>{x.address}</td>
                                             <td>{x.status}</td>
                                             <td>{x.remark}</td>
+                                            <td>
+                                                <i onClick={() => { openEditCustomer(x.mobile) }} className="fa fa-edit"></i>
+                                            </td>
+                                            <td>
+                                                <i onClick={() => { deleteCustomer(x.mobile) }} className="fa fa-trash"></i>
+                                            </td>
 
                                         </tr>
                                     )
