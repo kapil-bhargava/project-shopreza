@@ -42,7 +42,7 @@ const SubCategory = () => {
         } else {
             aitem[x].cartqty = parseInt(aitem[x].cartqty) - 1;
         }
-        console.log(aitem);
+        // console.log(aitem);
 
         dispatch({ type: 'INC', cdata: data.cdata });
         showUnitOptions(spid);
@@ -64,7 +64,7 @@ const SubCategory = () => {
         } else {
             productdata[x].cartqty = parseInt(productdata[x].cartqty) - 1;
         }
-        console.log(data);
+        // console.log(data);
         //       alert(data.cdata);
         dispatch({ type: 'INC', cdata: data.cdata });
         getProduct(scid);
@@ -73,18 +73,27 @@ const SubCategory = () => {
 
     // unit options div close and open functions 
     const showUnitOptions = async (spid) => {
+        setLoaderMsg("Loading Units...");
+        loaderLoading.current.style.display = "block";
         setspid(spid);
-        const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=${cookie.storeid}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const data = await re.json();
-        // console.log(data);
-        setaitem(data);
-        openUnitOptions()
+        try {
+            const re = await fetch(`${process.env.REACT_APP_URL}/aitemapi.php?spid=${spid}&mob=${cookie.sp}&storeid=${cookie.storeid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = await re.json();
+            console.log(data);
+            setaitem(data);
+            openUnitOptions();
+            loaderLoading.current.style.display = "none";
+            setLoaderMsg("");
 
+        }
+        catch (error) {
+            setLoaderMsg("Failed to load Unit Options...");
+        }
     }
     const openUnitOptions = () => {
         unitOptionsDivBg.current.classList.add("active-unit-options-bg-div");
@@ -92,7 +101,7 @@ const SubCategory = () => {
         unitOptionsDiv.current.classList.add("active-unit-options-div-mobile");
     }
 
-    const closeUnitOptions = (l) => {
+    const closeUnitOptions = () => {
         unitOptionsDivBg.current.classList.remove("active-unit-options-bg-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div");
         unitOptionsDiv.current.classList.remove("active-unit-options-div-mobile");
@@ -101,65 +110,86 @@ const SubCategory = () => {
     const opencart = () => {
         document.getElementById("cc").style.display = "block"
     }
+    const [loaderMsg, setLoaderMsg] = useState("");
 
     // getting subcategory data 
     const sub = async () => {
-        loaderLoading.current.style.display = "block"
-        const re = await fetch(`${process.env.REACT_APP_URL}/subcategoryapi.php?cid=${cid}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const data = await re.json()
-        getProduct(data[0].subcatid)
-        loaderLoading.current.style.display = "none"
-        setsubcatdata(data)
+        setLoaderMsg("Loading Subcategories...");
+        try {
+            loaderLoading.current.style.display = "block"
+            const re = await fetch(`${process.env.REACT_APP_URL}/subcategoryapi.php?cid=${cid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = await re.json()
+            setLoaderMsg("Loading Products...")
+            setsubcatdata(data);
+            getProduct(data[0].subcatid)
+            // loaderLoading.current.style.display = "none"
+            // setLoaderMsg("");
+        }
+        catch (error) {
+            setLoaderMsg("Failed to load Subcategories...");
+            // console.error(error)
+            // alert(error.message);
+        }
     }
 
     // getting all products 
     const getProduct = async (scid) => {
-        
+        setLoaderMsg("Loading Products...")
         loaderLoading.current.style.display = "block"
-        var mob = cookie["sp"];
-        setscid(scid);
-        console.log(scid, mob, cookie.storeid);
-        // alert(cookie.storeid)
-        const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=${cookie.storeid}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const data = await re.json()
-        console.log(data);
-        // console.table(data);
-        loaderLoading.current.style.display = "none";
-        setproductdata(data)
+        try {
+            var mob = cookie["sp"];
+            setscid(scid);
+            // console.log(scid, mob, cookie.storeid);
+            // alert(cookie.storeid)
+            const re = await fetch(`${process.env.REACT_APP_URL}/productapi.php?scid=${scid}&mob=${mob}&storeid=${cookie.storeid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = await re.json()
+            loaderLoading.current.style.display = "none";
+            setproductdata(data);
+            setLoaderMsg("");
+        }
+        catch (error) {
+            setLoaderMsg("Failed to load Products...");
+        }
     }
 
 
     // adding to the cart 
     const addToCart = async (unitId, x, au) => {
+        setLoaderMsg("Adding to cart");
         loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: cookie.storeid })
-        });
-        const data = await re.json();
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/cartapi.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ unitid: unitId, mobile: cookie.sp, storeid: cookie.storeid })
+            });
+            const data = await re.json();
 
-        dispatch({ type: 'INC', cdata: data.cdata });
-        if (au === "yes") { showUnitOptions(spid) }else{getProduct(scid);};
-        audio.current.play();
-        mobileCart.current.classList.add("active-mobile-cart");
-        animatedImg.current.classList.add("active-animated-img");
-        setTimeout(() => {
-            animatedImg.current.classList.remove("active-animated-img");
-        }, 500);
-        loaderLoading.current.style.display = "none";
+            dispatch({ type: 'INC', cdata: data.cdata });
+            if (au === "yes") { showUnitOptions(spid) } else { getProduct(scid); };
+            audio.current.play();
+            mobileCart.current.classList.add("active-mobile-cart");
+            animatedImg.current.classList.add("active-animated-img");
+            setTimeout(() => {
+                animatedImg.current.classList.remove("active-animated-img");
+            }, 500);
+            loaderLoading.current.style.display = "none";
+        }
+        catch (error) {
+            setLoaderMsg("Failed to add to cart...");
+        }
     }
 
 
@@ -171,7 +201,7 @@ const SubCategory = () => {
     return (
         <>
 
-            {/* <Tracking /> */}
+            <Tracking />
 
             {/* Header */}
             <Header loginPopup={loginPopup} popupBg={popupBg} />
@@ -199,26 +229,23 @@ const SubCategory = () => {
                             &times;
                         </div>
                         {aitem.map((unit, index) => (
-                            <>
-                                <h5></h5>
-                                <div key={unit.unitid} className="options-items">
-                                    <img src={unit.pic} alt={unit.unitname} />
-                                    <h5>{unit.unitname}</h5>
-                                    <h5>{unit.offerprice}</h5>
-                                    {
-                                        unit.cart === "no"
-                                            ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index, 'yes')} >Add</button>
-                                            :
-                                            <span className="quantity">
-                                                <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
-                                                <span>{unit.cartqty}</span>
-                                                <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid, index) }}>+</button>
-                                            </span>
-                                    }
-                                    {/* <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button> */}
-                                    {/* <span className='items-options-btns'><button>-</button><span>{aitem.cartqty}</span><button>+</button></span> */}
-                                </div >
-                            </>
+                            <div key={unit.unitid} className="options-items">
+                                <img src={unit.pic} alt={unit.unitname} />
+                                <h5>{unit.unitname}</h5>
+                                <h5>{unit.offerprice}</h5>
+                                {
+                                    unit.cart === "no"
+                                        ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index, 'yes')} >Add</button>
+                                        :
+                                        <span className="quantity">
+                                            <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
+                                            <span>{unit.cartqty}</span>
+                                            <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid, index) }}>+</button>
+                                        </span>
+                                }
+                                {/* <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button> */}
+                                {/* <span className='items-options-btns'><button>-</button><span>{aitem.cartqty}</span><button>+</button></span> */}
+                            </div >
                         ))}
                     </div>
                     {productdata.map((x, index) => (
@@ -272,7 +299,7 @@ const SubCategory = () => {
             <audio ref={audio} src={require("./sounds/cash-sound.mp3")}></audio>
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
-                <p>Loading....</p>
+                <p>{loaderMsg}</p>
             </div>
 
             {/* wait  */}

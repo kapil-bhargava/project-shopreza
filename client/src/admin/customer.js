@@ -17,9 +17,7 @@ const Customer = () => {
     const [signUpData, setSignUpData] = useState([]);
     const [mobile, setMobile] = useState("");
     const [cookie, createcookie, removecookie] = useCookies();
-    const jump = useNavigate();
-    // const [address, setAddress] = useState("");
-
+    const [editMode, setEditMode] = useState(false);
 
     const openAddCustomer = () => {
         customerForm.current.style.display = "block";
@@ -54,7 +52,7 @@ const Customer = () => {
             })
         })
         const data = await re.json();
-        console.log(data);
+        // console.log(data);
         loaderLoading.current.style.display = "none";
         if (data.response === "Saved") {
             closeAddCustomer();
@@ -95,7 +93,7 @@ const Customer = () => {
                 }
             })
             const data = await re.json();
-            console.log(data)
+            // console.log(data)
             loaderLoading.current.style.display = "none";
             setSignUpData(data)
         }
@@ -104,7 +102,7 @@ const Customer = () => {
             loaderLoading.current.style.display = "none"
         }
     }
-    const [editMode, setEditMode] = useState(false);
+    
 
     // opening edit modal and getting single customer data 
     const openEditCustomer = async (mob) => {
@@ -122,7 +120,7 @@ const Customer = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             loaderWaiting.current.style.display = "none";
             setUsername(data[0].name);
             setUserGender(data[0].gender);
@@ -150,7 +148,7 @@ const Customer = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             loaderWaiting.current.style.display = "none";
             getSignUpData();
         }

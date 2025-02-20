@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Header from './common/common'
+import Header, { Tracking } from './common/common'
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,6 +44,7 @@ const Userorders = () => {
 
     return (
         <>
+        <Tracking />
             {/* using Header form common  */}
             <Header />
             {/* User Order page coding */}

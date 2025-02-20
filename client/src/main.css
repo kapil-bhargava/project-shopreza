@@ -445,6 +445,30 @@ header {
 }
 
 /* cart css  */
+.empty-cart{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    /* background-color: yellow; */
+}
+.empty-cart-btn-div{
+    display: flex;
+    align-items: center;
+    /* background-color: red; */
+    width: 100%;
+    justify-content: space-between;
+}
+.lnk-empty-cart{
+    display: block;
+    margin-inline: auto;
+}
+.empty-cart img{
+    margin-bottom: 50px;
+    width: 90%;
+
+}
 .cart-bg-div {
     position: fixed;
     top: 0;
@@ -2152,14 +2176,86 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: red;
+    padding: 10px 20px;
+    background-color: green;
     border-radius: 10px;
     position: fixed;
+    color: white;
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
 } 
+.track-main strong{
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.NotDeliveredOrder-popup{
+    /* display: none; */
+    width: 50%;
+    z-index: 500;
+    height: 70%;
+    overflow-y: scroll;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    /* background-color: var(--primary-green); */
+    color: var(--primary-white);
+    /* padding: 30px 40px; */
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-size: 1.3rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: fixed;
+}
+.NotDeliveredOrder-popup .order-container{
+    margin: 0;
+    /* position: relative;
+    background-color: red; */
+}
+.NotDeliveredOrder-popup-Bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    z-index: 500;
+}
+
+.NotDeliveredOrder-popup-Bg.showBg{
+    visibility: visible;
+    opacity: 1;
+}
+
+.NotDeliveredOrder-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+.NotDeliveredOrder-popup::-webkit-scrollbar {
+    width: 0;
+}
+.closeOrder{
+    cursor: pointer;
+    font-size: 25px;
+    color: red;
+    margin-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+@media screen and (max-width: 768px){
+    .NotDeliveredOrder-popup{
+        width: 90%;
+        /* font-size: 1.1rem; */
+    }
+}
 
 /* ======= Footer css Started ====== */
 footer {

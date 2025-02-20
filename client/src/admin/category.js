@@ -36,7 +36,7 @@ const Category = () => {
         setCategory('')
         setIsEditMode(false)
     }
-    
+
     const showRes = (re) => {
         setresponse(re);
         res.current.classList.add("active-response-popup")
@@ -272,7 +272,7 @@ const Category = () => {
             <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div">
-                   
+
                     <button onClick={openAddCategory}>Add Category</button>
                 </div>
 
@@ -286,26 +286,16 @@ const Category = () => {
                                 <tr>
                                     <th>S.No.</th>
                                     <th>Category</th>
-                                    {/* <th>Price</th>
-                                <th>Offer Price</th>
-                                <th>Des</th> */}
                                     <th>Action</th>
-                                    {/* <th>Referral Code</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     catData.map((cat, index) => {
                                         return (
-                                            // <tr key={index}>
                                             <tr key={index} className={`tbrow ${newItemId === cat.catid ? (del ? "del-row" : "new-row") : ""}`}>
-
-
                                                 <td>{index + 1}</td>
                                                 <td> <img onClick={() => { openPicForm(cat.catid) }} src={cat.pic} alt={cat.pic} /> {cat.catname}</td>
-                                                {/* <td>{cat.price}</td>
-                                            <td>{cat.offerprice}</td>
-                                            <td>{cat.description}</td> */}
                                                 <td>
                                                     <i onClick={() => { openEditCategory(cat.catid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
                                                     <i onClick={() => { openConfirmPopup(catData[index].catid) }} className="fa fa-trash text-danger"></i>

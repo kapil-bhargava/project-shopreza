@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Header from './common/common'
+import Header, { Tracking } from './common/common'
 import { useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
@@ -126,7 +126,7 @@ const TrackingOrder = () => {
 
     return (
         <>
-            {/* <Header /> */}
+            
 
             <Header />
 

@@ -293,7 +293,7 @@ const Subcategory = () => {
                 </div>
 
                 <div className="form-group">
-                    <label for="subcategory name" >Subcategory Name</label>
+                    <label htmlFor="subcategory name" >Subcategory Name</label>
                     <input value={subcategoryName} onChange={(e) => { setSubcategoryName(e.target.value) }} placeholder='Enter subcategory name' type="text" required />
                 </div>
                 <div className="form-group">

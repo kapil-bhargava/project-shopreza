@@ -49,6 +49,7 @@ const Header = ({ loginPopup, popupBg }) => {
     }
 
 
+    const [cartLength, setCartLength] = useState("");
     // gettting cart data 
     const getCartData = async () => {
         // alert(cookie.sp)
@@ -60,6 +61,7 @@ const Header = ({ loginPopup, popupBg }) => {
             body: JSON.stringify({ mobile: cookie.sp, storeid: cookie.storeid })
         });
         const data = await re.json();
+        setCartLength(data.length)
         var itot = 0;
         var qty = 0;
         var saved = 0;
@@ -170,101 +172,94 @@ const Header = ({ loginPopup, popupBg }) => {
 
             <div ref={cartbg} onClick={cartClose} className="cart-bg-div"></div>
             <div id='cc' ref={cart} className="cart-container">
-
-                <div>
-                    <div className="cart-header">
-                        <h2> Cart</h2>
-                        <i onClick={cartClose} className="fa fa-times"></i>
-                    </div>
-                    <div className="scroll-cart">
-
-                        <div className="delivery-info">
-                            <p>
-                                <strong>Free delivery in 9 minutes</strong>
-                            </p>
-                            <p>Shipment of 2 items</p>
-                        </div>
-
-                        <div className="cart-items">
-                            {
-                                cartData.map((x, index) => {
-                                    return (
-
-                                        <div key={index} className="item">
-                                            <img
-                                                src={x.pic}
-                                                alt={x.productname}
-                                                className="item-image"
-                                            />
-                                            <div className="item-details">
-                                                <p>{x.productname}</p>
-                                                <p>{x.unitname}</p>
-                                                <strong><p>{x.offerprice}</p></strong>
-                                            </div>
-                                            <div className="quantity">
-                                                <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
-                                                <span>{x.quantity}</span>
-                                                <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-
-
-                        </div>
-
-                        <div className="bill-details">
-                            <h3> <strong>Bill details</strong></h3>
-                            <p>
-                                Items total <span className="saved">Saved ₹{saved}</span> ₹{total}
-                            </p>
-                            <p>
-                                Delivery charge <span className="free">FREE</span>
-                            </p>
-                            <p>Handling charge <span className="free">FREE</span></p>
-                            <p>Grand total <span><strong>₹ {total}</strong></span></p>
-                        </div>
-
-                        {/* <div className="donation">
-                    <input type="checkbox" id="donation" />
-                    <label htmlFor="donation">
-                        Feeding India donation ₹1
-                        <p>Working towards a malnutrition-free India. Feeding India...</p>
-                    </label>
-                </div> */}
-
-                        {/* <div className="tip-delivery">
-                    <h3>Tip your delivery partner</h3>
-                    <p>
-                        Your kindness means a lot! 100% of your tip will go directly to your
-                        delivery partner.
-                    </p>
-                    <div className="tip-options">
-                        <button>₹20</button>
-                        <button className="most-tipped">₹30</button>
-                        <button>₹50</button>
-                        <button>Custom</button>
-                    </div>
-                </div> */}
-
-                        <div className="bill-details">
-                            <h4> <strong>Address</strong></h4>
-                            <p>
-                                {cookie_userAddress.address}
-                            </p>
-                        </div>
-
-                        <div className="cart-footer">
-                            <div className="total-amount">₹ {total}</div>
-                            <Link to="/checkout">
-                                <button className="proceed-btn">Proceed</button>
-                            </Link>
-                        </div>
-                    </div>
+                <div className="cart-header">
+                    <h2> Cart</h2>
+                    <i onClick={cartClose} className="fa fa-times"></i>
                 </div>
+                {
+                    cartLength == 0 ? (
+                        <div className="empty-cart">
+                            {/* <h3>Your cart is empty</h3> */}
+                            <img src={require("../images/empty_cart.png")} alt="" />
+                            <p>Your cart is empty. Start shopping now!</p>
+                            <div className="empty-cart-btn-div">
+                                <Link to="/" className="lnk-empty-cart btn btn-warning">Continue Shopping</Link>
+                            </div>
+                        </div>
+                    )
+                        : (
+
+
+                            <div>
+
+                                <div className="scroll-cart">
+
+                                    <div className="delivery-info">
+                                        <p>
+                                            <strong>Free delivery in 9 minutes</strong>
+                                        </p>
+                                        <p>Shipment of {cartLength} items</p>
+                                    </div>
+
+                                    <div className="cart-items">
+                                        {
+                                            cartData.map((x, index) => {
+                                                return (
+
+                                                    <div key={index} className="item">
+                                                        <img
+                                                            src={x.pic}
+                                                            alt={x.productname}
+                                                            className="item-image"
+                                                        />
+                                                        <div className="item-details">
+                                                            <p>{x.productname}</p>
+                                                            <p>{x.unitname}</p>
+                                                            <strong><p>{x.offerprice}</p></strong>
+                                                        </div>
+                                                        <div className="quantity">
+                                                            <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
+                                                            <span>{x.quantity}</span>
+                                                            <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+
+
+                                    </div>
+
+                                    <div className="bill-details">
+                                        <h3> <strong>Bill details</strong></h3>
+                                        <p>
+                                            Items total <span className="saved">Saved ₹{saved}</span> ₹{total}
+                                        </p>
+                                        <p>
+                                            Delivery charge <span className="free">FREE</span>
+                                        </p>
+                                        <p>Handling charge <span className="free">FREE</span></p>
+                                        <p>Grand total <span><strong>₹ {total}</strong></span></p>
+                                    </div>
+                                    <div className="bill-details">
+                                        <h4> <strong>Address</strong></h4>
+                                        <p>
+                                            {cookie_userAddress.address}
+                                        </p>
+                                    </div>
+
+                                    <div className="cart-footer">
+                                        <div className="total-amount">₹ {total}</div>
+                                        <Link to="/checkout">
+                                            <button className="proceed-btn">Proceed</button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
             </div>
+
 
             {/* user icon click section part  */}
             <div onClick={closeUserProfile} ref={userProfileBg} className="user-profileBg"></div>
@@ -301,11 +296,92 @@ const Footer = () => {
     )
 }
 const Tracking = () => {
+    const [cookie, createcookie, removecookie] = useCookies();
+
+    // useState for setting order Data 
+    const [orderData, setOrderData] = useState([]);
+    const [totalNotDeliveredOrders, setTotalNotDeliveredOrders] = useState();
+
+    const jump = useNavigate();
+    // getting productorder
+    const getProductOrders = async () => {
+        try {
+            // loaderLoading.current.style.display = "block";
+            const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php?vtype=customer&mobile=${cookie.sp}&storeid=${cookie.storeid}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const dt = await re.json();
+            const or = dt.filter(order => order.orderstatus !== "Delivered");
+            setOrderData(or);
+            setTotalNotDeliveredOrders(or.length);
+            // loaderLoading.current.style.display = "none";
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const orPopup = useRef();
+    const orPopupBg = useRef();
+
+    const openOrders = () => {
+        orPopup.current.classList.add("show");
+        orPopupBg.current.classList.add("showBg");
+
+        // console.log(orderData)
+        // alert("Orders");
+    }
+    const closeOrders = () => {
+        orPopupBg.current.classList.remove("showBg");
+        orPopup.current.classList.remove("show")
+    }
+
+    const openTracking = (orderid) => {
+        jump(`/trackingorder/${orderid}`)
+    }
+
+    useEffect(() => {
+        getProductOrders();
+        // console.log("useeffect run")
+    }, [])
     return (
         <>
             {/* Tracking fixed section in bottom  */}
             <div className="track-main">
-                <h1>this is tracking div</h1>
+                <h4>Track your Order here</h4>
+                <h4>Total tracking orders : <strong onClick={openOrders}>{totalNotDeliveredOrders}</strong> </h4>
+            </div>
+
+            {/* or Popup */}
+            <div ref={orPopupBg} className="NotDeliveredOrder-popup-Bg"></div>
+            <div ref={orPopup} className="NotDeliveredOrder-popup">
+                <div className="closeOrder">
+                    <i onClick={closeOrders} className="fa fa-times"></i>
+                </div>
+                <div className="order-container">
+                    <h2>My Orders</h2>
+                    {
+                        orderData.map((order, index) => {
+                            return (
+                                <div onClick={() => { openTracking(order.orderid) }} key={index} className="order">
+                                    <div className="details">
+                                        <img src={require("./images/fruits.png")} alt="Fruits" />
+                                        <div className="info">
+                                            <p>
+                                                Order # <strong>{order.orderid}</strong>
+                                            </p>
+                                            <p>Order Date : <strong>{order.orderdate}</strong> {order.ordertime}</p>
+
+                                        </div>
+                                    </div>
+                                    {/* <span className={`status ${order.order_status.toLowerCase()}`}>{order.order_status}</span> */}
+                                    <span className={`status ${order.orderstatus}`}>{order.orderstatus}</span>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
         </>
     )
@@ -314,4 +390,4 @@ const Tracking = () => {
 
 export default Header
 
-export { Footer,Tracking }
+export { Footer, Tracking }

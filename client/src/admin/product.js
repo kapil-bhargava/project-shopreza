@@ -119,6 +119,7 @@ const Product = () => {
 
     // getting product unit 
     const openAddProductUnit = async (spid) => {
+        alert(spid)
         setSPId(spid);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?spid=" + spid, {
@@ -177,7 +178,12 @@ const Product = () => {
 
     // adding new Product unit
     const addUnit = async () => {
-        try {
+        console.log(spid)
+        console.log(unitName)
+        console.log(unitPrice)
+        console.log(unitOfferPrice)
+        console.log(stock)
+        // try {
             loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
                 method: 'POST',
@@ -195,27 +201,26 @@ const Product = () => {
             })
             const data = await re.json();
             console.log(data);
-            if (data.Response === "Saved") {
-                alert(data.Response);
-                getProducts(subCatId);
-                openAddProductUnit(spid)
-                loaderLoading.current.style.display = "none";
+            // if (data.Response === "Saved") {
+            //     alert(data.Response);
+            //     getProducts(subCatId);
+            //     openAddProductUnit(spid)
+            //     loaderLoading.current.style.display = "none";
 
-            } else {
-                alert(data.Response);
-                loaderLoading.current.style.display = "none";
-            }
-        }
-        catch (error) {
-            loaderLoading.current.style.display = "none";
-            alert("add unit error: " + error.message)
-        }
+            // } else {
+            //     alert(data.Response);
+            //     loaderLoading.current.style.display = "none";
+            // }
+        // }
+        // catch (error) {
+        //     loaderLoading.current.style.display = "none";
+        //     alert("add unit error: " + error.message)
+        // }
     }
 
     // getting single data of product 
     const openEditProduct = async (spid) => {
         setSPId(spid);
-        alert(spid)
         setIsEditMode(true);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/productmasterapi.php", {

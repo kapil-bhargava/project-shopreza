@@ -12,22 +12,33 @@ const Home = () => {
     const loaderLoading = useRef()
 
     const [cookie, createCookie, removeCookie] = useCookies();
+    const [loaderMsg, setLoaderMsg] = useState("");
 
 
 
     const jump = useNavigate()
 
     const getCategory = async () => {
-
+        setLoaderMsg("Loading Categories...");
         loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-        const dt = await re.json();
-        loaderLoading.current.style.display = "none";
-        setCategories(dt);
+            const dt = await re.json();
+            // loaderLoading.current.style.display = "none";
+            setCategories(dt);
+            // loaderLoading.current.style.display = "none";
+            setLoaderMsg(""); 
+        }
+        catch (e) {
+            console.error(e);
+            loaderLoading.current.style.display = "none";
+            setLoaderMsg("Failed to load categories!");
+
+        }
     }
 
     const catClicked = (cid) => {
@@ -35,8 +46,9 @@ const Home = () => {
     }
 
 
+
     useEffect(() => {
-        if ( cookie.sp != null) {
+        if (cookie.sp != null) {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
         }
@@ -70,12 +82,12 @@ const Home = () => {
     return (
         <>
 
-            <Tracking/>
-            <div id="status" class="status-popup"></div>
+            <Tracking />
+            <div id="status" className="status-popup"></div>
 
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
-                <p>Loading....</p>
+                <p>{loaderMsg}</p>
             </div>
             {/* importing Header from './common/header' */}
             <Header loginPopup={loginPopup} popupBg={popupBg} />

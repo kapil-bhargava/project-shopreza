@@ -1019,8 +1019,9 @@ select {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -80%);
-    transition: 0.3s cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate(-50%, -50%) scale(0.8);
+    /* transition: 0.3s cubic-bezier(0.755, 0.05, 0.855, 0.06); */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     border-radius: 10px;
     z-index: 300;
     opacity: 0;
@@ -1029,7 +1030,8 @@ select {
 .active-confirmation-popup{
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
+    
 
 }
 .confirmation-popupBg{
