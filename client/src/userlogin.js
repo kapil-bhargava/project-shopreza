@@ -153,7 +153,7 @@ const Userlogin = (props) => {
                 <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
                 <h4>Login</h4>
                 <label  >Enter Registered Mobile Number</label>
-                <input value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" />
+                <input ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" />
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
                 <button className="btn btn-success" onClick={login}>Go</button> <br />

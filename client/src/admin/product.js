@@ -119,7 +119,6 @@ const Product = () => {
 
     // getting product unit 
     const openAddProductUnit = async (spid) => {
-        alert(spid)
         setSPId(spid);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?spid=" + spid, {
@@ -168,7 +167,7 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        alert(data.Response);
+        // alert(data.Response);
         if (data.Response === "Saved") {
             //setCategory(data.response);
             getProducts(subCatId);
@@ -183,7 +182,7 @@ const Product = () => {
         console.log(unitPrice)
         console.log(unitOfferPrice)
         console.log(stock)
-        // try {
+        try {
             loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
                 method: 'POST',
@@ -201,21 +200,21 @@ const Product = () => {
             })
             const data = await re.json();
             console.log(data);
-            // if (data.Response === "Saved") {
-            //     alert(data.Response);
-            //     getProducts(subCatId);
-            //     openAddProductUnit(spid)
-            //     loaderLoading.current.style.display = "none";
+            if (data.Response === "Saved") {
+                // alert(data.Response);
+                getProducts(subCatId);
+                openAddProductUnit(spid)
+                loaderLoading.current.style.display = "none";
 
-            // } else {
-            //     alert(data.Response);
-            //     loaderLoading.current.style.display = "none";
-            // }
-        // }
-        // catch (error) {
-        //     loaderLoading.current.style.display = "none";
-        //     alert("add unit error: " + error.message)
-        // }
+            } else {
+                alert(data.Response);
+                loaderLoading.current.style.display = "none";
+            }
+        }
+        catch (error) {
+            loaderLoading.current.style.display = "none";
+            alert("add unit error: " + error.message)
+        }
     }
 
     // getting single data of product 
@@ -255,7 +254,7 @@ const Product = () => {
         const data = await re.json();
         loaderLoading.current.style.display = "none";
         // console.log(data);
-        alert(data.Response)
+        // alert(data.Response)
         getProducts(subCatId);
         closeAddProductUnit();
     }
@@ -305,7 +304,7 @@ const Product = () => {
             const data = await re.json();
             loaderLoading.current.style.display = "none";
             if (data.Response === "Updated") {
-                alert(data.Response);
+                // alert(data.Response);
                 getProducts(subCatId);
                 openAddProductUnit(spid);
             }
@@ -338,7 +337,7 @@ const Product = () => {
             loaderLoading.current.style.display = "none";
 
             if (data.Response === "Deleted") {
-                alert(data.Response);
+                // alert(data.Response);
                 getProducts(subCatId);
                 openAddProductUnit(spid);
             }
@@ -365,7 +364,7 @@ const Product = () => {
             const data = await re.json();
             loaderLoading.current.style.display = "none";
             if (data.Response === "Deleted") {
-                alert(data.Response);
+                // alert(data.Response);
                 getProducts(subCatId);
             }
 
@@ -434,7 +433,7 @@ const Product = () => {
                 // console.log(data);
                 loaderLoading.current.style.display = "none";
                 if (data.Response === "Deleted") {
-                    alert(data.Response);
+                    // alert(data.Response);
                     getUploadPic(unitId);
                     closeConfirmPopup();
                 }

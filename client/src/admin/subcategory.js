@@ -14,11 +14,11 @@ const Subcategory = () => {
 
 
     const [subcategory, setSubcategory] = useState([]);
-    const [subcategoryPic, setSubcategoryPic] = useState();
-    const [subcategoryName, setSubcategoryName] = useState();
-    const [catId, setCatId] = useState();
+    const [subcategoryPic, setSubcategoryPic] = useState("");
+    const [subcategoryName, setSubcategoryName] = useState("");
+    const [catId, setCatId] = useState("");
     const [catData, setCatData] = useState([]);
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState("");
     const [cookie, createcookie, removecookie] = useCookies();
 
     // const [categoryData, setCategoryData] = useState([]);
@@ -83,6 +83,8 @@ const Subcategory = () => {
     }
     // uploading subcategory pic 
     const uploadPic = async () => {
+        console.log(subcategoryPic)
+        alert(subcatId)
         loaderLoading.current.style.display = "block";
         const formData = new FormData();
         formData.append('pic', subcategoryPic);
@@ -93,6 +95,7 @@ const Subcategory = () => {
             body: formData
         })
         const data = await re.json();
+        console.log(data);
         alert(data.Response);
         getSubCategory(catId);
         closePicPopup();
@@ -161,7 +164,7 @@ const Subcategory = () => {
     }
 
 
-    const [subcatId, setSubcatId] = useState();
+    const [subcatId, setSubcatId] = useState("");
     // getting single subcategory data 
     const openEditSubcategory = async (subcatid) => {
         setSubcatId(subcatid);
@@ -187,7 +190,8 @@ const Subcategory = () => {
     
     // updating subcategory 
     const updateSubcategory = async () => {
-        // alert(subcatId)
+        alert(subcatId)
+        alert(subcategoryName)
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/subcategoryapi.php", {
             method: 'PUT',
@@ -200,7 +204,7 @@ const Subcategory = () => {
             })
         })
         const data = await re.json();
-        // console.log(data);
+        console.log(data);
         if (data.Response === "Updated") {
             // setResponse(data.Response);
             closeAddSubcategory();

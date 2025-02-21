@@ -8,6 +8,7 @@ import Userlogin from './userlogin'
 const Home = () => {
     const loginPopup = useRef();
     const popupBg = useRef();
+    const ip = useRef();
     const [categories, setCategories] = useState([]);
     const loaderLoading = useRef()
 
@@ -51,6 +52,16 @@ const Home = () => {
         if (cookie.sp != null) {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
+        }
+        else{
+            // if (ip.current) {
+                ip.current.focus();
+                // ip.current.style.backgroundColor="red";
+                
+            //   }
+            //   else{
+                console.log("first")
+            //   }
         }
 
 
@@ -176,7 +187,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            <Userlogin ref={loginPopup} ref1={popupBg} />
+            <Userlogin ref={loginPopup} ref1={popupBg} ip={ip} />
 
 
 
