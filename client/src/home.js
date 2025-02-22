@@ -32,7 +32,7 @@ const Home = () => {
             // loaderLoading.current.style.display = "none";
             setCategories(dt);
             // loaderLoading.current.style.display = "none";
-            setLoaderMsg(""); 
+            setLoaderMsg("");
         }
         catch (e) {
             console.error(e);
@@ -53,14 +53,14 @@ const Home = () => {
             getCategory();
             // alert("Cookie:  "+cookie.sp)
         }
-        else{
+        else {
             // if (ip.current) {
-                ip.current.focus();
-                // ip.current.style.backgroundColor="red";
-                
+            ip.current.focus();
+            // ip.current.style.backgroundColor="red";
+
             //   }
             //   else{
-                console.log("first")
+            console.log("first")
             //   }
         }
 
@@ -105,12 +105,15 @@ const Home = () => {
 
             {/* hero section */}
             <section className="hero">
-                <div className="hero-content">
+                {/* <div className="hero-content">
                     <img src={require("./images/groceryveg.png")} alt="" />
                     <h2>Discover the <span>New</span> Collection</h2>
                     <p>Discover our wide range of milk products, starting from 50% fat free to 99% fat free.</p>
                     <button className="btn btn-success">Shop Now</button>
-                </div>
+                </div> */}
+                <h1>Get Groceries Delivered in Minutes!</h1>
+                <p>Fresh fruits, vegetables, and daily essentials at your doorstep.</p>
+                <button>Shop Now</button>
             </section>
 
             {/* category section  */}
@@ -134,6 +137,7 @@ const Home = () => {
             </section>
 
             {/* items secton  */}
+            <div className="fixed-gradiet-section"></div>
             <section className="items-container">
                 <h2>Our Items</h2>
                 <div className="container">
