@@ -398,16 +398,30 @@ header {
     pointer-events: none;
     white-space: nowrap;
     opacity: 0;
-    animation: fade 2s ease-in-out;
+    animation: slideUp 2s ease-in-out infinite;
 }
 
 /* .fade-animation {
     animation: fade 1s ease-in-out;
   } */
   
-  @keyframes fade {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%); /* Start below */
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(0); /* Slide up */
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(0); /* Stay for a second */
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100%); /* Move up */
+      opacity: 0;
+    }
   }
   
 .search {
