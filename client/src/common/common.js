@@ -110,14 +110,27 @@ const Header = ({ loginPopup, popupBg }) => {
     }
 
 
+
+    const groceryItems = ["Vegetables", "Fruits", "Dairy", "Grocery", "Eggs"];
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+
+
+
     useEffect(() => {
         if (cookie.sp == null) {
             openLogin()
         }
         else {
             getCartData();
+            const interval = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % groceryItems.length);
+            }, 2000); // Change text every 2 seconds
+    
+            return () => clearInterval(interval); // Cleanup on unmount
         }
-
+        
 
     }, [])
 
@@ -139,7 +152,8 @@ const Header = ({ loginPopup, popupBg }) => {
                 </div>
                 <div className="inpt-div">
                     <div className="search">
-                        <i className="fa-solid fa-magnifying-glass"></i><input placeholder="Search Milk..." type="text" />
+                        <i className="fa-solid fa-magnifying-glass"></i><input placeholder="" type="text" />
+                        <div key={currentIndex} className="placeholder-text" id="placeholder-text">{groceryItems[currentIndex]}</div>
                     </div>
                 </div>
                 <div className="cart-btn-div">

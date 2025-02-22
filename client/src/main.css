@@ -380,7 +380,7 @@ header {
 }
 
 .inpt-div {
-    background-color:white;
+    background-color: white;
     /* background-color:red; */
 
     width: 45%;
@@ -389,6 +389,27 @@ header {
     /* padding: 20px; */
 }
 
+.placeholder-text {
+    position: absolute;
+    /* top: 50%; */
+    left: 30px;
+    /* transform: translateY(100%); */
+    color: #999;
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fade 2s ease-in-out;
+}
+
+/* .fade-animation {
+    animation: fade 1s ease-in-out;
+  } */
+  
+  @keyframes fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
 .search {
     padding: 0px 5px;
     width: 100%;
@@ -398,6 +419,8 @@ header {
     align-items: center;
     /* border: 1px solid grey; */
     border-radius: 5px;
+    position: relative;
+    /* overflow: hidden; */
 }
 
 .search i {
@@ -756,11 +779,13 @@ header {
         background-color: white;
         /* background-color: red; */
     }
-    .search{
+
+    .search {
         height: 30px;
         /* padding: 1px; */
         /* background-color: blue; */
     }
+
     .search input {
         height: 100%;
         border: none;
@@ -769,7 +794,7 @@ header {
         background-color: white;
     }
 
-   
+
     .cart-btn-div i.fa-shopping-cart {
         display: none;
     }
@@ -812,8 +837,8 @@ header {
 
 /* ======= Header css Ended ====== */
 /* ======= Hero Section css Started ====== */
-.fixed-gradiet-section{
-    background: linear-gradient(to bottom,  rgb(221, 240, 212), #ffff);
+.fixed-gradiet-section {
+    background: linear-gradient(to bottom, rgb(221, 240, 212), #ffff);
     height: 300px;
     position: fixed;
     top: 56px;
@@ -822,10 +847,11 @@ header {
     z-index: -3;
     /* z-index: 9999; */
 }
+
 .hero {
     margin-top: 56px;
     /* background-color: rgb(221, 240, 212); */
-    
+
     /* background-color: #f4f4f4; */
     width: 100%;
     padding: 50px;
@@ -835,6 +861,7 @@ header {
     align-items: center;
     color: black;
 }
+
 .hero button {
     padding: 5px 10px;
     background-color: var(--primary-yellow);
@@ -881,7 +908,7 @@ header {
         font-size: 1rem;
     }
 
-   
+
 
     .hero-content {
         background-color: var(--primary-yellow);
@@ -1304,7 +1331,7 @@ header {
 /* ======= Items Section css Ended ====== */
 .items-container {
     background-color: rgb(221, 240, 212);
-    background: linear-gradient(to top,  rgb(221, 240, 212), #ffff);
+    background: linear-gradient(to top, rgb(221, 240, 212), #ffff);
     text-align: center;
     margin-top: 50px;
 }
