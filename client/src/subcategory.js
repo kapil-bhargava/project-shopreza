@@ -307,6 +307,10 @@ const SubCategory = () => {
                 <p>Please wait....</p>
             </div>
 
+            {/* gradient div fixed  */}
+            <div className="fixed-gradiet-section">
+            </div>
+
         </>
     )
 }

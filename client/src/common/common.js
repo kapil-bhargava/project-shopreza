@@ -12,7 +12,6 @@ const Header = ({ loginPopup, popupBg }) => {
     const [cookie, createcookie, removecookie] = useCookies();
     const [cookie2, createcookie2, removecookie2] = useCookies();
     const [cookie_userAddress, createcookie_userAddress, removecookie_userAddress] = useCookies();
-    const [cookie_username, createcookie_username, removecookie_username] = useCookies();
     const [cartData, setCartData] = useState([])
     const [total, settotal] = useState(0);
     const dispatch = useDispatch();
@@ -20,6 +19,21 @@ const Header = ({ loginPopup, popupBg }) => {
     const cartbg = useRef();
     const userProfile = useRef();
     const userProfileBg = useRef();
+
+    const confirmPopup = useRef();
+    const confirmPopupBg = useRef();
+
+
+    // confirm popup code 
+    const openConfirmPopup = () => {
+        closeUserProfile()
+        confirmPopup.current.classList.add("active-confirmation-popup");
+        confirmPopupBg.current.classList.add("active-confirmationBg");
+    }
+    const closeConfirmPopup = () => {
+        confirmPopup.current.classList.remove("active-confirmation-popup");
+        confirmPopupBg.current.classList.remove("active-confirmationBg");
+    }
 
     const closeUserProfile = () => {
         userProfile.current.style.transform = 'translateX(100%)';
@@ -32,12 +46,12 @@ const Header = ({ loginPopup, popupBg }) => {
 
     const cartOpen = () => {
         getCartData();
-        cart.current.style.display = 'block';
-        cartbg.current.style.display = 'block';
+        cart.current.classList.add("show")
+        cartbg.current.classList.add("show")
     }
     const cartClose = () => {
-        cart.current.style.display = 'none';
-        cartbg.current.style.display = 'none';
+        cart.current.classList.remove("show")
+        cartbg.current.classList.remove("show")
 
     }
     const openLogin = () => {
@@ -79,7 +93,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
     // logout function 
     const logout = () => {
-        if (window.confirm("Are you sure ?")) {
+        
             removecookie("sp");
             removecookie("storeid");
             removecookie("address");
@@ -91,7 +105,6 @@ const Header = ({ loginPopup, popupBg }) => {
             //     openLogin()
             // }, 5000)
 
-        }
     };
 
 
@@ -114,6 +127,9 @@ const Header = ({ loginPopup, popupBg }) => {
     const groceryItems = ["Vegetables", "Fruits", "Dairy", "Grocery", "Eggs"];
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const inputRef = useRef();
+    const searchRef = useRef();
+    const input = inputRef.current;
 
 
 
@@ -124,13 +140,23 @@ const Header = ({ loginPopup, popupBg }) => {
         }
         else {
             getCartData();
+
+            // Change text every 2 seconds
             const interval = setInterval(() => {
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % groceryItems.length);
-            }, 2000); // Change text every 2 seconds
-    
+                if (document.activeElement === input) {
+                    searchRef.current.style.backgroundColor = 'red';
+                    // input.blur();
+                    // alert("Input is focused")
+                }
+                else {
+                    setCurrentIndex((prevIndex) => (prevIndex + 1) % groceryItems.length);
+
+                }
+            }, 2000);
+
             return () => clearInterval(interval); // Cleanup on unmount
         }
-        
+
 
     }, [])
 
@@ -144,15 +170,15 @@ const Header = ({ loginPopup, popupBg }) => {
                 </div>
                 <div className="add-div">
                     {cookie_userAddress.address == null ?
-                        (<h6><i className="fas fa-map-marker-alt"></i> &nbsp;Enter Location</h6>)
-                        : (<span><h5>Delivery in <span>15</span> minutes</h5>
+                        (<h6><i style={{color:"white"}} className="fas fa-map-marker-alt"></i></h6>)
+                        : (<span><h5>Delivery in <span>10</span> minutes</h5>
                             <p>{cookie_userAddress.address}</p></span>)}
 
 
                 </div>
                 <div className="inpt-div">
-                    <div className="search">
-                        <i className="fa-solid fa-magnifying-glass"></i><input placeholder="" type="text" />
+                    <div ref={searchRef} className="search">
+                        <i className="fa-solid fa-magnifying-glass"></i><input ref={inputRef} placeholder="" type="text" />
                         <div key={currentIndex} className="placeholder-text" id="placeholder-text">{groceryItems[currentIndex]}</div>
                     </div>
                 </div>
@@ -229,12 +255,15 @@ const Header = ({ loginPopup, popupBg }) => {
                                                         <div className="item-details">
                                                             <p>{x.productname}</p>
                                                             <p>{x.unitname}</p>
-                                                            <strong><p>{x.offerprice}</p></strong>
+                                                            <p><del>{x.price}</del> <strong>{x.offerprice}</strong></p>
                                                         </div>
                                                         <div className="quantity">
-                                                            <button className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</button>
+                                                            <span className="quantity-btn" onClick={() => { cartCount("minus", x.cartid) }}>-</span>
                                                             <span>{x.quantity}</span>
-                                                            <button className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</button>
+                                                            <span className="quantity-btn" onClick={() => { cartCount("plus", x.cartid) }}>+</span>
+                                                        </div>
+                                                        <div className="multipy-item-div">
+                                                            <strong>₹{x.quantity * x.offerprice}</strong>
                                                         </div>
                                                     </div>
                                                 )
@@ -281,12 +310,32 @@ const Header = ({ loginPopup, popupBg }) => {
                 <h3>{cookie.username} <br /> {cookie.sp}</h3> <div onClick={closeUserProfile} className="cross-mobile">&times;</div>
                 <div className="user-dropdown">
                     <ul>
-                        <li><Link className='link-m' to="/profile">Profile</Link></li>
-                        <li><Link className='link-m' to="/userorders">Orders</Link></li>
-                        <li onClick={logout}>Logout</li>
+                        <li><Link className='link-m' to="/profile"> <i className="fas fa-user"></i> Profile</Link></li>
+                        <li><Link className='link-m' to="/userorders"> <i className="fas fa-box"></i> Orders</Link></li>
+                        <li onClick={openConfirmPopup}> <i className="fas fa-sign-out-alt"></i> Logout</li>
                     </ul>
                 </div>
             </section>
+
+
+            <div style={{zIndex:"5000"}} ref={confirmPopupBg} className="confirmation-popupBg user-logoutBg">
+                <div style={{zIndex:"5001"}} ref={confirmPopup} className="confirmation-popup user-logout-poppup">
+                    <div className="cross-confirm-main-div d-flex justify-content-end">
+                        <div onClick={closeConfirmPopup} className="cross-confirm-popup-div">
+                            <i className="fas fa-times" ></i>
+                        </div>
+                    </div>
+                    <h6 className='text-center'>
+                        Are you sure want to Logout ?</h6>
+                    {/* <p style={{fontSize:"12px"}}>
+            This action will log you out from the system.
+          </p> */}
+                    <div className="del-btn-div d-flex justify-content-around">
+                        <button onClick={logout} className="btn btn-danger btn-sm">Yes, Logout</button>
+                        <button onClick={closeConfirmPopup} className="btn btn-light border btn-sm">Cancel</button>
+                    </div>
+                </div>
+            </div>
 
 
         </>

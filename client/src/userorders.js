@@ -44,7 +44,7 @@ const Userorders = () => {
 
     return (
         <>
-        <Tracking />
+            <Tracking />
             {/* using Header form common  */}
             <Header />
             {/* User Order page coding */}
@@ -53,7 +53,7 @@ const Userorders = () => {
                 {
                     orderData.map((order, index) => {
                         return (
-                            <div onClick={()=>{openTracking(order.orderid)}} key={index} className="order">
+                            <div onClick={() => { openTracking(order.orderid) }} key={index} className="order">
                                 <div className="details">
                                     <img src={require("./images/fruits.png")} alt="Fruits" />
                                     <div className="info">
@@ -70,12 +70,13 @@ const Userorders = () => {
                         )
                     })
                 }
+                <div className="fixed-gradiet-section"></div>
             </div>
 
 
 
 
-             {/* ======== loader and waiter ===== */}
+            {/* ======== loader and waiter ===== */}
             {/* loader  */}
             <div ref={loaderLoading} className="loading">
                 <p>Loading....</p>
@@ -85,6 +86,8 @@ const Userorders = () => {
             <div ref={loaderWaiting} className="loading">
                 <p>Please wait....</p>
             </div>
+
+            <div className="fixed-gradiet-section"></div>
         </>
     )
 }

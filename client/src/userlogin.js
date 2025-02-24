@@ -31,28 +31,22 @@ const Userlogin = (props) => {
             });
             const data = await re.json();
             console.log(data);
-            if(data[0].status === "Done") {
+            if (data[0].status === "Done") {
                 openSignup();
             }
             loaderWaiting.current.style.display = "none"
-           
+
         }
     }
 
 
-
-    // for login up back button 
-    const goBack = () => {
-        props.ref.current.classList.remove("active-popup");
-        signupPopup.current.classList.add("active-popup");
-    }
 
     // opening login and signup popups 
     const openSignup = () => {
         props.ref.current.classList.remove("active-popup");
         signupPopup.current.classList.add("active-popup");
     }
-    
+
 
     const login = () => {
         if (cookie.sp == null) {
@@ -117,20 +111,20 @@ const Userlogin = (props) => {
             if (data.response === "Valid") {
                 createcookie("sp", usermobile, {
                     path: "/",
-                    maxAge: 3600 * 24 * 30 * 12 * 10, 
-                    secure: true, 
-                });
-                createcookie("storeid", data.storeid, {
-                    path: "/", 
-                    maxAge: 3600 * 24 * 30 * 12 * 10, 
-                    secure: true, 
-                });
-                createcookie("address", data.address, {
-                    path: "/", 
                     maxAge: 3600 * 24 * 30 * 12 * 10,
                     secure: true,
                 });
-                createcookie_username("username", data.name,{
+                createcookie("storeid", data.storeid, {
+                    path: "/",
+                    maxAge: 3600 * 24 * 30 * 12 * 10,
+                    secure: true,
+                });
+                createcookie("address", data.address, {
+                    path: "/",
+                    maxAge: 3600 * 24 * 30 * 12 * 10,
+                    secure: true,
+                });
+                createcookie_username("username", data.name, {
                     path: "/", // Cookie is available on all routes
                     maxAge: 3600 * 24 * 30 * 12 * 10, // 10 years in seconds
                     secure: true, // Use for HTTPS
@@ -149,14 +143,20 @@ const Userlogin = (props) => {
     return (
         <>
 
-            <section ref={props.ref} className="login-popup-container">
-                <i onClick={goBack} className="fa-solid fa-arrow-left"></i>
-                <h4>Login</h4>
-                <label  >Enter Registered Mobile Number</label>
-                <input ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='9158XXXX45' type="number" />
+            <section ref={props.ref} className="login-popup-container user-login-big ">
+                <div className="login-img-div">
+                    <img src={require("./images/sr_logo_long.png")} alt="" />
+                </div>
+                <h5>Get Grocery in minutes</h5>
+                {/* <i onClick={goBack} className="fa-solid fa-arrow-left"></i> */}
+                <h6>Login with registered mobile number</h6>
+                
+                <div className="inpt-container">
+                   <div>+91</div> <input ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='Enter registered mobile number' type="number" />
+                </div>
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
-                <button className="btn btn-success" onClick={login}>Go</button> <br />
+                <button className="btn btn-success" onClick={login}>Continue</button> <br />
             </section>
             <div onClick={closePopup} ref={props.ref1} className="popup-bg"></div>
 

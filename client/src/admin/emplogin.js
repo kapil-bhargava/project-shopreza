@@ -60,7 +60,7 @@ const Emplogin = () => {
 
     return (
         <>
-            <section className="login-popup-container active-popup">
+            <section className="admin-login-popup-container active-popup">
                 <h4>Employee Login</h4> <br />
                 <label  >Enter Mobile Number</label>
                 <input onChange={(e) => { setmobile(e.target.value) }} placeholder='9158XXXX45' type="number" />  <br />

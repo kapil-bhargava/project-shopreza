@@ -63,7 +63,7 @@ const AdminLogin = () => {
 
     return (
         <>
-            <section className="login-popup-container active-popup">
+            <section className="admin-login-popup-container active-popup">
                 {/* <i onClick={goBack} className="fa-solid fa-arrow-left"></i> */}
                 <h4>Admin Login</h4>
                 <label  >Enter User Name</label>

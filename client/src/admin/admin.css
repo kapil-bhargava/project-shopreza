@@ -867,7 +867,7 @@ select {
 
 /* admin login css  */
 /* login popup  */
-.popup-bg {
+/* .admin-popup-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -878,10 +878,9 @@ select {
     visibility: hidden;
     opacity: 0;
     transition: 0.2s ease;
-    /* display: none; */
-}
+} */
 
-.login-popup-container {
+.admin-login-popup-container {
     /* display: none; */
     position: fixed;
     top: 50%;
@@ -899,7 +898,7 @@ select {
     transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-.login-popup-container i {
+.admin-login-popup-container i {
     cursor: pointer;
 }
 

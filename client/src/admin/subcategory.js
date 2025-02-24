@@ -187,7 +187,7 @@ const Subcategory = () => {
         openAddSubcategory()
     }
 
-    
+
     // updating subcategory 
     const updateSubcategory = async () => {
         alert(subcatId)
@@ -221,7 +221,7 @@ const Subcategory = () => {
 
     return (
         <>
-             {/* <ConfirmPopup ref={confirmPopupRef} resp={response} showRes={showRes} /> */}
+            {/* <ConfirmPopup ref={confirmPopupRef} resp={response} showRes={showRes} /> */}
             <Sidebar />
             <div className="new-employee-main">
                 <div className="add-c-div selection">
@@ -274,6 +274,8 @@ const Subcategory = () => {
                             </tbody>
                         </table>)}
                 </div>
+              
+
             </div>
 
 
@@ -329,20 +331,11 @@ const Subcategory = () => {
                         &times;
                     </div>
                 </div>
-                {/* <br />
-                <div className="main-pic-container">
-                    {
-                        picData.map((x, i) => {
-                            return (
-                                <div key={i} className="pic-card">
-                                    <img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { picOption(x.picname, x.unitid, x.picid) }} />
-                                </div>
-                            )
-                        })
-                    }
-                </div> */}
 
             </div>
+
+
+
         </>
     )
 }
