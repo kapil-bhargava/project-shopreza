@@ -23,7 +23,7 @@ const Userorders = () => {
             });
             const dt = await re.json();
             setOrderData(dt);
-            // console.log(dt);
+            console.log(dt);
             loaderLoading.current.style.display = "none";
         }
         catch (error) {

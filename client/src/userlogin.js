@@ -57,23 +57,43 @@ const Userlogin = (props) => {
         }
 
     }
+    const loginBtn = useRef();
 
     const mobileChange = (e) => {
         const mobileValue = e.target.value;
-        const regex = /^[6-9]\d{9}$/;
+
+        // Allow only numeric input
         if (!/^\d*$/.test(mobileValue)) {
             setMobileError("Only numeric values are allowed");
             return;
         }
-        if (mobileValue.length > 10) {
-            setMobileError("Mobile number must not exceed 10 digits");
-        } else if (mobileValue && !regex.test(mobileValue)) {
+
+        // Update state before validation
+        setusermobile(mobileValue);
+
+        // Mobile number validation regex (starts with 6-9, followed by 9 digits)
+        const regex = /^[6-9]\d{9}$/;
+        if (mobileValue.length === 10 && !regex.test(mobileValue)) {
             setMobileError("Invalid mobile number");
         } else {
             setMobileError(""); // Clear error if valid
         }
-        setusermobile(mobileValue);
-    }
+
+        // Delay validation to check if the input length is exactly 10
+        // setTimeout(() => {
+        if (mobileValue.length === 10) {
+            loginBtn.current.disabled = false; // Enable login button
+            loginBtn.current.classList.remove("btn-dark");
+            loginBtn.current.backgroundColor = "var(--primary-green)";
+
+        } else {
+            loginBtn.current.classList.add("btn-dark");
+            // loginBtn.current.classList.remove("btn-success");    
+            loginBtn.current.disabled = true; // Disable login button
+        }
+        // }, 50);
+    };
+
 
 
     const closePopup = () => {
@@ -150,13 +170,13 @@ const Userlogin = (props) => {
                 <h5>Get Grocery in minutes</h5>
                 {/* <i onClick={goBack} className="fa-solid fa-arrow-left"></i> */}
                 <h6>Login with registered mobile number</h6>
-                
+
                 <div className="inpt-container">
-                   <div>+91</div> <input ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='Enter registered mobile number' type="number" />
+                    <div>+91</div> <input maxLength="10" ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='Enter registered mobile number' type="text" />
                 </div>
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
-                <button className="btn btn-success" onClick={login}>Continue</button> <br />
+                <button className='btn btn-dark' ref={loginBtn} onClick={login}>Continue</button> <br />
             </section>
             <div onClick={closePopup} ref={props.ref1} className="popup-bg"></div>
 

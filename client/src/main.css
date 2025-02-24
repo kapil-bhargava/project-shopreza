@@ -206,9 +206,16 @@ input::-webkit-inner-spin-button {
 }
 
 .login-popup-container button {
+    border:none;
     width: 100%;
     padding: 7px 12px;
     border-radius: 12px;
+    color:white;
+    background-color: var(--primary-green);
+}
+.login-popup-container button:hover{
+    background-color:var(--primary-yellow);
+    color: black;
 }
 
 .login-popup-container h5 {
