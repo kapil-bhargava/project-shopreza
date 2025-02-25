@@ -10,11 +10,23 @@ const Product = () => {
     const loaderLoading = useRef();
     const confirmPopup = useRef();
     const confirmPopupBg = useRef();
+    const productDetails = useRef();
+
+    const openProductDetails = (unitid) => {
+        setUnitId(unitId);
+        alert(unitid);
+        productDetails.current.style.display = "block";
+        customerFormBg.current.style.display = "block";
+    }
+    const closeProductDetails = () => {
+        productDetails.current.style.display = "none";
+        customerFormBg.current.style.display = "none";
+    }
 
     const [skeletonLoading, setSkeletonLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
-    const [category, setCategory] = useState("");
+    
 
     const [cookie, createcookie, removecookie] = useCookies();
 
@@ -119,6 +131,7 @@ const Product = () => {
 
     // getting product unit 
     const openAddProductUnit = async (spid) => {
+        alert(spid)
         setSPId(spid);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?spid=" + spid, {
@@ -696,7 +709,8 @@ const Product = () => {
                                                     <i
                                                         onClick={() => deleteProductUnit(x.unitid)}
                                                         className="fa fa-trash text-danger"
-                                                    ></i>
+                                                    ></i> &nbsp;&nbsp;
+                                                    <button className="btn-sm btn btn-info" onClick={()=>{openProductDetails(x.unitid)}}>Add Details</button>
                                                 </td>
                                             </tr>
                                         );
@@ -754,6 +768,27 @@ const Product = () => {
                 <button onClick={usePic} className="btn btn-primary" >Use Pic</button>
                 <button onClick={deletePic} className="btn btn-danger">Delete</button>
 
+            </div>
+
+            {/* adding product details popup  */}
+            <div style={{border:"1px solid black"}} ref={productDetails} className="add-customer-form product-unit">
+            <div className="cross-entity">
+                    <i className="fas fa-times" onClick={closeProductDetails} ></i>
+                </div>
+                <h2>Add New Product Details</h2>
+                {/* table for product details  */}
+                <div className="mt-4 table-responsive table-employee">
+                    <h1>Hello product</h1>
+                    <div className="input-row">
+                        <label>Product Key</label>
+                        <input type="text" placeholder='Product Name' required />
+                       
+                    </div>
+                    <div className="input-row">
+                        <label>Product Value</label>
+                        <input type="text" placeholder='Product Name' required />
+                    </div>
+                </div>
             </div>
 
 

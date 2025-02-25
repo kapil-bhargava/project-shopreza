@@ -60,6 +60,7 @@ const Userorders = () => {
                                         <p>
                                             Order # <strong>{order.orderid}</strong>
                                         </p>
+                                        <p>Total : {order.totitem}</p>
                                         <p>Order Date : <strong>{order.orderdate}</strong> {order.ordertime}</p>
 
                                     </div>

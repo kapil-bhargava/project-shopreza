@@ -84,7 +84,7 @@ const SubCategory = () => {
                 },
             })
             const data = await re.json();
-            console.log(data);
+            // console.log(data);
             setaitem(data);
             openUnitOptions();
             loaderLoading.current.style.display = "none";
@@ -232,15 +232,15 @@ const SubCategory = () => {
                             <div key={unit.unitid} className="options-items">
                                 <img src={unit.pic} alt={unit.unitname} />
                                 <h5>{unit.unitname}</h5>
-                                <h5>{unit.offerprice}</h5>
+                                <h5>₹ <del>{unit.price}</del> <span style={{color:"green", fontWeight:"bold"}}>{unit.offerprice}</span></h5>
                                 {
                                     unit.cart === "no"
                                         ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index, 'yes')} >Add</button>
                                         :
                                         <span className="quantity">
-                                            <button className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</button>
+                                            <span className="quantity-btn" onClick={() => { handleButtonClick("minus", unit.cartid, index) }}>-</span>
                                             <span>{unit.cartqty}</span>
-                                            <button className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid, index) }}>+</button>
+                                            <span className="quantity-btn" onClick={() => { handleButtonClick("plus", unit.cartid, index) }}>+</span>
                                         </span>
                                 }
                                 {/* <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid)} >Add</button> */}

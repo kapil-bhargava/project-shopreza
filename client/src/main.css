@@ -1259,6 +1259,9 @@ header {
     height: 70px;
     border-radius: 10px;
 }
+.options-items h5{
+    font-size: 13px;
+}
 
 .options-items>button {
     padding: 0px 10px;

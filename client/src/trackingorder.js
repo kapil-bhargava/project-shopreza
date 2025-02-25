@@ -5,7 +5,6 @@ import { useCookies } from 'react-cookie';
 
 const TrackingOrder = () => {
     const { orderid } = useParams();
-    const [cookie, createcookie, removecookie] = useCookies();
 
     const [otp, setOTP] = useState();
     var [status, setStatus] = useState();
@@ -29,7 +28,8 @@ const TrackingOrder = () => {
     const orderAssignedText = useRef();
     const orderDeliveredStep = useRef();
     const orderDeliveredText = useRef();
-
+    
+    const [orderID, setOrderID] = useState("");
 
     document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
@@ -37,6 +37,25 @@ const TrackingOrder = () => {
         }, 10000);
     });
 
+
+    const getProductDetails = async (orderid)=>{
+        progressBar.current.style.height = "0%";
+        try {
+            loaderLoading.current.style.display = "block";
+            const re = await fetch(`${process.env.REACT_APP_URL}/productorderapi.php`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderid: orderid
+                })
+            });
+            const dt = await re.json();
+            console.table(dt);
+            loaderLoading.current.style.display = "none";
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const getProductOrders = async () => {
         progressBar.current.style.height = "0%";
         try {
@@ -49,7 +68,9 @@ const TrackingOrder = () => {
                 })
             });
             const dt = await re.json();
-            // console.log(dt);
+            console.log(dt);
+            getProductDetails(dt[0].orderid)
+            setOrderID(dt[0].orderid)
             loaderLoading.current.style.display = "none";
             setOrderDate(dt[0].orderdate);
             setOrderTime(dt[0].ordertime);
@@ -138,7 +159,7 @@ const TrackingOrder = () => {
                 <div className="order-info">
                     <img src={require("./images/fruits.png")} alt="Fruits" />
                     <div className="details">
-                        <p><strong>Order #12345</strong></p>
+                        <p><strong>Order #{orderID}</strong></p>
                         <p>Product: Wireless Earbuds</p>
                         <p>Price: ₹1,999</p>
                     </div>
