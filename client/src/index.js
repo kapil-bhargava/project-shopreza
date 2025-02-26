@@ -33,6 +33,7 @@ import ManagerDashboard from './admin/Manager/dasboardmanager';
 import Profile from './admin/profile';
 import DelBoyDashboard from './admin/Manager/dasboarddelboy';
 import DelboyOrders from './admin/DelboyOrders';
+import Festivals from './admin/festivals';
 
 
 
@@ -59,6 +60,7 @@ root.render(
           <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
           <Route exact path="/delboydashboard" element={<DelBoyDashboard />} />
           <Route exact path="/delboy" element={<Delboy />} />
+          <Route exact path="/festivals" element={<Festivals />} />
 
           <Route exact path="/empsignup" element={<Empsignup />} />
           <Route exact path="/category" element={<Category />} />

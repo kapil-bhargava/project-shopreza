@@ -12,13 +12,16 @@ const Product = () => {
     const confirmPopupBg = useRef();
     const productDetails = useRef();
 
-    const openProductDetails = (unitid) => {
-        setUnitId(unitId);
-        alert(unitid);
+    const openProductDetails = (unitid, unitname) => {
+        setEditDetailsMode(false);
+        setUnitName(unitname)
+        setUnitId(unitid);
         productDetails.current.style.display = "block";
         customerFormBg.current.style.display = "block";
+        getDetails(unitid)
     }
     const closeProductDetails = () => {
+        setEditDetailsMode(false);
         productDetails.current.style.display = "none";
         customerFormBg.current.style.display = "none";
     }
@@ -26,7 +29,7 @@ const Product = () => {
     const [skeletonLoading, setSkeletonLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
-    
+
 
     const [cookie, createcookie, removecookie] = useCookies();
 
@@ -55,7 +58,6 @@ const Product = () => {
     const getCategory = async () => {
         try {
             loaderLoading.current.style.display = "block";
-            // console.log(cookie2.adminCookie2)
             const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?storeid=" + cookie.storeid, {
                 method: 'GET',
                 headers: {
@@ -63,20 +65,13 @@ const Product = () => {
                 }
             })
             const data = await re.json();
-            // setCatId(data[0].catid)
             getSubCategory(data[0].catid)
-            // console.log(data[0])
             setCatData(data);
             loaderLoading.current.style.display = "none";
-            // console.log("TRY");
         }
 
         catch (error) {
             setSkeletonLoading(true);
-            // console.log(error);
-            // alert(error.message);
-            // loaderLoading.current.style.display = "none";
-            // console.error(error)
         }
     }
 
@@ -91,17 +86,12 @@ const Product = () => {
                 }
             })
             const data = await re.json();
-            // console.log("subct data",data);
-            // setsubCatId(data[0].subcatid)
             getProducts(data[0].subcatid)
             setSubcategory(data);
             loaderLoading.current.style.display = "none";
         }
         catch (error) {
             setSkeletonLoading(true);
-            // console.error(error)
-            // alert(error.message);
-            // loaderLoading.current.style.display = "none";
         }
     }
 
@@ -123,15 +113,15 @@ const Product = () => {
         }
         catch (error) {
             setSkeletonLoading(true);
-            // console.log("CATHCH pr");
             alert(error.message);
-            // loaderLoading.current.style.display = "none";
         }
     }
 
+
+
     // getting product unit 
-    const openAddProductUnit = async (spid) => {
-        alert(spid)
+    const openAddProductUnit = async (spid, productname) => {
+        setProductName(productname)
         setSPId(spid);
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php?spid=" + spid, {
@@ -141,10 +131,8 @@ const Product = () => {
             }
         })
         const data = await re.json();
-        // console.log(data)
         loaderLoading.current.style.display = "none";
         setProductUnits(data)
-        // alert(data.Response);
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
     }
@@ -190,11 +178,6 @@ const Product = () => {
 
     // adding new Product unit
     const addUnit = async () => {
-        console.log(spid)
-        console.log(unitName)
-        console.log(unitPrice)
-        console.log(unitOfferPrice)
-        console.log(stock)
         try {
             loaderLoading.current.style.display = "block";
             const re = await fetch(process.env.REACT_APP_URL + "/unitmasterapi.php", {
@@ -212,7 +195,6 @@ const Product = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
             if (data.Response === "Saved") {
                 // alert(data.Response);
                 getProducts(subCatId);
@@ -246,7 +228,6 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        // console.log(data);
         setProductName(data[0].productname);
     }
 
@@ -266,8 +247,6 @@ const Product = () => {
         })
         const data = await re.json();
         loaderLoading.current.style.display = "none";
-        // console.log(data);
-        // alert(data.Response)
         getProducts(subCatId);
         closeAddProductUnit();
     }
@@ -399,6 +378,7 @@ const Product = () => {
     }
 
     const [picData, setPicData] = useState([]);
+
     // getUploadPic 
     const getUploadPic = async (unitid) => {
         loaderLoading.current.style.display = "block";
@@ -443,7 +423,6 @@ const Product = () => {
                     })
                 })
                 const data = await re.json();
-                // console.log(data);
                 loaderLoading.current.style.display = "none";
                 if (data.Response === "Deleted") {
                     // alert(data.Response);
@@ -477,7 +456,6 @@ const Product = () => {
                 })
             })
             const data = await re.json();
-            // console.log(data);
             openAddProductUnit(spid);
             loaderLoading.current.style.display = "none";
             closePicPopup();
@@ -498,7 +476,6 @@ const Product = () => {
             body: formData
         })
         const data = await re.json();
-        // console.log(data);
         loaderLoading.current.style.display = "none";
         getUploadPic(unitId)
         // if (data.Response === "Uploaded") {
@@ -527,6 +504,157 @@ const Product = () => {
         setUnitStatus('');
 
     }
+
+    // ============= Details functionalities  ==========
+    const [productKey, setProductKey] = useState("");
+    const [keyValue, setKeyValue] = useState("");
+    const [detailsData, setDetailsData] = useState([]);
+
+    // adding details function 
+    const addDetails = async () => {
+        // if (!detailsName ||!detailsValue)  {
+        //     alert("All fields are required");
+        //     return;
+        // }
+        loaderLoading.current.style.display = "block";
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/productdetailsapi.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    unitid: unitId,
+                    productkey: productKey,
+                    keyvalue: keyValue
+                })
+            })
+            const data = await re.json();
+            getDetails(unitId)
+            loaderLoading.current.style.display = "none";
+
+        }
+        catch (error) {
+            loaderLoading.current.style.display = "none";
+            alert("add details error: " + error.message)
+        }
+    }
+
+    // getting details function 
+    const getDetails = async (unitid) => {
+        loaderLoading.current.style.display = "block";
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/productdetailsapi.php?unitid=" + unitid, {
+                method: 'GET',
+            })
+            const data = await re.json();
+            loaderLoading.current.style.display = "none";
+            setDetailsData(data);
+        }
+        catch (error) {
+            loaderLoading.current.style.display = "none";
+            alert("get details error: " + error.message)
+        }
+    }
+
+    // delete details 
+    const deleteDetails = async (descid) => {
+        // alert(detailid)
+        if (window.confirm('Are you sure you want to delete')) {
+            loaderLoading.current.style.display = "block";
+            try {
+                const re = await fetch(process.env.REACT_APP_URL + "/productdetailsapi.php", {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        descid: descid
+                    })
+                })
+                const data = await re.json();
+                getDetails(unitId)
+                loaderLoading.current.style.display = "none";
+
+            }
+            catch (error) {
+                loaderLoading.current.style.display = "none";
+                alert("delete details error: " + error.message)
+            }
+        }
+    }
+
+    const [editDetailsMode, setEditDetailsMode] = useState(false);
+    const [descid, setDescid] = useState("");
+
+    const editDetails = async (descid) => {
+        setEditDetailsMode(true)
+        setDescid(descid)
+        const re = await fetch(process.env.REACT_APP_URL + "/productdetailsapi.php", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                descid: descid
+            })
+        })
+        const data = await re.json();
+        setProductKey(data[0].productkey)
+        setKeyValue(data[0].keyvalue)
+
+
+    }
+
+    // update details 
+    const updateDetails = async () => {
+        alert(descid)
+        // if (!detailsName ||!detailsValue)  {
+        //     alert("All fields are required");
+        //     return;
+        // }
+        loaderLoading.current.style.display = "block";
+        try {
+            const re = await fetch(process.env.REACT_APP_URL + "/productdetailsapi.php", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    unitid: unitId,
+                    descid: descid,
+                    productkey: productKey,
+                    keyvalue: keyValue
+                })
+            })
+            const data = await re.json();
+            getDetails(unitId)
+            loaderLoading.current.style.display = "none";
+            setEditDetailsMode(false)
+            setProductKey('')
+            setKeyValue('')
+        }
+        catch (error) {
+            loaderLoading.current.style.display = "none";
+            alert("update details error: " + error.message)
+        }
+    }
+
+
+
+    const cancelDetails = async () => {
+        setEditDetailsMode(false)
+        setProductKey('')
+        setKeyValue('')
+    }
+
+
+
+
+
+
+
+
 
 
     useEffect(() => {
@@ -614,7 +742,7 @@ const Product = () => {
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{x.productname}</td>
-                                                    <td><button className="btn btn-warning" onClick={() => { openAddProductUnit(x.spid) }}>{x.available_units} Options</button></td>
+                                                    <td><button className="btn btn-warning" onClick={() => { openAddProductUnit(x.spid, x.productname) }}>{x.available_units} Options</button></td>
                                                     <td>
                                                         <i onClick={() => { openEditProduct(x.spid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
                                                         <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
@@ -631,11 +759,12 @@ const Product = () => {
             {/* Modal of Product Units */}
             <div ref={customerFormBg} className="c-bg"></div>
             <div ref={customerForm} className="add-customer-form product-unit">
+
                 <div className="cross-entity">
                     <i className="fas fa-times" onClick={closeAddProductUnit} ></i>
                 </div>
 
-                <h2>{isEditMode ? "Edit Product  Unit" : "Add New Product Unit"}</h2>
+                <h2>{isEditMode ? "Edit Product  Unit" : "New Unit for: " + productName}</h2>
                 <div className="input-pair-container">
                     <div className="input-pair">
                         <label>Product Unit</label>
@@ -710,7 +839,7 @@ const Product = () => {
                                                         onClick={() => deleteProductUnit(x.unitid)}
                                                         className="fa fa-trash text-danger"
                                                     ></i> &nbsp;&nbsp;
-                                                    <button className="btn-sm btn btn-info" onClick={()=>{openProductDetails(x.unitid)}}>Add Details</button>
+                                                    <button className="btn-sm btn btn-info" onClick={() => { openProductDetails(x.unitid, x.unitname) }}>Add Details</button>
                                                 </td>
                                             </tr>
                                         );
@@ -771,23 +900,38 @@ const Product = () => {
             </div>
 
             {/* adding product details popup  */}
-            <div style={{border:"1px solid black"}} ref={productDetails} className="add-customer-form product-unit">
-            <div className="cross-entity">
+            <div style={{ border: "1px solid black" }} ref={productDetails} className="add-customer-form product-unit product-details-section-main">
+                <div className="cross-entity">
                     <i className="fas fa-times" onClick={closeProductDetails} ></i>
                 </div>
-                <h2>Add New Product Details</h2>
+                <h2>{editDetailsMode ? "Edit " : null}Product Details for: {productName + " " + unitName}</h2>
                 {/* table for product details  */}
-                <div className="mt-4 table-responsive table-employee">
-                    <h1>Hello product</h1>
+                <div className="">
+                    {/* <h1>Hello product</h1> */}
                     <div className="input-row">
-                        <label>Product Key</label>
-                        <input type="text" placeholder='Product Name' required />
-                       
+                        <label>Key</label>
+                        <input value={productKey} onChange={(e) => { setProductKey(e.target.value) }} type="text" placeholder='Enter Key' required />
+
                     </div>
                     <div className="input-row">
-                        <label>Product Value</label>
-                        <input type="text" placeholder='Product Name' required />
+                        <label>Value</label>
+                        <textarea value={keyValue} onChange={(e) => { setKeyValue(e.target.value) }} placeholder='Product Value' required> </textarea>
                     </div>
+                    <button className="btn btn-primary btn-sm" onClick={editDetailsMode ? updateDetails : addDetails}>{editDetailsMode ? "Update" : "Add"}</button> {
+                        editDetailsMode ?
+                            <button className="btn btn-danger btn-sm" onClick={cancelDetails}>Cancel</button>
+                            : null}
+                </div>
+                <div className='mt-4 table-responsive table-employee'>
+                    <ol>
+                        {
+                            detailsData.map((x, index) => {
+                                return (
+                                    <li key={index}><strong>{x.productkey}:</strong> {x.keyvalue} <i style={{ cursor: "pointer" }} onClick={() => { editDetails(x.descid) }} className="fa fa-pencil text-success"></i> <i style={{ cursor: "pointer" }} onClick={() => { deleteDetails(x.descid) }} className="fa fa-trash text-danger"></i></li>
+                                );
+                            })
+                        }
+                    </ol>
                 </div>
             </div>
 

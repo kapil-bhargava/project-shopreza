@@ -216,7 +216,7 @@ const Category = () => {
         setCatId(catid)
         setIsEditMode(true);
         loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php?", {
+        const re = await fetch(process.env.REACT_APP_URL + "/categoryapi.php", {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

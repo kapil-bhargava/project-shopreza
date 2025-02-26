@@ -355,6 +355,44 @@ td {
     z-index: 700;
 }
 
+.product-details-section-main {
+    width: 400px;
+}
+.product-details-section-main .input-row {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.product-details-section-main label {
+    /* background-color: red; */
+    display: block;
+    width: 50px;
+}
+
+@media screen and (max-width: 400px) {
+    .product-details-section-main {
+        /* flex-direction: column; */
+        /* align-items: flex-start; */
+        width: 100%;
+    }
+    .product-details-section-main .input-row {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .product-details-section-main label {
+        display: block;
+        width: 100%;
+        /* width: 110px; */
+    }
+
+    .product-details-section-main input,
+    .product-details-section-main textarea {
+        display: block;
+        width: 100% !important; 
+    }
+}
+
 .cross-entity {
     justify-content: flex-end;
     align-items: center;
@@ -534,6 +572,7 @@ select {
 .input-pair {
     display: flex;
     gap: 10px;
+    margin-bottom: -5px;
     justify-content: space-between;
 }
 
@@ -800,10 +839,6 @@ select {
         /* width: 100%; */
     }
 
-    .input-pair {
-        flex-direction: column;
-    }
-
     .employee-form-container {
         width: 100%;
         height: 70%;
@@ -823,15 +858,15 @@ select {
     /* .product unit container css  */
     .product-unit {
         width: 90%;
+        height: 500px;
+        overflow-y: scroll;
         transform: translate(-50%, -50%);
         /* display: block; */
     }
 
     .product-unit .input-pair {
         width: 100%;
-    }
-
-    .product-unit .input-pair {
+        flex-direction: column;
         display: block;
     }
 
@@ -1004,13 +1039,15 @@ select {
     box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.1);
     z-index: 5000;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    
+
 }
-.active-response-popup{
+
+.active-response-popup {
     transform: translate(-50%, 0%);
 
 }
-.confirmation-popup{
+
+.confirmation-popup {
     box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.1);
     width: 300px;
     padding: 10px;
@@ -1026,14 +1063,16 @@ select {
     opacity: 0;
     visibility: hidden;
 }
-.active-confirmation-popup{
+
+.active-confirmation-popup {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -50%) scale(1);
-    
+
 
 }
-.confirmation-popupBg{
+
+.confirmation-popupBg {
     position: fixed;
     top: 0;
     left: 0;
@@ -1045,11 +1084,13 @@ select {
     opacity: 0;
     transition: 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
-.active-confirmationBg{
+
+.active-confirmationBg {
     visibility: visible;
     opacity: 1;
 }
-.cross-confirm-popup-div{
+
+.cross-confirm-popup-div {
     display: flex;
     justify-content: center;
     align-items: center;
