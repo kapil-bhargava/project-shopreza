@@ -77,7 +77,7 @@ const Home = () => {
     const [bannersData, setBannersData] = useState([]);
     // getting banners 
     const getBanners = async () => {
-        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?status=all&storeid=" + cookie.storeid, {
+        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?status=yes &storeid=" + cookie.storeid, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ const Banner = () => {
     const [festivalId, setFestivalId] = useState("");
 
     const openAddFestival = () => {
-        setIsEditMode(false);
+        // setIsEditMode(false);
         customerForm.current.style.display = "block";
         customerFormBg.current.style.display = "block";
     }
@@ -53,8 +53,28 @@ const Banner = () => {
         confirmPopupBg.current.classList.remove("active-confirmationBg");
     }
 
-    const openEditFestival = () => {
+    // ========= Getting single festival data =================
+    const [status, setStatus] = useState("");
+
+    const openEditFestival = async (festivalid) => {
+        setFestivalId(festivalid);
         setIsEditMode(true);
+        // getting single data using patch method 
+        const re = await fetch(`${process.env.REACT_APP_URL}/festivalapi.php`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                festivalid: festivalid
+            })
+        })
+        const data = await re.json();
+        setStatus(data[0].status)
+        setType(data[0].type)
+        setFestivalName(data[0].festivalname)
+        console.log(data);
+
         openAddFestival();
     }
 
@@ -134,28 +154,6 @@ const Banner = () => {
         // setFestivalData(data);
     }
 
-    const editFestival = async (festivalid) => {
-        setIsEditMode(true);
-        setFestivalId(festivalid);
-        loaderLoading.current.style.display = "block";
-        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php", {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                festivalid: festivalid,
-
-            })
-        })
-        const data = await re.json();
-        loaderLoading.current.style.display = "none";
-        setFestivalName(data[0].festivalname);
-        // setFestivalName(data[0].festivalname);
-        openAddFestival();
-
-    }
-
     // DELETE Festival 
     const deleteFestival = async () => {
         alert(festivalId)
@@ -179,7 +177,7 @@ const Banner = () => {
     }
 
 
-    // updating festivalName 
+    // updating festivals data 
     const updateFestival = async () => {
         loaderLoading.current.style.display = "block";
         const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php", {
@@ -188,17 +186,47 @@ const Banner = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                status: "NO",
+                status: status,
+                type: type,
                 festivalid: festivalId,
-                festivalname: festivalName
+                title: festivalName
             })
         })
         const data = await re.json();
         console.log(data);
         loaderLoading.current.style.display = "none";
         setFestivalName("");
+        setStatus("")
+        setType("");
         getFestival();
         closeAddFestival();
+        // setIsEditMode(false);
+
+    }
+    const updateFestivalByStatus = async (festivalid,status,festivalname,type) => {
+        alert("Hh")
+        loaderLoading.current.style.display = "block";
+        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                status: status,
+                type: type,
+                festivalid: festivalid,
+                title: festivalname
+            })
+        })
+        const data = await re.json();
+        console.log(data);
+        loaderLoading.current.style.display = "none";
+        setFestivalName("");
+        setStatus("")
+        setType("");
+        getFestival();
+        closeAddFestival();
+        // setIsEditMode(false);
 
     }
 
@@ -231,6 +259,7 @@ const Banner = () => {
                                     <th>S.No.</th>
                                     <th>Category</th>
                                     <th>Type</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -243,6 +272,13 @@ const Banner = () => {
                                                 <td> <img onClick={() => { openPicForm(x.festivalid) }} src={x.pic} alt={x.pic} /> {x.festivalname}</td>
                                                 <td>
                                                     {x.type}
+                                                </td>
+                                                <td>
+                                                    {/* <select value={x.status} selected onChange={(e) => { updateFestivalByStatus(x.festivalid,e.target.value,x.festivalname,x.type) }} className={x.status === "yes" ? "text-light  bg-success" : "text-light  bg-dark"} style={{ width: "50px" }} value={x.status} selected onChange={(e) => { setType(e.target.value) }}>
+                                                        <option value="no">no</option>
+                                                        <option value="yes">yes</option>
+                                                    </select> */}
+                                                    {x.status}
                                                 </td>
                                                 <td>
                                                     <i onClick={() => { openEditFestival(x.festivalid) }} className="fa fa-edit text-success"></i>&nbsp;&nbsp;&nbsp;
@@ -276,6 +312,21 @@ const Banner = () => {
                             <option value="Other">Other</option>
                         </select>
                     </div>
+                    {
+                        isEditMode ? (
+                            <div className="form-group">
+                                <label>Status</label>
+                                <select value={status} selected onChange={(e) => { setStatus(e.target.value) }}>
+                                    <option value="no">no</option>
+                                    <option value="yes">yes</option>
+                                </select>
+                                {/* <input type="text" value={status} onChange={(e)=>{setStatus(e.target.value)}} /> */}
+                            </div>
+                        )
+                            :
+                            null
+                    }
+
                     <div className="form-group">
                         <button onClick={isEditMode ? updateFestival : addFestival}>
                             {isEditMode ? "Update" : "Add"} Festival
@@ -285,7 +336,7 @@ const Banner = () => {
             </div>
             {/* ============ Festival ADD and UPDATE form ENDED ========== */}
 
-            {/* picPopup */}
+            {/* ========= picPopup Started========== */}
             <div ref={picPopup} className="pic-popup">
                 <h5>Select Pic</h5>
                 <div className="input-pair">
@@ -295,20 +346,8 @@ const Banner = () => {
                         &times;
                     </div>
                 </div>
-                {/* <br />
-                <div className="main-pic-container">
-                    {
-                        picData.map((x, i) => {
-                            return (
-                                <div key={i} className="pic-card">
-                                    <img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { picOption(x.picname, x.unitid, x.picid) }} />
-                                </div>
-                            )
-                        })
-                    }
-                </div> */}
-
             </div>
+            {/* ========= picPopup Ended========== */}
 
 
             {/* Confirm Popup  */}
