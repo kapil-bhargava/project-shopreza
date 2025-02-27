@@ -355,9 +355,11 @@ td {
     z-index: 700;
 }
 
+
 .product-details-section-main {
     width: 400px;
 }
+
 .product-details-section-main .input-row {
     display: flex;
     justify-content: flex-start;
@@ -375,6 +377,7 @@ td {
         /* align-items: flex-start; */
         width: 100%;
     }
+
     .product-details-section-main .input-row {
         width: 100%;
         flex-wrap: wrap;
@@ -389,7 +392,7 @@ td {
     .product-details-section-main input,
     .product-details-section-main textarea {
         display: block;
-        width: 100% !important; 
+        width: 100% !important;
     }
 }
 
@@ -471,7 +474,7 @@ td {
 .new-employee-main {
     margin-left: 250px;
     padding: 20px;
-    margin-top: 30px;
+    margin-top: 50px;
     /* background-color: crimson; */
 }
 
@@ -776,6 +779,54 @@ select {
         /* background-color: red; */
 }
 
+.banner-modal {
+    margin: 0;
+}
+
+/* enable disable button css  */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.62) 0px 0px 5px inset;
+}
+
+.slider::after {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* ON State */
+.switch.on .slider {
+    box-shadow: rgba(0, 0, 0, 0.62) 0px 0px 5px inset, #22cc3f 0px 0px 0px 2px inset, #22cc3f 0px 0px 0px 24px inset,
+        rgba(224, 224, 224, 0.45) 0px 1px 0px 0px;
+    background-color: #22cc3f;
+}
+
+.switch.on .slider::after {
+    left: 26px;
+}
+
 
 
 @media (max-width: 768px) {
@@ -832,11 +883,7 @@ select {
     }
 
     .new-employee-main {
-        margin: 0;
-        margin-top: 20px;
-        /* background-color: red; */
-        margin-top: 20px;
-        /* width: 100%; */
+        margin-left: 0;
     }
 
     .employee-form-container {

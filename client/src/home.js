@@ -18,6 +18,7 @@ const Home = () => {
 
 
     const jump = useNavigate()
+    const [catId, setCatId] = useState("");
 
     const getCategory = async () => {
         setLoaderMsg("Loading Categories...");
@@ -29,6 +30,7 @@ const Home = () => {
             });
 
             const dt = await re.json();
+            setCatId(dt[0].catid)
             // loaderLoading.current.style.display = "none";
             setCategories(dt);
             // loaderLoading.current.style.display = "none";
@@ -41,31 +43,14 @@ const Home = () => {
 
         }
     }
-
     const catClicked = (cid) => {
+        
         jump(`/subcategory/${cid}`)
     }
 
 
 
-    useEffect(() => {
-        if (cookie.sp != null) {
-            getCategory();
-            // alert("Cookie:  "+cookie.sp)
-        }
-        else {
-            // if (ip.current) {
-            ip.current.focus();
-            // ip.current.style.backgroundColor="red";
 
-            //   }
-            //   else{
-            console.log("first")
-            //   }
-        }
-
-
-    }, [])
 
 
     function updateStatus() {
@@ -89,6 +74,33 @@ const Home = () => {
     window.addEventListener("online", updateStatus);
     window.addEventListener("offline", updateStatus);
 
+    const [bannersData, setBannersData] = useState([]);
+    // getting banners 
+    const getBanners = async () => {
+        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?status=all&storeid=" + cookie.storeid, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const data = await re.json();
+        console.log(data);
+        setBannersData(data);
+    }
+
+
+    // useEffect functionalities 
+    useEffect(() => {
+        if (cookie.sp != null) {
+            getCategory();
+            getBanners();
+        }
+        else {
+            ip.current.focus();
+        }
+
+
+    }, [])
 
     return (
         <>
@@ -105,16 +117,28 @@ const Home = () => {
 
             {/* hero section */}
             <section className="hero">
-                {/* <div className="hero-content">
-                    <img src={require("./images/groceryveg.png")} alt="" />
-                    <h2>Discover the <span>New</span> Collection</h2>
-                    <p>Discover our wide range of milk products, starting from 50% fat free to 99% fat free.</p>
-                    <button className="btn btn-success">Shop Now</button>
-                </div> */}
                 <h1>Get Groceries Delivered in Minutes!</h1>
                 <p>Fresh fruits, vegetables, and daily essentials at your doorstep.</p>
-                <button>Shop Now</button>
+                <button onClick={()=>{catClicked(catId)}}>Shop Now</button>
             </section>
+
+            {/* Banner section coding  */}
+            <div className="banner-section">
+                {
+                    bannersData.map((x, index) => {
+                        return (
+                            <div key={index} className="banner">
+                                <div className="banner-img-div">
+                                    <img src={x.pic} alt="" />
+                                    <div className="banner-text">
+                                        <p>{x.festivalname}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
 
             {/* category section  */}
             <section className="cat">

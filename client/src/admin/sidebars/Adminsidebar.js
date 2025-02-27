@@ -186,7 +186,8 @@ const Adminsidebar = () => {
           {/* <div className="nav-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div> */}
           <div onClick={toggleSubmenu} className="nav-item"><Link className="linkdb subm">Store & Products <i ref={leftArrow} className="fa-solid fa-chevron-left"></i></Link></div>
           <div ref={sm} className=" submenu">
-            <div className="sub-item"><Link className="linkdb" to="/festivals"><i className="fas fa-list"></i>Festivals</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/banner"><i className="fas fa-list"></i>Banners</Link></div>
+            <div className="sub-item"><Link className="linkdb" to="/bannerproducts"><i className="fas fa-list"></i>Banner Products</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/stores"><i className="fas fa-store"></i>Stores</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/category"><i className="fa-solid fa-tags"></i>Category</Link></div>
             <div className="sub-item"><Link className="linkdb" to="/subcategory"><i className="fa-solid fa-th-large"></i>Subcategory</Link></div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from './sidebars/Sidebar';
 import { useCookies } from 'react-cookie';
 
-const Festivals = () => {
+const Banner = () => {
     const [cookie, createcookie, removecookie] = useCookies();
     const customerForm = useRef();
     const customerFormBg = useRef();
@@ -105,9 +105,10 @@ const Festivals = () => {
     }
 
     const [festivals, setFestivals] = useState([]);
+
     const getFestival = async () => {
         setDel(false);
-        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?storeid=" + cookie.storeid, {
+        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?status=all&storeid=" + cookie.storeid, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -345,4 +346,4 @@ const Festivals = () => {
     )
 }
 
-export default Festivals
+export default Banner
