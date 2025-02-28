@@ -28,7 +28,7 @@ const Adminsidebar = () => {
 
 
   // logout admin 
-  const logoutAdmin = () => {
+  const logout = () => {
     removecookie('uname');
     removecookie('storeid');
     removecookie('utype');
@@ -235,7 +235,7 @@ const Adminsidebar = () => {
             This action will log you out from the system.
           </p> */}
           <div className="del-btn-div d-flex justify-content-around">
-            <button onClick={logoutAdmin} className="btn btn-danger btn-sm">Yes, Logout</button>
+            <button onClick={logout} className="btn btn-danger btn-sm">Yes, Logout</button>
             <button onClick={closeConfirmPopup} className="btn btn-light border btn-sm">Cancel</button>
           </div>
         </div>

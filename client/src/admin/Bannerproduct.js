@@ -665,7 +665,7 @@ const Bannerproduct = () => {
                 })
             })
             const data = await re.json();
-            console.log(data);
+            alert(data.Response)
             loaderLoading.current.style.display = "none";
             getBannerProducts(festivalId)
         }
@@ -885,104 +885,7 @@ const Bannerproduct = () => {
                 </div>
             </div>
 
-            {/* Modal of Product Units */}
-            <div ref={customerFormBg} className="c-bg"></div>
-            <div ref={customerForm} className="add-customer-form product-unit">
-
-                <div className="cross-entity">
-                    <i className="fas fa-times" onClick={closeAddProductUnit} ></i>
-                </div>
-
-                <h2>{isEditMode ? "Edit Product Unit" : "New Unit for: " + productName}</h2>
-                <div className="input-pair-container">
-                    <div className="input-pair">
-                        <label>Product Unit</label>
-                        <input value={unitName} onChange={(e) => { setUnitName(e.target.value) }} placeholder='Product Unit' required />
-                    </div>
-                    <div className="input-pair">
-                        <label>Unit Price</label>
-                        <input value={unitPrice} onChange={(e) => { setUnitPrice(e.target.value) }} placeholder='Unit Price' required />
-                    </div>
-                    <div className="input-pair">
-                        <label>Unit Offer Price</label>
-                        <input value={unitOfferPrice} onChange={(e) => { setUnitOfferPrice(e.target.value) }} placeholder='Unit Offer Price' required />
-                    </div>
-                    <div className="input-pair">
-                        <label>Stock</label>
-                        <input value={stock} onChange={(e) => { setStock(e.target.value) }} placeholder='Unit Stock' required />
-                    </div>
-
-                </div>
-                <div>
-                    <button className='btn btn-success' onClick={isEditMode ? updateProductUnit : addUnit}>
-                        {isEditMode ? "Update Unit" : "Add Unit"}
-                    </button>
-                    {isEditMode ?
-                        (
-                            <button className='btn btn-danger' onClick={cancelUpdate}>
-                                {/* {isEditMode ? "Update Unit" : "Add Unit"} */}
-                                Cancel
-                            </button>
-                        ) : null
-                    }
-                </div>
-
-                {/* table for product units  */}
-                <div className="mt-4 table-responsive table-employee">
-                    {
-                        skeletonLoading ? (
-                            <div className="skeleton-loader">
-                                <h1>No Data</h1>
-                            </div>
-                        ) : (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S.No.</th>
-                                        <th>Unit Name</th>
-                                        <th>Stock</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {productUnits.map((x, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>< img style={{ cursor: "pointer" }} src={x.pic} alt={x.pic} onClick={() => { openPicForm(x.unitid) }} /> {x.unitname}</td>
-                                                <td>{x.stock}</td>
-                                                <td>
-                                                    <del>₹ {x.price}</del> ₹ {x.offerprice}
-                                                </td>
-                                                <td>{x.status}</td>
-                                                <td>
-                                                    <i
-                                                        onClick={() => openEditProductUnit(x.unitid)}
-                                                        className="fa fa-edit"
-                                                    ></i>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <i
-                                                        onClick={() => deleteProductUnit(x.unitid)}
-                                                        className="fa fa-trash text-danger"
-                                                    ></i> &nbsp;&nbsp;
-                                                    <button className="btn-sm btn btn-info" onClick={() => { openProductDetails(x.unitid, x.unitname) }}>Add Details</button>
-
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                    )
-                                    }
-
-                                </tbody>
-                            </table>)
-                    }
-                </div>
-            </div >
-
+           
             {/* loader  */}
             <div ref={loaderLoading} className="loading" >
                 <p>Loading....</p>
@@ -1129,7 +1032,6 @@ const Bannerproduct = () => {
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Product Name</th>
-                                            <th>Available Units</th>
                                             <th>Action</th>
                                             {/* <th>Referral Code</th> */}
                                         </tr>
@@ -1141,11 +1043,8 @@ const Bannerproduct = () => {
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
                                                         <td>{x.productname}</td>
-                                                        <td><button className="btn btn-warning" onClick={() => { openAddProductUnit(x.spid, x.productname) }}>{x.available_units} Options</button></td>
 
                                                         <td>
-                                                            <i onClick={() => { openEditProduct(x.spid) }} className="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;
-                                                            <i onClick={() => { deleteProduct(x.spid) }} className="fa fa-trash text-danger"></i>
                                                             <button onClick={() => { addProductToBanner(x.spid) }} className="btn-sm btn btn-primary">Add</button>
                                                         </td>
                                                     </tr>

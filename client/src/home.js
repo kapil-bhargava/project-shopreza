@@ -89,6 +89,12 @@ const Home = () => {
     }
 
 
+    // jumping to banner products of user 
+    const navigateToBannerProduct = (festivalid) => {
+        jump(`/bnrproducts/${festivalid}`)
+    }
+
+
     // useEffect functionalities 
     useEffect(() => {
         if (cookie.sp != null) {
@@ -127,7 +133,7 @@ const Home = () => {
                 {
                     bannersData.map((x, index) => {
                         return (
-                            <div key={index} className="banner">
+                            <div onClick={()=>{navigateToBannerProduct(x.festivalid)}} key={index} className="banner">
                                 <div className="banner-img-div">
                                     <img src={x.pic} alt="" />
                                     <div className="banner-text">
@@ -143,7 +149,7 @@ const Home = () => {
             {/* category section  */}
             <section className="cat">
                 {/* checking login then showing category */}
-                {cookie.sp !== null && cookie.sp !== undefined ? (<h2>Categories</h2>) : null}
+                {cookie.sp !== null && cookie.sp !== undefined ? (<h4>Categories</h4>) : null}
 
                 <div className="container">
                     {

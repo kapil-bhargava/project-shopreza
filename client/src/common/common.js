@@ -131,6 +131,20 @@ const Header = ({ loginPopup, popupBg }) => {
     const searchRef = useRef();
     const input = inputRef.current;
 
+    const head = useRef();
+
+// Function changing the backgroundColor of header when scroll Y 50px 
+    // useEffect(() => {
+        // window.addEventListener('scroll', () => {
+        //     if (window.scrollY > 50) {
+        //         head.current.style.backgroundColor = 'var(--primary-yellow)';
+        //     } else {
+        //         head.current.style.backgroundColor = 'var(--primary-green)';
+        //     }
+        // });
+    // }, []);
+
+
 
 
 
@@ -162,7 +176,7 @@ const Header = ({ loginPopup, popupBg }) => {
 
     return (
         <>
-            <header>
+            <header ref={head}>
                 <div className="logo">
                     <Link className='link' to="/">
                         <h1>Shop<span>Reza</span></h1>
@@ -412,8 +426,8 @@ const Tracking = () => {
         <>
             {/* Tracking fixed section in bottom  */}
             <div className="track-main">
-                <h4>Track your Order here</h4>
-                <h4>Total tracking orders : <strong onClick={openOrders}>{totalNotDeliveredOrders}</strong> </h4>
+                <p>Track your Order here</p>
+                <p>Total tracking orders : <strong onClick={openOrders}>{totalNotDeliveredOrders}</strong> </p>
             </div>
 
             {/* or Popup */}

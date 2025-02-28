@@ -989,7 +989,7 @@ header {
 .hero-content {
     background-color: var(--primary-yellow);
     border-radius: 30px;
-    width: 1200px;
+    max-width: 1200px;
     height: 250px;
     text-align: center;
     position: relative;
@@ -1049,18 +1049,29 @@ header {
 .banner-section {
     max-width: 1200px;
     margin-inline: auto;
-    /* background-color: var(--primary-green); */
+    /* background-color: var(--primary-yellow); */
+    /* background-color: #ffeaab; */
+
     padding: 10px;
     margin-top: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    overflow-x: scroll;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:auto;
+    /* flex-wrap: wrap; */
+    gap: 20px;
+}
+.banner-section::-webkit-scrollbar{
+    width: 0;
 }
 
 .banner {
-    width: 300px;
+    cursor: pointer;
+    flex: 0 0 300px;
+    /* width: 300px; */
+    scroll-snap-align: center;
     height: 200px;
     /* background-color: red; */
     border-radius: 10px;
@@ -1110,7 +1121,7 @@ header {
 /* ============  Banner section css Ended ============ */
 /* ======= Category Section css Started ====== */
 .cat {
-    margin-top: 50px;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -2462,7 +2473,7 @@ header {
 
 
 
-/* Tracking Component Css  */
+/* =================  Tracking Component CSS Started ================== */
 
 .track-main {
     width: 90%;
@@ -2470,18 +2481,20 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: green;
+    padding: 5px;
+    background-color: var(--primary-white);
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
     border-radius: 10px;
     position: fixed;
     color: white;
-    bottom: 100px;
+    bottom: 10px;
     left: 50%;
+    color:  var(--primary-green);
     transform: translateX(-50%);
 }
 
-.track-main strong {
-    font-size: 1.5rem;
+.track-main p {
+    font-size: 1.2rem;
     cursor: pointer;
 }
 
@@ -2557,6 +2570,22 @@ header {
         /* font-size: 1.1rem; */
     }
 }
+/* =================  Tracking Component CSS Ended ================== */
+/* ==================================================================================== */
+/* =================== User Banner Product CSS Started =================  */
+
+.banner-product-container {
+    margin-top: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+/* =============== User Banner Product CSS Ended ==================  */
 
 /* ======= Footer css Started ====== */
 footer {

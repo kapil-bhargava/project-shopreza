@@ -35,6 +35,7 @@ import DelBoyDashboard from './admin/Manager/dasboarddelboy';
 import DelboyOrders from './admin/DelboyOrders';
 import Banner from './admin/banner';
 import Bannerproduct from './admin/Bannerproduct';
+import BnrProducts from './bnrProducts';
 
 
 
@@ -44,37 +45,44 @@ root.render(
     <Provider store={store} >
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+
+          {/* Admin Routers */}
           <Route exact path="/dashboard" element={<Dashboard />} />
           <Route exact path="/customers" element={<Customer />} />
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/stores" element={<Store />} />
           <Route exact path="/newemployee/:mob" element={<Newemployee />} />
           <Route exact path="/products" element={<Products />} />
-          <Route exact path="/userlogin" element={<Userlogin />} />
-          <Route exact path="/subcategory/:cid" element={<SubCategory />} />
+          <Route exact path="/banner" element={<Banner />} />
+          <Route exact path="/bannerproducts" element={<Bannerproduct />} />
+          <Route exact path="/empprofile" element={<Profile />} />
+          <Route exact path="/subcategory" element={<Subcategory />} />
           {/* login panels  */}
           <Route exact path="/emplogin" element={<Emplogin />} />
           <Route exact path="/adminlogin" element={<AdminLogin />} />
-
-          {/* dashboards  */}
-          <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
-          <Route exact path="/delboydashboard" element={<DelBoyDashboard />} />
-          <Route exact path="/delboy" element={<Delboy />} />
-          <Route exact path="/banner" element={<Banner />} />
-          <Route exact path="/bannerproducts" element={<Bannerproduct />} />
-
-          <Route exact path="/empsignup" element={<Empsignup />} />
-          <Route exact path="/category" element={<Category />} />
-          <Route exact path="/subcategory" element={<Subcategory />} />
-          <Route exact path="/product" element={<Product />} />
-          <Route exact path="/checkout" element={<Checkout />} />
-          <Route exact path="/trackingorder/:orderid" element={<TrackingOrder />} />
           {/* orders  */}
           <Route exact path="/userorders" element={<Userorders />} />
           <Route exact path="/delboyorders" element={<DelboyOrders />} />
           <Route exact path="/adminorders" element={<Adminorder />} />
-          <Route exact path="/empprofile" element={<Profile />} />
+          {/* dashboards  */}
+          <Route exact path="/managerdashboard" element={<ManagerDashboard />} />
+          <Route exact path="/delboydashboard" element={<DelBoyDashboard />} />
+          <Route exact path="/delboy" element={<Delboy />} />
+
+          <Route exact path="/empsignup" element={<Empsignup />} />
+         
+
+
+          {/* Users Routers  */}
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/userlogin" element={<Userlogin />} />
+          <Route exact path="/subcategory/:cid" element={<SubCategory />} />
+          <Route exact path="/product" element={<Product />} />
+          <Route exact path="/bnrproducts/:festivalid" element={<BnrProducts />} />
+
+          <Route exact path="/category" element={<Category />} />
+          <Route exact path="/checkout" element={<Checkout />} />
+          <Route exact path="/trackingorder/:orderid" element={<TrackingOrder />} />
         </Routes>
       </BrowserRouter>
     </Provider>
