@@ -44,7 +44,7 @@ const Home = () => {
         }
     }
     const catClicked = (cid) => {
-        
+
         jump(`/subcategory/${cid}`)
     }
 
@@ -77,7 +77,7 @@ const Home = () => {
     const [bannersData, setBannersData] = useState([]);
     // getting banners 
     const getBanners = async () => {
-        const re = await fetch(process.env.REACT_APP_URL + "/festivalapi.php?status=yes &storeid=" + cookie.storeid, {
+        const re = await fetch(process.env.REACT_APP_URL + "/banner_cust.php?type=Festival&storeid=" + cookie.storeid, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const Home = () => {
             <section className="hero">
                 <h1>Get Groceries Delivered in Minutes!</h1>
                 <p>Fresh fruits, vegetables, and daily essentials at your doorstep.</p>
-                <button onClick={()=>{catClicked(catId)}}>Shop Now</button>
+                <button onClick={() => { catClicked(catId) }}>Shop Now</button>
             </section>
 
             {/* Banner section coding  */}
@@ -133,7 +133,7 @@ const Home = () => {
                 {
                     bannersData.map((x, index) => {
                         return (
-                            <div onClick={()=>{navigateToBannerProduct(x.festivalid)}} key={index} className="banner">
+                            <div onClick={() => { navigateToBannerProduct(x.festivalid) }} key={index} className="banner">
                                 <div className="banner-img-div">
                                     <img src={x.pic} alt="" />
                                     <div className="banner-text">

@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './common/common'
 import { useParams } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
 
 const BnrProducts = () => {
     // refs 
     const loaderWaiting = useRef();
     const loaderLoading = useRef();
+    const [cookie, createcookie, removecookie] = useCookies();
     // params for festivalid
     const { festivalid } = useParams();
     const [bannerProductsData, setBannerProductsData] = useState([])
@@ -16,7 +18,9 @@ const BnrProducts = () => {
         // setFestivalId(festivalid);
         loaderLoading.current.style.display = "block";
         try {
-            const re = await fetch(process.env.REACT_APP_URL + "/festivalproductapi.php?festivalid=" + festivalid, {
+            // const re = await fetch(process.env.REACT_APP_URL + "/festivalproductapi.php?festivalid=" + festivalid, {
+            const re = await fetch(`${process.env.REACT_APP_URL}/bannerproduct_cust.php?festivalid=${festivalid}&mobile=${cookie.sp}&storeid=${cookie.storeid}`, {
+
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,9 +49,16 @@ const BnrProducts = () => {
         }
     }
 
+    
+    const fetchRef = useRef(false);
+
     useEffect(() => {
-        getBannerProducts();
-    }, [])
+        if (!fetchRef.current) {
+            fetchRef.current = true; // Mark as fetched
+            getBannerProducts();
+        }
+    }, []);
+
 
 
     return (
@@ -72,6 +83,7 @@ const BnrProducts = () => {
             <div ref={loaderWaiting} className="loading" >
                 <p>Please wait....</p>
             </div >
+
 
         </>
     )

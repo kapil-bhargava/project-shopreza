@@ -118,6 +118,8 @@ const Userlogin = (props) => {
     const [OTP, setOTP] = useState("");
 
     const verifyOTP = async () => {
+        // setOTP([...otp].join(""));
+        // alert(OTP)
         if (OTP.length === 4) {
             const re = await fetch(process.env.REACT_APP_URL + "/validateapi.php", {
                 method: 'POST',
@@ -159,10 +161,45 @@ const Userlogin = (props) => {
         }
     }
 
+    // OTp verification 
+    const [otp, setOtp] = useState(["", "", "", ""]); // Store 4-digit OTP
+    const inputsRef = useRef([]); // Reference to input elements
+
+    // Function to handle OTP input changes
+    const handleChange = (index, event) => {
+        const value = event.target.value;
+
+        // Ensure only numbers are entered
+        if (!/^\d?$/.test(value)) return;
+
+        const newOtp = [...otp];
+        newOtp[index] = value;
+        setOtp(newOtp);
+
+        // Move focus to next input if a number is entered
+        if (value && index < otp.length - 1) {
+            inputsRef.current[index + 1].focus();
+        }
+        else{
+            
+        }
+        
+        // verifyOTP();
+
+    };
+
+    // Function to handle backspace key for OTP inputs
+    const handleKeyDown = (index, event) => {
+        if (event.key === "Backspace" && !otp[index] && index > 0) {
+            inputsRef.current[index - 1].focus();
+        }
+    };
+
 
     return (
         <>
 
+            {/* Login  popup  */}
             <section ref={props.ref} className="login-popup-container user-login-big ">
                 <div className="login-img-div">
                     <img src={require("./images/sr_logo_long.png")} alt="" />
@@ -172,7 +209,7 @@ const Userlogin = (props) => {
                 <h6>Login with registered mobile number</h6>
 
                 <div className="inpt-container">
-                    <div>+91</div> <input maxLength="10" ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='Enter registered mobile number' type="text" />
+                    <div>+91</div> <input maxLength="10" ref={props.ip} value={usermobile} onChange={mobileChange} placeholder='Enter registered mobile number' type="number" />
                 </div>
                 {mobileError && <span style={{ color: "red", fontSize: "12px" }}>{mobileError}</span>}
                 <br />
@@ -180,11 +217,37 @@ const Userlogin = (props) => {
             </section>
             <div onClick={closePopup} ref={props.ref1} className="popup-bg"></div>
 
-            {/* sign up popup  */}
-            <section ref={signupPopup} className="sp login-popup-container ">
-                <h4>OTP</h4>
+            {/* OTP verification popup  */}
+            <section ref={signupPopup} className="sp login-popup-container user-login-big ">
+                <i className="fa fa-arrow-left"></i>
+                <p style={{ textAlign: "center" }}>OTP Verification</p>
+                <p style={{ textAlign: "center", fontSize: "13px" }}>We have sent a verification code to  <br /> <span style={{ fontSize: "15px" }}> +91-{cookie.sp}</span></p>
                 <label  >Enter OTP</label>
                 <input value={username} onChange={(e) => { setOTP(e.target.value) }} placeholder='Enter OTP' type="number" />
+                {/* <div className="otp-inputs">
+                    <input value={OTP} maxLength="1" type="number" placeholder='5' />
+                    <input value={OTP} maxLength="1" type="number" />
+                    <input value={OTP} maxLength="1" type="number" />
+                    <input value={OTP} maxLength="1" type="number" />
+                </div> */}
+                {/* <div className="otp-inputs">
+                    {otp.map((digit, index) => (
+                        <input
+                            key={index}
+                            ref={(el) => (inputsRef.current[index] = el)}
+                            type="text"
+                            inputMode="numeric"
+                            maxLength="1"
+                            value={digit}
+                            onChange={(e) => handleChange(index, e)}
+                            onKeyDown={(e) => handleKeyDown(index, e)}
+                            className="otp-input"
+                            placeholder="   "
+
+
+                        />
+                    ))}
+                </div> */}
                 <button className="btn btn-warning" onClick={verifyOTP}>Verify</button> <br />
             </section>
 

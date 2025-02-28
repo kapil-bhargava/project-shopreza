@@ -6,7 +6,6 @@ import Home from './home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Userlogin from './userlogin';
 import Products from './products';
-import Usersignup from './usersignup';
 import SubCategory from './subcategory';
 import { Provider } from 'react-redux';
 import store from './redstore';

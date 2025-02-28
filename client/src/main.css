@@ -6,6 +6,7 @@
     --primary-red: #ff5f5f;
     --grey-light: #dcdcdc;
     --soft-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    --floating-box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.15);
 }
 
 body {
@@ -110,6 +111,30 @@ input::-webkit-inner-spin-button {
     border: 1px solid var(--primary-green);
     box-shadow: var(--soft-shadow);
     transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.login-popup-container i {
+    cursor: pointer;
+    position: absolute;
+
+    left: 20px;
+    top: 10px;
+}
+
+.otp-inputs {
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    outline: none;
+    border: none;
+    gap: 5px;
+    align-items: center;
+}
+
+.sp input {
+    /* width: 40px !important; */
+    text-align: center;
+    font-size: 18px;
 }
 
 .login-img-div {
@@ -1058,12 +1083,13 @@ header {
     justify-content: start;
     align-items: center;
     overflow-x: scroll;
-    scroll-snap-type:x mandatory;
-    scroll-behavior:auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: auto;
     /* flex-wrap: wrap; */
     gap: 20px;
 }
-.banner-section::-webkit-scrollbar{
+
+.banner-section::-webkit-scrollbar {
     width: 0;
 }
 
@@ -1101,7 +1127,7 @@ header {
 /* Responsice banner section */
 
 @media screen and (max-width:400px) {
-   
+
 
     .banner {
         width: 350px;
@@ -1134,6 +1160,7 @@ header {
 .cat .category {
     /* border: 1px solid grey; */
     box-shadow: var(--soft-shadow);
+    box-shadow: var(--floating-box-shadow);
     width: 130px;
     /* height: 120px; */
     padding: 10px;
@@ -1354,13 +1381,11 @@ header {
 .sub-cat-main-container .items {
     border-radius: 5px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-        0 1px 3px rgba(0, 0, 0, 0.06);
     width: 180px;
     padding: 5px;
     /* flex-grow: 1; */
     background-color: white;
+    box-shadow: var(--floating-box-shadow);
     /* background-color: blue; */
 }
 
@@ -2483,13 +2508,13 @@ header {
     align-items: center;
     padding: 5px;
     background-color: var(--primary-white);
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
     position: fixed;
     color: white;
     bottom: 10px;
     left: 50%;
-    color:  var(--primary-green);
+    color: var(--primary-green);
     transform: translateX(-50%);
 }
 
@@ -2570,6 +2595,7 @@ header {
         /* font-size: 1.1rem; */
     }
 }
+
 /* =================  Tracking Component CSS Ended ================== */
 /* ==================================================================================== */
 /* =================== User Banner Product CSS Started =================  */
@@ -2585,6 +2611,7 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
 }
+
 /* =============== User Banner Product CSS Ended ==================  */
 
 /* ======= Footer css Started ====== */
