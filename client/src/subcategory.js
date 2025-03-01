@@ -215,7 +215,7 @@ const SubCategory = () => {
                             return (
                                 <ul key={index}>
                                     <li onClick={() => { getProduct(x.subcatid) }}>
-                                        <img src={x.pic} alt={x.pic} /> <span>{x.subcatname}</span>
+                                        <img src={x.pic} alt={x.pic} /> <div className="sub-cat-name-div"> <span>{x.subcatname}</span></div>
                                     </li>
                                 </ul>
                             )
@@ -232,7 +232,7 @@ const SubCategory = () => {
                             <div key={unit.unitid} className="options-items">
                                 <img src={unit.pic} alt={unit.unitname} />
                                 <h5>{unit.unitname}</h5>
-                                <h5>₹ <del>{unit.price}</del> <span style={{color:"green", fontWeight:"bold"}}>{unit.offerprice}</span></h5>
+                                <h5>₹ <del>{unit.price}</del> <span style={{ color: "green", fontWeight: "bold" }}>{unit.offerprice}</span></h5>
                                 {
                                     unit.cart === "no"
                                         ? <button className='items-options-single-btn' onClick={() => addToCart(unit.unitid, index, 'yes')} >Add</button>

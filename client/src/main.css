@@ -1235,6 +1235,7 @@ header {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    font-size: 0.8rem;
     cursor: pointer;
     border-right: 1px solid rgb(209, 209, 209);
 }
@@ -1249,15 +1250,25 @@ header {
     width: 50px;
     border-radius: 50%;
     /* background-color: green; */
+    padding: 5px;
     height: 50px;
 }
 
 .sidebar li {
     border-bottom: 1px solid rgb(209, 209, 209);
-    ;
+    display: flex;
+    justify-content: start;
+    align-items: center;
     padding: 7px;
     margin: 0;
+    gap: 4px;
 
+}
+.sidebar .sub-cat-name-div{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sidebar li:hover {
@@ -1487,13 +1498,25 @@ header {
         width: 100%;
         flex-direction: column;
         align-items: center;
-        justify-content: start;
+        justify-content: center;
         padding: 1px 5px;
-        justify-content: space-between;
+        gap: 0;
+    }
+    .sidebar .sub-cat-name-div{
+        width: 100%;
+        /* background-color: blue; */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .sidebar span {
         font-size: 0.75rem;
+        text-align: center;
+        margin: 0;
+        line-height: 10px;
+        word-spacing: 0px;
+        /* background-color: red; */
         /* margin-left: 10px; */
     }
 
